@@ -112,4 +112,13 @@ else:
 PYEOF
 echo "$(date '+%H:%M:%S') [3/3] ChatWork投稿完了" >> "$LOG"
 
+# 4. GitHub Pages にデプロイ
+echo "$(date '+%H:%M:%S') [4/4] GitHub Pages デプロイ" >> "$LOG"
+cp "$SCRIPT_DIR/reports/timeline_latest.html" "$SCRIPT_DIR/docs/index.html"
+cd "$SCRIPT_DIR"
+git add docs/index.html
+git commit -m "chore: update timeline $(date '+%Y-%m-%d')" >> "$LOG" 2>&1
+git push origin main >> "$LOG" 2>&1
+echo "$(date '+%H:%M:%S') [4/4] デプロイ完了" >> "$LOG"
+
 echo "$(date '+%Y-%m-%d %H:%M:%S') 日次更新終了" >> "$LOG"
