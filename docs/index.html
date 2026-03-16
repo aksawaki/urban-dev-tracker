@@ -1,0 +1,2961 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>都市開発計画 エリア別一覧</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;background:#eef2f7;color:#1a1a2e;line-height:1.7;font-size:14px}
+/* ヘッダー */
+.hdr{background:linear-gradient(135deg,#0f2044,#1e4d8c);color:#fff;padding:16px 28px;position:sticky;top:0;z-index:200;box-shadow:0 3px 14px rgba(0,0,0,.35);display:flex;align-items:center;gap:12px}
+.hdr h1{font-size:18px;font-weight:700;letter-spacing:.03em}
+.hdr .meta{margin-left:auto;font-size:11px;opacity:.75;text-align:right;line-height:1.6}
+/* 統計バー */
+.stats{background:#fff;border-bottom:1px solid #d0daea;padding:8px 28px;display:flex;flex-wrap:wrap;gap:18px;font-size:12px;color:#555;position:sticky;top:var(--stats-top,52px);z-index:195}
+.sn{font-weight:700;font-size:13px;padding:0 2px}
+.sc{color:#27ae60} .sw{color:#e67e22} .sp{color:#8e44ad} .sl{color:#2980b9} .si{color:#7f8c8d}
+/* エリアナビ：横スクロール1行固定 */
+.anav{background:#1e3a6e;padding:8px 16px;display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:var(--anav-top,148px);z-index:190}
+.anav::-webkit-scrollbar{height:3px}
+.anav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.4);border-radius:2px}
+.anav a{font-size:11px;color:rgba(255,255,255,.85);text-decoration:none;padding:3px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.2);white-space:nowrap;flex-shrink:0;transition:.15s}
+.anav a:hover,.anav a.active{background:rgba(255,255,255,.22);color:#fff}
+/* コンテナ */
+.container{max-width:960px;margin:0 auto;padding:24px 16px 60px}
+/* エリアブロック */
+.ab{margin-bottom:24px;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.ah{background:linear-gradient(90deg,#1e3a6e,#2d5a8c);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:10px}
+.ah-name{font-size:16px;font-weight:700}
+.ah-cnt{margin-left:auto;font-size:11px;background:rgba(255,255,255,.18);padding:2px 10px;border-radius:8px}
+/* 計画カード */
+.plan-card{background:#fff;border-bottom:1px solid #e8eef8}
+.plan-card:last-child{border-bottom:none}
+.plan-card:hover{background:#f7faff}
+/* カード内部: 定義リスト形式 */
+dl.fields{display:grid;grid-template-columns:120px 1fr;gap:0}
+dl.fields>div{display:contents}
+dl.fields dt{padding:9px 14px 9px 20px;font-size:11px;font-weight:700;color:#6b7280;background:#f9fafb;border-bottom:1px solid #edf2f7;border-right:1px solid #e8eef8;display:flex;align-items:flex-start;white-space:nowrap}
+dl.fields dd{padding:9px 20px 9px 16px;font-size:13px;color:#2d3748;border-bottom:1px solid #edf2f7;display:flex;align-items:flex-start;flex-wrap:wrap;gap:6px;word-break:break-word}
+dl.fields .title-row dt{background:#eef2fa;color:#1e3a6e;font-size:12px}
+dl.fields .title-row dd{font-size:14px;font-weight:700}
+dl.fields .detail-row dd{font-size:13px;color:#374151;line-height:1.7;display:block}
+/* フェーズバッジ */
+.pb{font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px;color:#fff;white-space:nowrap}
+.pb-completed{background:#27ae60} .pb-construction{background:#e67e22} .pb-pre_construction{background:#8e44ad} .pb-planning{background:#2980b9} .pb-info{background:#7f8c8d}
+/* 開発期間 */
+.period-box{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.period-s{color:#8e44ad;font-weight:600;font-size:12px}
+.period-e{color:#27ae60;font-weight:600;font-size:12px}
+.period-arrow{color:#aaa;font-size:14px}
+.no-period{color:#bbb;font-size:12px;font-style:italic}
+/* 箇条書き詳細 */
+.detail-list{margin:0;padding-left:16px;list-style:disc}
+.detail-list li{margin:3px 0;font-size:13px;color:#374151;line-height:1.65}
+/* スペックバー */
+.specs-bar{display:flex;flex-wrap:wrap;gap:6px}
+.spec-item{display:inline-flex;align-items:center;background:#f0f4ff;border:1px solid #d0daea;border-radius:6px;overflow:hidden;font-size:11px}
+.spec-k{background:#1e3a6e;color:#fff;padding:2px 7px;font-weight:700;white-space:nowrap}
+.spec-v{padding:2px 8px;color:#1a1a2e;font-weight:600;white-space:nowrap}
+/* URL */
+.src-link{color:#1e4d8c;font-size:12px;text-decoration:none;word-break:break-all;border-bottom:1px dashed #a0aec0}
+.src-link:hover{color:#2d6a9f;border-bottom-color:#2d6a9f}
+/* エリアチップ */
+.area-chip{background:#eef2fa;color:#1e3a6e;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px}
+/* 優先度 */
+.pri-high{background:#fef2f2;color:#c0392b;font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
+.pri-medium{background:#fff8f0;color:#d35400;font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
+footer{text-align:center;padding:18px;font-size:11px;color:#aaa}
+/* 日付フィルタバー */
+.filter-bar{background:#f4f7fc;border-bottom:1px solid #d0daea;padding:7px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:#555;position:sticky;top:var(--fb-top,100px);z-index:192}
+.filter-bar .fb-label{font-weight:700;color:#1e3a6e;margin-right:2px}
+.fb-sep{color:#c8d4e8;margin:0 4px;font-size:14px}
+.fbtn{background:#fff;border:1px solid #c0cfe0;border-radius:14px;padding:3px 14px;font-size:12px;cursor:pointer;color:#445;transition:.15s;white-space:nowrap}
+.fbtn:hover{background:#e8eef8;border-color:#8aaad0}
+.fbtn.active{background:#1e3a6e;color:#fff;border-color:#1e3a6e}
+.fb-date{border:1px solid #c0cfe0;border-radius:6px;padding:2px 8px;font-size:12px;color:#445;background:#fff;cursor:pointer;height:26px}
+.fb-date:focus{outline:none;border-color:#1e3a6e;box-shadow:0 0 0 2px rgba(30,58,110,.15)}
+.fb-date-clear{background:none;border:none;color:#aaa;cursor:pointer;font-size:14px;padding:0 2px;line-height:1;vertical-align:middle}
+.fb-date-clear:hover{color:#e53e3e}
+.filter-count{margin-left:auto;font-size:11px;color:#888}
+.fb-toggle{margin-left:4px;font-size:12px;color:#555;cursor:pointer;display:flex;align-items:center;gap:4px}
+.fb-toggle input{cursor:pointer;accent-color:#1e3a6e}
+@media(max-width:600px){
+  dl.fields{grid-template-columns:90px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <span style="font-size:26px">🏙️</span>
+  <h1>都市開発計画 エリア別一覧</h1>
+  <div class="meta">更新: 2026年03月16日 12:27<br>全77件 / 49エリア</div>
+</div>
+<div class="stats">
+  ✅ 完成・供用中 <span class="sn sc">3</span> &nbsp;
+  🔨 工事中 <span class="sn sw">4</span> &nbsp;
+  📐 着工予定 <span class="sn sp">1</span> &nbsp;
+  📋 計画中 <span class="sn sl">12</span> &nbsp;
+  📄 その他 <span class="sn si">57</span>
+</div>
+<div class="filter-bar">
+  <span class="fb-label">📅 期間</span>
+  <button class="fbtn" data-days="0">全期間</button>
+  <button class="fbtn" data-days="30">1ヶ月</button>
+  <button class="fbtn" data-days="90">3ヶ月</button>
+  <button class="fbtn" data-days="180">6ヶ月</button>
+  <button class="fbtn active" data-days="365">1年</button>
+  <span class="fb-sep">|</span>
+  <span class="fb-label">📆 日付指定</span>
+  <input type="date" id="date-from" class="fb-date" title="開始日">
+  <span style="color:#999">〜</span>
+  <input type="date" id="date-to" class="fb-date" title="終了日">
+  <button class="fb-date-clear" id="date-clear" title="日付指定をクリア">✕</button>
+  <label class="fb-toggle"><input type="checkbox" id="show-completed"> 完了済みも表示</label>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+<div class="anav" id="area-nav"><a href="#ab-大阪市">大阪市（5）</a> <a href="#ab-渋谷">渋谷（3）</a> <a href="#ab-流山市">流山市（1）</a> <a href="#ab-銀座">銀座（1）</a> <a href="#ab-霞が関">霞が関（1）</a> <a href="#ab-笹塚">笹塚（1）</a> <a href="#ab-千代田区">千代田区（1）</a> <a href="#ab-高輪">高輪（3）</a> <a href="#ab-日本橋">日本橋（1）</a> <a href="#ab-調布市">調布市（1）</a> <a href="#ab-東村山市">東村山市（1）</a> <a href="#ab-練馬区">練馬区（1）</a> <a href="#ab-大宮">大宮（2）</a> <a href="#ab-横浜">横浜（2）</a> <a href="#ab-船橋">船橋（4）</a> <a href="#ab-千葉市">千葉市（2）</a> <a href="#ab-津田沼">津田沼（1）</a> <a href="#ab-宇都宮市">宇都宮市（1）</a> <a href="#ab-福岡市">福岡市（5）</a> <a href="#ab-東京都">東京都（1）</a> <a href="#ab-西東京市">西東京市（1）</a> <a href="#ab-福岡県">福岡県（1）</a> <a href="#ab-全国">全国（1）</a> <a href="#ab-水戸市">水戸市（2）</a> <a href="#ab-川崎">川崎（2）</a> <a href="#ab-愛知県">愛知県（1）</a> <a href="#ab-名古屋市">名古屋市（3）</a> <a href="#ab-沖縄県">沖縄県（2）</a> <a href="#ab-自由が丘">自由が丘（1）</a> <a href="#ab-市川市">市川市（1）</a> <a href="#ab-新潟市">新潟市（4）</a> <a href="#ab-仙台市">仙台市（1）</a> <a href="#ab-北海道">北海道（1）</a> <a href="#ab-広島市">広島市（1）</a> <a href="#ab-三重県">三重県（2）</a> <a href="#ab-鹿児島市">鹿児島市（1）</a> <a href="#ab-奈良県">奈良県（1）</a> <a href="#ab-大阪府">大阪府（2）</a> <a href="#ab-小平市">小平市（1）</a> <a href="#ab-飯田橋">飯田橋（1）</a> <a href="#ab-新橋">新橋（1）</a> <a href="#ab-府中市">府中市（1）</a> <a href="#ab-浦和">浦和（1）</a> <a href="#ab-横須賀中央">横須賀中央（1）</a> <a href="#ab-神戸市">神戸市（1）</a> <a href="#ab-秩父宮">秩父宮（1）</a> <a href="#ab-中央区">中央区（1）</a> <a href="#ab-赤坂">赤坂（1）</a> <a href="#ab-熱海">熱海（1）</a></div>
+<div class="container">
+<div class="ab" id="ab-大阪市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">大阪市</span><span class="ah-cnt">5 件</span></div><div class="plan-card" data-date="2025年11月4日" data-end-year="2026" data-end-month="1">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.tokyu-land.co.jp/news/2026/001674.html" target="_blank" rel="noopener">東急不動産グループ、チャーム・ケア・コーポレーションの共同プロジェクト 公募型アートイベント「ライフデザインアート」結果報告 ～受賞・入選作品の表彰式・特別展示会開催のお知らせ～</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年11月4日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2025年11月4日</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2026年1月5日</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅 🎪ホール</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東急不動産株式会社（本社：東京都渋谷区、代表取締役社長：星野 浩明、以下「東急不動産」）および株式会社東急イーライフデザイン（本社：東京都渋谷区、代表取締役社長：鮎澤 英輔、以下「東急イーライフデザイン」）、ならびに株式会社チャーム・ケア・コーポレーション（本社：大阪府大阪市、代表取締役会長 兼 CEO：下村 隆彦、以下「チャーム・ケア・コーポレーション」）の三社は、2024年6月に締結した業務提携契約及び資本提携（以下「業務資本提携」）に基づく具体的な取り組みの一つとして、シニアライフの充実と若いアーティストの育成を目的とした、「ライフデザインアート」プロジェクトに取り組んでおります</li><li>2025年11月4日から2026年1月5日まで約2カ月の募集を行った結果、651点の作品のご応募を全国各地より頂きました</li><li>審査委員による厳正な選考を経て、受賞・入選作品29点(内、グランプリ1点、東急不動産賞1点、東急イーライフデザイン賞1点、チャーム・ケア・コーポレーション賞1点、審査委員賞1点、入選24点)を決定いたしましたのでお知らせいたします</li><li>受賞および入選作品の表彰式（2026年3月26日）は東急不動産が参画する「渋谷サクラステージ」にて、特別展示会（2026年3月28日・29日）は東急イーライフデザインのシニア向け住宅「グランクレール綱島」に隣接するミズキーホール ギャラリー（横浜市港北区民文化センター）にて開催いたします</li><li>PDFファイルをご覧になるにはAdobe Readerが必要です</li><li>お持ちでない方は、下記よりダウンロードしてください</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.tokyu-land.co.jp/news/2026/001674.html" target="_blank" rel="noopener">https://www.tokyu-land.co.jp/news/2026/001674.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東急不動産 ニュースリリース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025-11-28" data-end-year="2055" data-end-month="10">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/osaka/9608.html" target="_blank" rel="noopener">大阪港・常吉臨港緑地を再整備へ。全国4カ所目の「みなと緑地PPP」活用事例。</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-11-28</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2025年11月</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2055年10月</span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>「みなと緑地PPP」を活用した官民連携事業 国土交通省港湾局は2025年10月下旬、大阪市此花区の常吉臨港緑地を対象とする 「みなと緑地PPP」（港湾環境整備計画）を正式に認定したと発表 した</li><li>「みなと緑地PPP」の活用事例としては、全国で４カ所目、大阪港では常吉西臨港緑地に続いて２カ所目となる</li><li>「みなと緑地PPP」とは、港湾緑地などにおいて港湾環境整備計画に基づき、カフェなどの収益施設の整備を行うとともに、収益の一部を還元して緑地などのリニューアルを行う民間事業者に対し、行政財産の長期貸付けを可能とする制度</li><li>2022年12月の港湾法改正によって創設されている</li><li>大阪港にある常吉臨港緑地の再整備は一般社団法人ディパーチャーが事業者に認定され、2025年11月から2055年10月までの30年間にわたって運営・管理することになる</li><li>スポーツ・水辺・みどりが一体となった事業 一般社団法人ディパーチャーによる常吉臨港緑地の事業コンセプトは、「“スポーツ”“水辺”“みどり” 三位一体となった賑わいの創出」</li><li>スポーツ資源を活用し、世代を超えて人が集い語らい、魅力ある地域のインフラ施設を目指すという</li><li>具体的な事業計画としては、主にグラウンドゾーンとツリーゾーンにセパレート</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/osaka/9608.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/osaka/9608.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 大阪再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025年11月 3" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/osaka/9644.html" target="_blank" rel="noopener">阪急大阪梅田駅、大規模改修に着手 2026年からホーム改良工事を開始</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年11月 3</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>阪急電鉄は2026年1月頃から、 阪急大阪梅田駅 のリニューアル工事を順次開始する</li><li>神戸線を皮切りに、宝塚線・京都線でも列車停止位置の移動や設備改善を進め、将来の利用増に備えた駅構造へと整える計画だ</li><li>運行を維持しながら進められる改修で、拠点駅としての機能更新が段階的に進むことになる</li><li>3階ホームとコンコースを段階的に更新 今回の改修 は駅舎全体のリニューアルではなく、3階ホームとコンコースの内部機能を段階的に更新する計画だ</li><li>将来の設備拡張に必要なスペースを確保し、ホーム上の混雑緩和につなげる狙いがある</li><li>2026年1月頃から、神戸線・宝塚線・京都線の3路線で列車停止位置を約14メートル十三側へ移動させる工事が実施される</li><li>・2026年1月頃：神戸線 ・2026年春頃：宝塚線 ・2026年秋頃：京都線 3線の停止位置移動が完了した後、ホーム床面の段差や隙間を低減する改良を行い、2031年頃からは全ホームへ可動式ホーム柵を順次設置する予定となっている</li><li>コンコースでは、改札機・案内カウンターの配置見直しに加え、多機能トイレ、授乳室、カームダウンスペースなど利用環境に関わる設備を整備する</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/osaka/9644.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/osaka/9644.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 大阪再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-02-01" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/osaka/9813.html" target="_blank" rel="noopener">大阪・クボタ本社が難波から梅田のグラングリーン大阪へ移転。本社跡地でアリーナ構想が浮上</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-01</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏨ホテル 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>農業機械大手のクボタが、2026年5月に本社を創業の地である大阪・難波から、JR大阪駅北側に位置する国内最大級の再開発エリア「グラングリーン大阪」（うめきた2期地区）内のパークタワーへ移転することを決定した</li><li>移転に伴い、現在の本社跡地では1万2000人規模の巨大アリーナを中心とした複合再開発が計画されている</li><li>創業の地・ミナミに136年　クボタ、本社移転で「キタ」へ集約 1890（明治23）年、大阪市南区御蔵跡町（現・中央区日本橋）で創業した クボタ は、1901年に現在の大阪市浪速区に拠点を構えて以来、一貫してミナミエリアを拠点に事業を展開してきた</li><li>南海電鉄「難波駅」から徒歩圏内 であり、大型商業施設であるなんばパークスにも近く、長年にわたりミナミの顔とも言える立地にあった</li><li>一方で、現在の本社は1970年前後に竣工した複数の建屋から構成されており、一部に老朽化が進む建物が含まれている</li><li>老朽化に加え、建物が分散配置されていることで、部門間やグループ会社との連携に物理的な制約を抱えていた</li><li>敷地面積は、隣接地を含めて約2万4000平方メートル規模で、建て替えという選択肢もあった</li><li>しかし、同社にとっては社外との連携がしやすい環境や、関西国際空港へのアクセス性も重要な判断材料となり、本社機能を交通結節点である梅田に集約する判断に至った</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/osaka/9813.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/osaka/9813.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 大阪再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025年12月12" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/osaka/9914.html" target="_blank" rel="noopener">大阪・堺東駅前が変わる 高島屋閉店後の再編、瓦町公園周辺で再開発始動 New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年12月12</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>2025年12月12日、大阪府堺市の 堺東エリア 再編で先行する3ゾーンの一つ、瓦町公園周辺ゾーンの「北瓦町一丁地区」で、市街地再開発準備組合が事業協力者を選定した</li><li>選ばれたのは、東急不動産を代表企業とする共同企業体だ</li><li>駅徒歩4分の駅前近接地、活用進まぬ街区の実態 北瓦町一丁地区は、南海高野線「堺東」駅の北西側、駅から徒歩約4分の場所にある約1万平方メートルの街区だ</li><li>駅前に近い立地だが、再開発の中心となる 瓦町公園 や地下自転車駐車場は街区の内部にあり、駅からの主な歩行者動線とは直結していない</li><li>実際に歩いてみると、月極駐車場や平面駐車場が点在し、建物の更新が進んでいない区画も多い</li><li>商店街 は駅から離れるほど閑散としていた</li><li>容積率400％の商業地域に指定されているが、駅近にふさわしい土地利用とは言い難い状況だ</li><li>堺東駅周辺には、堺東中瓦町商店街や堺銀座商店街など7つの商店街が連なり、 駅前 から奥へアーケードが続く</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/osaka/9914.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/osaka/9914.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 大阪再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-渋谷"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">渋谷</span><span class="ah-cnt">3 件</span></div><div class="plan-card" data-date="2026年3月17日" data-end-year="2026" data-end-month="3">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.tokyu-land.co.jp/news/2026/001676.html" target="_blank" rel="noopener">「東急ステイ渋谷 恵比寿」2026年3月17日(火)開業 広域渋谷圏のハブとなる“都市滞在の拠点”へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 渋谷</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年3月17日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年3月17日(火)に開業いたします</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏨ホテル 🏨宿泊</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東急不動産株式会社（本社：東京都渋谷区、代表取締役社長：星野 浩明、以下「東急不動産」）と東急リゾーツ＆ステイ株式会社（本社：東京都渋谷区、代表取締役社長：丹下 慎也、以下「東急リゾーツ&amp;ステイ」）は、「東急ステイ渋谷 恵比寿」(東京都渋谷区、支配人：播間 洋輔、以下「本ホテル」)を2026年3月17日(火)に開業いたします</li><li>本ホテルは、全国に展開する「東急ステイ」の33施設目として、恵比寿駅至近エリアにて、広域渋谷圏※の宿泊機能充実に貢献します</li><li>都市滞在のハブとして“住まい”のように快適な客室を起点に、都市とゲストをつなぐ時間と体験を提供してまいります</li><li>館内には、滞在機能の高い全77室・5タイプの客室のほか、オールデイダイニング「EZARO」、趣の異なる2つの寿司店、ドラッグストアなどをご用意しています</li><li>また、様々な企業と提携し、多彩な体験コンテンツを展開することで、恵比寿ならではの滞在価値を提供してまいります</li><li>PDFファイルをご覧になるにはAdobe Readerが必要です</li><li>お持ちでない方は、下記よりダウンロードしてください</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.tokyu-land.co.jp/news/2026/001676.html" target="_blank" rel="noopener">https://www.tokyu-land.co.jp/news/2026/001676.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東急不動産 ニュースリリース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-02-20" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9849.html" target="_blank" rel="noopener">東京都日野市から実践女子大学移転？ 日野自動車跡地のゆくえは？ JR中央線日野駅～JR八高線北八王子駅周辺を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 渋谷</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-20</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>実践女子大学は、東京都日野市に本部が設置されている総合大学であり、JR山手線の渋谷駅に近い渋谷キャンパスとJR中央線の日野駅が最寄りの日野キャンパス、合計2つのキャンパスから構成されている</li><li>日野駅からほど近い実践女子大学のキャンパスが移転予定 学生総数はおよそ4500人程度であり、文学部・人間社会学部・国際学部・短期大学部などは渋谷キャンパス、環境デザイン学部と生活科学部は日野キャンパスと、学部によってキャンパスが分離されて、授業が行なわれている状態である</li><li>著名な卒業生としては脚本家の向田邦子や、タレントのうつみ宮土理氏などを輩出しており、歴史と伝統を持つ大規模な大学といえよう</li><li>そんな実践女子大学では、 日野キャンパスの移転 を発表している</li><li>具体的には2031年をめどに、渋谷キャンパスにすべての学部を移転する計画である</li><li>日野キャンパスは依然残すというものの、日野に関しては、大幅に機能を縮小させていくことになるだろう</li><li>大学本部としては、最先端の企業や文化が集積し、国際性豊かな渋谷へのキャンパス集約は、本学が目指す「様々な社会課題に向き合い、自ら考え、行動する力」を育成する上できわめて重要な意義を持つ、としている</li><li>今後は渋谷への集約にともない、学びの領域をさらに広げるための学部・学科改革を進めるとともに、渋谷という立地を最大限に活かした教育を進めていく方針であり、今後渋谷キャンパスでは、新棟建設を含めた再整備を行うことも合わせて表明している</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9849.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9849.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年4月1日" data-end-year="2026" data-end-month="4">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://tatemono.com/news/20260227.html" target="_blank" rel="noopener">2026年02月27日 都市開発・ビル イノベーション拠点 日本初のCVCコミュニティ特化型イノベーション拠点「JAPAN CVC BASECAMP」 東京駅前のTOFROM YAESU TOWER内に2026年4月開設</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 渋谷</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年4月1日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年4月1日、「TOFROM YAESU TOWER」内に開設</span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>国内最大級※のCVC（コーポレート・ベンチャー・キャピタル）コミュニティを運営するFIRST CVC株式会社（本社：東京都渋谷区、代表取締役社長 山田 一慶、以下「FIRST CVC」）と東京建物株式会社（本社：東京都中央区、代表取締役 社長執行役員 小澤 克人、以下「東京建物」）は、大企業の新規事業担当者やCVCを集積し、オープンイノベーション加速させる拠点「JAPAN CVC BASECAMP」（以下「本施設」）を2026年4月1日、「TOFROM YAESU TOWER」内に開設します</li><li>大企業の新規事業担当者やCVCに特化した拠点は日本で初※となります</li><li>【本リリースのポイント】 ・ 日本初、大企業の新規事業担当者やCVCに特化したイノベーション拠点を、東京駅前「TOFROM YAESU TOWER」に開設 ・ 大企業の新規事業担当者やCVCが課題として抱える、CVCやスタートアップ等との交流・共創機会の乏しさや、出資・オープンイノベーションに関するノウハウ不足に対するサービスを提供 近年、日本の大企業では、主にスタートアップの技術や知見を活用し未来の成長源を獲得するための戦略的な仕組みとしてCVCを設立する動きが活発化してきました</li><li>当初は、未上場のスタートアップに出資することで、成長源の獲得だけでなく、新規株式公開（IPO）によるキャピタルゲインの獲得も重要なリターンでした</li><li>しかしながら、東証グロース市場の上場維持基準が厳格化されIPOの大幅増加が見込めないことから、多くの起業家が上場を延期または出口戦略をM&amp;Aにシフトしており、大企業からは将来のM&amp;A候補との関係構築やシナジー創出など、CVCがより戦略的な役割を担うことが想定されています</li><li>一方で、CVCの運営や投資後の事業共創に関しては、これまでCVC同士がオフィシャルに情報交換を行い、具体的な成功・失敗事例</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260227.html" target="_blank" rel="noopener">https://tatemono.com/news/20260227.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-流山市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">流山市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025-12-23" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-completed">✅ 完成・供用中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9703.html" target="_blank" rel="noopener">東京圏で最も地価上昇率が高いエリア、東武アーバンパークライン初石駅で橋上駅の駅舎が12/21開業</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 流山市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-23</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>つくばエクスプレス開業以降、「千葉の新拠点」として脚光を浴びてきた流山おおたかの森</li><li>その一駅北に位置する東武アーバンパークラインの初石駅で、橋上駅舎化と東西一体整備が進んでいる</li><li>今回の事業では、ホーム上空に橋上駅舎を新設し、線路をまたぐ東西自由通路を整備する</li><li>これまで初石駅の改札は西側にしかなく、駅の東側に住む住民は、駅の南北いずれかにある踏切を渡らなければ駅にたどり着けなかった</li><li>橋上駅の供用開始後は、東西どちらからも自由通路経由で改札階へアクセスできるようになる見込みだ</li><li>2018年には地元住民から12,000件を超える署名が出るなど、初石駅の東口開設は、周辺住民の「悲願」だったと言っても良い</li><li>橋上駅舎にはエレベーターなどのバリアフリー設備が整備され、高齢者やベビーカー利用者も、段差を意識せずホームに向かえるようになる</li><li>また、駅前では、西口駅前広場の再編に加え、新たに東口駅前広場も整備される計画で、これまで住宅街の奥に隠れていた駅の東側エリアが、駅と正面から向き合う「顔」を持つことになる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9703.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9703.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-銀座"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">銀座</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-01" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9701.html" target="_blank" rel="noopener">銀座ヴィジョン2040公表。街づくり会議が示す「人が主役」の都心更新、交通・環境・防災も視野に</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 銀座</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-01</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">高さ</span><span class="spec-v">56m</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>国内随一の繁華街である、銀座の街づくりを支える二つの組織が、将来像を「見える化」した</li><li>銀座一から八丁目の町会・通り会などが連携する「銀座街づくり会議」と、その運営の下で個別案件を事前協議する「銀座デザイン協議会」が「銀座ヴィジョン2040」を公表</li><li>歩行者中心の都心づくりや、環境・防災まで含めた更新戦略を示した</li><li>2003年頃に、都市再生の流れの中で超高層ビル提案が持ち上がったことを契機として発足したのが、銀座街づくり会議だ</li><li>単なる利害調整ではなく、「銀座らしさ」を守りながら街の更新を進めるため、専門家と調査・ワークショップ・シンポジウムを重ね、中央区との協議を主導してきた</li><li>会議で整理した論点は全銀座会（銀座の町会・通り会などが参加する意思決定の場）へ報告され、地域全体の合意として確定させる運用が取られている</li><li>意思決定の手続きを明確にすることで、街を開発するデベロッパーなどに「何を満たせば前へ進めるか」の見通しを与える狙いがある</li><li>具体的な成果の一つが、地区計画「銀座ルール」の改正だ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9701.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9701.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-霞が関"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">霞が関</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025年11月17" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9711.html" target="_blank" rel="noopener">都市再生プロジェクトに「築地一丁目地区」と「霞が関・虎ノ門地区」が追加！手続きのワンストップ化でまちづくりを後押し</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 霞が関</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年11月17</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上31階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪店舗</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>築地には2棟の高層ビル、霞が関・虎ノ門にはビジネス支援施設も 東京都はこれまで、国際競争力の強化に資する53の都市再生プロジェクトを都市計画法の特例等の対象と定めていた</li><li>都市計画法に基づく通常の手続では、都道府県と区市町村の都市計画決定や大臣の同意等を個別に進める必要があるが、 本特例によりこれらの手続が一本化</li><li>国家戦略特区における区域計画の認定をもって、都市計画の決定/変更がされたものとみなされる</li><li>2022年2月に「品川駅西口地区」、2024年10月に「田町駅東口地区」がこの都市再生プロジェクトに追加されており、品川駅西口地区は都市計画法の特例の活用により、2022年10月に区域計画が認定されている</li><li>そして、2025年11月17日「第50回 東京圏国家戦略特別区域会議」にて、この都市再生プロジェクトに２つのプロジェクトが追加されることが決定した</li><li>住友不動産が手掛ける「築地一丁目地区」と、中央日本土地建物、東洋不動産が手掛ける「霞が関・虎ノ門地区」だ</li><li>「築地一丁目地区」の計画地は、都営地下鉄・東京メトロ「東銀座」駅、東京メトロ「築地」駅などからほど近い、約1.4haの土地</li><li>A街区には、オフィス、店舗、文化交流施設などが入る高層ビル、B街区にはサービスアパートメント、福祉施設などが入る高層ビルが建設される計画で、 建物の規模は、A街区が地上31階、地下3階、高さ約180ｍ、敷地面積約8,760㎡、延べ面積約159,000㎡</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9711.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9711.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-笹塚"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">笹塚</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-05" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9678.html" target="_blank" rel="noopener">明大前駅周辺で進む「骨格からのまちづくり」。高架化と道路整備は再開発の呼び水になるか</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 笹塚</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-05</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>連続立体交差事業が後押しする街区再編計画 京王線と井の頭線の乗換駅であり、明治大学の和泉キャンパス最寄りとなっている明大前駅周辺で、街の骨格を組み替える都市インフラ整備が進んでいる</li><li>背景には、京王電鉄が進める、笹塚駅から仙川駅までの連続立体交差事業がある</li><li>連続立体交差事業に並行する形で、都市計画道路・補助第154号線および駅前広場の整備を進める</li><li>さらに、地区計画による建物の高さ・用途の誘導なども進んでおり、世田谷区は明大前駅周辺エリアを「地域生活拠点」として機能させたいと考えている</li><li>京王線の連続立体交差事業は、約7.2kmにわたる線路の高架化により25か所の踏切を除却し、道路渋滞と安全性の課題を解消しようというものだ</li><li>事業期間は2014年度から2030年度末までとされており、明大前周辺でも高架橋の構築や仮線切り替えなどの工事が段階的に進んでいる</li><li>線路南北を分断してきた物理的な壁を取り払い、面的な回遊性を高める効果が期待される</li><li>この高架化と連動する形で、世田谷区施行の都市計画道路「補助第154号線（明大前駅付近）」が整備される</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9678.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9678.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-千代田区"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">千代田区</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025年12月8日" data-end-year="2031" data-end-month="10">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9716.html" target="_blank" rel="noopener">日比谷からはじまる「光の街」づくり powered by IOWN～NTTグループ誕生の地・日比谷に、NTT本社を 2031年に移転予定</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 千代田区</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年12月8日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2031年10月末竣工予定</span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>NTT株式会社、NTTアーバンソリューションズ株式会社およびNTT都市開発株式会社は、NTTが中心となって構想を推進する次世代情報通信基盤「IOWN※1」が実装され、テクノロジーの進化とともに、街も進化し続ける“「光の街」づくり powered by IOWN ”に着手する</li><li>この取り組みの第一弾は、NTT都市開発と東京電力パワーグリッド株式会社が事業主として、東京都千代田区にて開発中の「NTT日比谷タワー」（2031年10月末竣工予定、以下「同タワー」）において推進され、同タワーを含む「内幸町一丁目街区※2」にて掲げる次世代スマートシティ実現の一端を担う</li><li>日比谷は、1961年に当時の日本電信電話公社（現NTT）が本社を構えた大変思い入れの深い場所</li><li>NTTは、この地に建設する同タワーに本社を移転（予定）し、これまで培ってきたNTTグループ※3の技術力とノウハウを結集することにより、これまでにない“新しい価値の提供”と、圧倒的な“超・低消費電力化”を実現していく</li><li>さらに、パートナー企業の皆さまとの共創を通じて、多様な知見や最先端の技術を融合させ、人を中心とした、より持続可能で魅力的な社会の実現をめざして推進していくという</li><li>日本は現在、少子高齢化にともなう人手不足、気候変動による地球温暖化、頻発する自然災害など、深刻な社会課題に直面しており、持続可能な社会の実現に向けた対応が急務となっている</li><li>またAI・ロボット・モビリティ市場の拡大により生活が豊かになる一方、電力消費量の著しい増大が懸念されている</li><li>こうした課題に対し、NTTグループは膨大なデータを大容量・低遅延・低消費電力で処理する次世代情報通信基盤「IOWN」を活用し、社会の変革に挑む</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9716.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9716.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-高輪"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">高輪</span><span class="ah-cnt">3 件</span></div><div class="plan-card" data-date="2026-01-14" data-end-year="2030" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9743.html" target="_blank" rel="noopener">東京メトロ南北線延伸で注目を集める「白金高輪」駅！2つの大規模再開発も進行中</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 高輪</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-14</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2025年に工事が着工</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2030年半ば開業予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上39階</span></span><span class="spec-item"><span class="spec-k">総戸数</span><span class="spec-v">991戸</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢事務所 🏪店舗 🏠住宅 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>2029年・2030年、駅周辺に２つの再開発ビルが誕生予定 東京都港区に位置する白金高輪駅</li><li>東京メトロ南北線と都営地下鉄三田線の2路線が乗り入れており、都心各所へのアクセスも良好</li><li>駅から少し歩けば静かな住宅街が広がり、高級住宅街、住んでみたい憧れの街として、幅広い年代層から人気を集めている</li><li>さて、現在、そんな白金高輪駅の人気をさらに押し上げるであろう大規模プロジェクトが進行中だ</li><li>東京メトロ南北線を白金高輪駅で分岐し、品川駅方面に2.5km延伸して品川駅につなげる 「南北線延伸（品川・白金高輪間）計画」 である</li><li>※引用： 東京メトロホームページ 新路線は、2030年半ば開業予定</li><li>延線が実現すれば、六本木・赤坂エリアと品川エリア間のアクセス利便性が向上し、周辺エリアのさらなる活性化が期待できる</li><li>もちろん、その分岐点となる白金高輪駅周辺も例外ではないだろう</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9743.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9743.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025年12月22" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9804.html" target="_blank" rel="noopener">【品川駅高輪口再開発】グランドプリンスホテル新高輪2026年解体に。東京随一の発展を続ける歴史と伝統の街を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 高輪</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年12月22</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都港区にある品川駅は、JR山手線の6大ターミナルである東京・品川・渋谷・新宿・上野・池袋の一角として、発展してきた</li><li>今現在6大ターミナル駅のなかでも、もっとも成長著しいのが品川といえるだろう</li><li>従来、海側の港南口（東口）は鉄道唱歌でも「台場も見えて　波白く」と歌われているほど遠浅の海が広がっていたのだが、埋め立てられてしまった</li><li>埋め立てた土地は台場も含めて昭和40年ごろに港南と名付けられ、それからは食肉市場や下水処理場が設置されたのだが、依然として閑散とした雰囲気があった</li><li>しかし1990年代より開発が進み、近年港南方面ではオフィス街としての発展が加速している</li><li>それは、東海道新幹線の品川駅新設で中京・関西圏にもアクセスしやすい交通利便性や、リニア新幹線の始発駅として工事が進んでいる期待感も背景にはあるのだろう</li><li>そして、品川の内陸側にある高級住宅エリア「高輪」方面でも、再開発が進むことになっている</li><li>もともと高台にある高輪エリアには、江戸期を通じて大名や旗本の別荘が建てられていた</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9804.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9804.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年1月30日" data-end-year="2026" data-end-month="1">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://tatemono.com/news/20260226.html" target="_blank" rel="noopener">2026年02月26日 都市開発・ビル 生まれ変わる品川駅高輪口に「Ave.Takanawa」竣工・開業 新しい時代の働き方を追求した次世代のワーキングプレイス</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 高輪</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月30日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年1月30日に竣工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京建物株式会社（本社：東京都中央区、代表取締役社長執行役員 小澤 克人）は、品川駅高輪口より徒歩4分に位置するオフィスビル「Ave.Takanawa（アベニュータカナワ）」（以下「本物件」）が2026年1月30日に竣工し、同年3月2日に開業することをお知らせします</li><li>本物件が所在する品川駅高輪口エリアは、今後リニア中央新幹線の開通や環状第4号線の延伸等により一層広域交通結節点としての魅力を高め、さらに複数の大規模再開発により、日本を代表する新たなビジネス・商業拠点へと変貌する予定です</li><li>本物件は、ビジネスエリアへの生まれ変わりを先導すべく、新しい時代の働き方を追求した次世代型オフィスとして誕生します</li><li>本物件は、象徴的な大階段や全フロアに設けた屋外バルコニー、建物中間階の5階に設けたテナント共用ラウンジなどのパブリックスペースを備えることで、入居者間の多様な交流を促進するとともに、執務空間では東西両面からの採光・通風の確保や、スケルトン天井の採用等により、まちや人・自然とのつながりを感じる開放的な執務空間を実現しました</li><li>AIが企業活動や生活に浸透するこれからの時代を見据え、オフィスワーカーがより人間的な価値や創造性を発揮できる空間の在り方を追求しました</li><li>働きながら自然や季節の移ろい、ゆらぎを感じられる開放的な空間により、オフィスワーカーの感性の刺激と快適性を両立させ、イノベーションの創出を支援します</li><li>本物件は、従前建物である「アベニュー高輪前川ビル」の建替えにより誕生しました</li><li>本物件が面する国道15号（第一京浜）は特定緊急輸送道路※1に指定されており、従前建物については築年の経過に加えて耐震性の不足が課題となっていたことから、建替えにより耐震化を図ること等を目的として開発しました</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260226.html" target="_blank" rel="noopener">https://tatemono.com/news/20260226.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span><br><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9933.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9933.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-日本橋"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">日本橋</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年6月30日" data-end-year="2026" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9768.html" target="_blank" rel="noopener">東京駅直結、国家戦略特区の大規模複合再開発「TOFROM YAESU」2026年順次竣工！高さ約250mの「TOFROM YAESU TOWER」も登場</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 日本橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年6月30日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年に順次竣工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上10階・地下2階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢事務所 🏪商業 🏪店舗 🏠住宅 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>個性豊かな飲食店舗を中心に約70店舗がオープン予定 東京駅八重洲中央口前で推し進められている国家戦略特区の大規模複合再開発「 TOFROM YAESU（トフロム ヤエス）」 が、いよいよ2026年に順次竣工を迎える</li><li>同再開発はA地区（延床面積約12,000㎡）とB地区（延床面積約225,000㎡）の２街区に分けて進められており、A地区には事務所、店舗、診療所等から成る地上10階・地下2階、高さ約45mの「TOFROM YAESU THE FRONT」が</li><li>そして、B地区には、事務所、医療施設、劇場・カンファレンス、バスターミナル、店舗、住宅等から成る、地上51階・地下4階、高さ約250mの「TOFROM YAESU TOWER」が登場する予定だ</li><li>「TOFROM YAESU THE FRONT」は2026年7月、「TOFROM YAESU TOWER」は2026年2月に竣工</li><li>開業日は、TOWERが2026年秋、THE FRONTは未定</li><li>いずれも2026年7月に開業日、商業テナントラインナップが発表される運びとなっている</li><li>「TOFROM YAESU」内には、「東京ならでは」を発信する商業施設を整備する計画で、個性豊かな飲食店舗を中心に約70店舗がオープン</li><li>TOWER 1階には、東京駅と日本橋髙島屋などが立地する日本橋地区を結ぶ貫通通路と、屋内広場「檜物町スクエア（ひものちょうスクエア）」が登場する</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9768.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9768.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-調布市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">調布市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-22" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9748.html" target="_blank" rel="noopener">東京都狛江市・多摩川住宅の建替え事業が進行中。2028年6月に全4棟・1217戸のマンションが竣工する予定</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 調布市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-22</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上12階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅 🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>築55年の住宅団地を大規模マンションに建替え 狛江市は東京都の多摩地区東部に位置するまち</li><li>東京都区部に接し、新宿まで電車だと約20分の好立地で、ベッドタウンとして発展してきた</li><li>多摩川と野川に挟まれ自然豊かであることから、「水と緑のまち」という将来像も掲げている</li><li>東京都ではもっとも、日本でも2番目に面積が小さい</li><li>同市では「多摩川住宅二棟団地マンション建替え事業」と呼ばれる、大規模な再開発プロジェクトが進行中だ</li><li>これは、1968年竣工の築55年、522戸の住宅団地を、全4棟・1217戸の大規模分譲マンションに建替えるというもの</li><li>事業手法はマンションに建替え法に基づくマンション建替事業（組合施行）となり、積水ハウス、小田急不動産、長谷工不動産、長谷工コーポレーションが参加組合員として名を連ね、ユーディ都市建築研究所はコンサルタント・事務局代表としてプロジェクトに参画している</li><li>物件名称は「多摩川シーズンズ」で、2025年11月にモデルルームもオープン、28年6月に全体竣工を迎える予定だ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9748.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9748.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-東村山市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">東村山市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-23" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9761.html" target="_blank" rel="noopener">東京都・東村山駅東口の再整備、急成長スーパー「ベイシア」オープン、線路高架化も進行中</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 東村山市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-23</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都東村山市にある西武新宿線東村山駅は、ドリフターズで有名な志村けんの出身地として知られている東村山市の中心地であり、西武国分寺線・西武西武園線も利用できる</li><li>東京郊外にあり都心まで通勤圏内にある距離感に加えて、一戸建てを子育て世代が無理なく買える街ということから、新築建売り住宅の販売もまずまず好調な雰囲気だ</li><li>東村山駅の電車運行本数は、朝7時台上りが13本</li><li>日中時間帯は、毎時7本（うち1本は特急）となっており、高田馬場駅まで約30分とそこそこな利便性が確保されている</li><li>その東村山駅では高架化工事が進んでいる</li><li>しかし工事の遅延が決定しており、それとは別に街づくりは着実に進んでいる状況である</li><li>現地を取材して、情勢を探る</li><li>東村山駅の高架化工事は、約4年間の工期延長が正式に東京都、および西武鉄道から発表されている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9761.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9761.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-練馬区"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">練馬区</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-29" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9777.html" target="_blank" rel="noopener">東京の練馬城址公園（旧としまえん跡地）付近で新たな幹線道路を整備へ。環七と環八の間で新たな大動脈の整備が一歩前進へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 練馬区</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-29</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都は2025年3月に、練馬区向山四丁目～春日町三丁目で都市計画道路「補助第133号線（向山）」を都市計画事業として認可し、整備を進める方針を示した</li><li>大まかに言うと、「旧としまえん（現・練馬城址公園）西側あたりを南北に抜ける、幅16mの新しい幹線道路を通す」計画だ</li><li>11月には用地説明会を開催、12月に説明会時の資料が公開されている</li><li>整備する道路の長さは約1,240m、計画幅員16mで、車道2車線に加えて歩道・自転車通行空間を確保し、無電柱化や街路樹整備も行う</li><li>事業期間は2036年度までで、事業費は約141億円とされる</li><li>補助133号線は、環状道路（環七・環八など）の機能を補完する南北軸として位置付けられてきた</li><li>しかし、これまで整備は細かく分かれた区間ごとに進んでおり、供用済みの道路が点在する「こま切れ状態」が続いてきた</li><li>向山地区の今回区間は、こま切れ状態を解消するピースの一つとなる（全部が完全につながるわけではない）</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9777.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9777.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-大宮"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">大宮</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2025-12-17" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9639.html" target="_blank" rel="noopener">埼玉県が「大宮スーパー・ボールパーク基本計画」を策定。大宮公園にプロ野球に対応する球場 を整備する方針</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大宮</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-17</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳公園 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>さいたま市に所在する県営の都市公園 大宮公園は、埼玉県さいたま市大宮区及び見沼区にある、67.8haの都市公園だ</li><li>さくら名所100選や都市公園100銭に選定されており、埼玉県でもっとも歴史ある県営公園として多くの人に親しまれている</li><li>第一公園から第三公園の3つの公園で構成され、それぞれにスポーツ施設や日本庭園、茶室、広場、森などが点在している</li><li>地域にとってなくてはならない場所だが、埼玉県は再整備を検討しているところ</li><li>2025年秋には「大宮スーパー・ボールパーク基本計画を策定」した</li><li>これまでの経緯を振り返ろう</li><li>大宮公園は開園から130年以上の歴史があり、公園の歴史的価値や日本的風景の継承、次の100年を見据えた公園整備のため、2018年から19年にかけ有識者による検討委員会を結成の上、「大宮公園グランドデザイン」を策定</li><li>これによると、現在の公園の配置をそのまま踏襲しながら「都市公園から世界に愛される公園都市へ」の発展を目指す「大宮グランドパーク」を理想像に掲げ、自然や伝統の景色の継承や、見沼田んぼの農業風景と生態系の保存・活用、スポーツを軸とした賑わいの創出を案として挙げていた</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9639.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9639.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-13" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-construction">🔨 工事中</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9737.html" target="_blank" rel="noopener">大宮始発の新幹線は復活する？さいたま市が10年以上続ける要望は実現するか</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大宮</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-13</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>さいたま市が「新幹線の大宮駅始発」の復活を国に求める要望を続けている</li><li>市が2025年に公表した「令和8年度 国の施策・予算に対する提案・要望」で、鉄道事業者への働きかけに対する国の支援を求めた</li><li>大宮駅を終着とする列車を折り返して始発化することや、臨時列車にとどまらず定期列車も含めた設定を視野に入れている</li><li>要望の背景として市は、大宮駅が北海道・東北・秋田・山形・上越・北陸の6つの新幹線が乗り入れる結節点であることを挙げる</li><li>加えて、2017年度から2020年度にかけて、大宮始発の臨時便が計52便運行された実績がある</li><li>便数の内訳も示されており、2017年度は6便、2018年度は13便、2019年度は20便、2020年度は13便だった</li><li>ただ、コロナ禍の影響もあり、2021～2024年度は0便となった</li><li>市は、当時の利用状況や感染症による需要低下が、臨時便が途絶えた背景にある可能性を挙げている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9737.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9737.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-横浜"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">横浜</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2025年11月14" data-end-year="2037" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9677.html" target="_blank" rel="noopener">横浜駅東口再開発が本格化！“空飛ぶクルマ”の離発着場を有する超高層再開発ビルが誕生</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 横浜</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年11月14</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 誕生！供用は2037年</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上45階</span></span><span class="spec-item"><span class="spec-k">高さ</span><span class="spec-v">231m</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>横浜市で2番目の高さとなる再開発ビル誕生！供用は2037年度を予定 JR線・京急線など鉄道6社・9路線が乗り入れる横浜駅</li><li>一日の乗降客数は約200万人、新宿・池袋・東京駅に次いで第4位を誇る、日本有数のターミナル駅だ</li><li>この横浜駅の東口を出てすぐの場所で、現在、新たな再開発計画が進行している</li><li>日本郵政不動産、JR東日本、京浜急行電鉄が事業協力者として参画するその計画の名称は 「横浜駅みなみ東口地区第一種市街地再開発事業」 （所在地：横浜市西区高島二丁目14、15、16の各一部）</li><li>計画地は約1.3ha、南側は帷子川に面しており、川を挟んでみなとみらい21地区及び平沼地区と隣接している</li><li>現在計画地には「横浜中央郵便局」や「アソビル」のほか、中低層の商業・業務・鉄道施設などが建っているが、建物の老朽化が進んでおり、鉄道による分断や未利用地の存在、隣接するみなとみらい21地区及び平沼地区との回遊性などが課題視されてきた</li><li>これらの課題を解消するべく、横浜市主催の「横浜駅東口地区まちづくり勉強会」等において議論が重ねられ、2024年6月に「横浜駅みなみ東口地区市街地再開発準備組合」が設立</li><li>2025年11月14日に環境影響評価方法書の縦覧が開始され、いよいよ再開発計画が本格的に動き出そうとしている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9677.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9677.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-02-08" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9792.html" target="_blank" rel="noopener">横浜市・上大岡駅西側再開発、駅前「最後のピース」が動く。歩行者動線の再編で交通結節点を更新へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 横浜</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-08</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上43階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪店舗 🏠住宅 🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>横浜市港南区の上大岡駅西側で検討が進む「（仮称）上大岡C北地区第一種市街地再開発事業」が、環境影響評価手続き（方法書段階）を通じて具体像を見せ始めた</li><li>この計画は、上大岡駅を中心とした「横浜上大岡駅西地域」で段階的に進められてきた再開発の「総仕上げ」と位置づけられている</li><li>公表されている資料からは、駅前の歩行者環境や公共交通の使い勝手を更新する狙いが読み取れる</li><li>再開発建物はゲタばきの大型タワーマンションだ</li><li>階高は地下2階・地上43階（最高高さ約179m）で、延床面積は約79,230㎡</li><li>用途としては、住宅約595戸を中心として、低層部（地下1～3階）へ店舗と文化交流施設を配置する</li><li>高層部（4階以上）は共同住宅と機械室等で構成される</li><li>駅との接続面では、地下1階で市営地下鉄の上大岡駅に接続し、エレベーターなどによって地上へのバリアフリー動線を確保する計画だ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9792.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9792.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-船橋"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">船橋</span><span class="ah-cnt">4 件</span></div><div class="plan-card" data-date="2026-01-04" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9697.html" target="_blank" rel="noopener">発展目覚ましい千葉県・船橋駅周辺。2028年3月には駅直結で県下最高層の大規模複合施設が竣工</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 船橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-04</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅 🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>船橋市の主要ターミナル駅で千葉県有数の繁華街を形成 船橋駅は千葉県船橋市のある駅で、JR東日本と東武鉄道が乗り入れている</li><li>周辺には駅が密集しており、相互乗換駅である京成電鉄の京成船橋駅をはじめ、大神宮下駅、海神駅、東葉高速鉄道の新船橋駅が当駅から半径1.5㎞圏内に位置している</li><li>JR東日本の総武本線を走る横須賀・総武快速と各駅停車、東武鉄道の東武野田線、同駅の南側にある接続路線の京成電鉄には京成本線が乗り入れている</li><li>駅南口には商店街が広がり、ほぼ終日人通り、車の通行量ともに多い</li><li>2003年春には駅前の商店街の一部が再開発ビルとして生まれ変わり、駅から本町方面に伸びる船橋駅前商店街、船橋大神宮の門前町、宿場町として栄えた船橋の中心に船橋本通り商店街上があり、金融機関などが建ち並ぶ</li><li>一方、北側は住宅地に近く、総武線が地上線だった時代にあった側線跡地を利用して駅舎の高架化後に再開発を推進</li><li>駅北口の道路は拡幅も進められている</li><li>そんな同駅周辺だが、南口でさらなる開発が行われている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9697.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9697.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-16" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9736.html" target="_blank" rel="noopener">千葉県船橋市「JR船橋市場町社宅」跡地で全4棟の再開発事業が進行中。2028年の完成を目指す</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 船橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-16</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上14階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏠住宅 🏠マンション 🎪ホール</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>千葉県北西部に位置する船橋市</li><li>東京都心へのアクセスがよく、市内にはJRや私鉄が乗り入れ交通網は発達しており、大型商業施設や豊かな自然が共存</li><li>単身者・ファミリー世帯ともに人気のまちとして知られている</li><li>多くの自治体とは対照的で、人口が増え続けている船橋市</li><li>2025年には65万人を超えた</li><li>全国に62ある中核市（保健、福祉、環境、都市計画など市民生活に密着した分野の事務権限が都道府県から移譲されている自治体）のなかで、最大の人口を誇る</li><li>それを示すかのように、住宅の供給を目的とした再開発事業も進行中だ</li><li>ジェイアール東日本都市開発と東急不動産による共同プロジェクトもそのひとつで、全4棟・738戸の大規模分譲マンションを整備している</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9736.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9736.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-26" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9749.html" target="_blank" rel="noopener">千葉県船橋市・南船橋市駅至近で県内最大規模のマンション建替え事業が開始。2028年に先行工区の竣工目指す</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 船橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-26</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上5階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🏠住宅 🏠マンション 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>南船橋駅は、JR京葉線と武蔵野線が乗り入れる千葉県船橋市の駅</li><li>「ららぽーとTOKYO-BAY」や「LaLa arena TOKYO-BAY」「IKEA」などへのアクセス拠点であり、駅周辺には商業施設や公園が充実している</li><li>都心や西船橋方面へ接続し、駅前開発も進展</li><li>とりわけ南口に関しては、駅前に広がる空き地が2013年に千葉県企業庁から船橋市に売却され、22年8月にバス停やタクシーループが設置された南口駅前広場の供用を開始</li><li>残りの土地については公益的複合施設、社会福祉施設、生活複合施設、商業施設を整備する計画が進められ、23年11月に「三井ショッピングパーク ららテラスTOKYO-BAY」が開業するなど、近年は再開発が目覚ましい</li><li>同エリアにはマンションや店舗、情報発信拠点、特別養護老人ホーム等も整備されており、26年8月には児童相談所も開設する予定だ</li><li>新たに始まっているのが「若松二丁目住宅マンション建替え事業」だ</li><li>同住宅は南船橋駅から徒歩で10分もかからない、三井ショッピングパーク ららテラスTOKYO-BAYの裏手に位置する地上5階建て、全17棟・総戸数約576戸の建物で、1969年に竣工した</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9749.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9749.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年2月7日" data-end-year="2026" data-end-month="2">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://tatemono.com/news/20260205.html" target="_blank" rel="noopener">2026年02月05日 住宅 千葉県最高層を誇る地上51階建て・総戸数677戸の大規模複合開発タワーマンション 「プレミストタワー船橋」販売開始</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 船橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月7日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: オープン以降、2026年2月</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上51階・地下1階</span></span><span class="spec-item"><span class="spec-k">総戸数</span><span class="spec-v">677戸</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢事務所 🏪店舗 🏠住宅 🏠マンション 🎪ホール</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>大和ハウス工業株式会社（本社：大阪府大阪市、社長：大友 浩嗣）と東京建物株式会社（本社：東京都中央区、社長：小澤 克人）、京成電鉄株式会社（本社：千葉県市川市、社長：天野 貴夫）は、千葉県船橋市の「西武船橋店本館」跡地において、2026年2月7日より、分譲マンション「プレミストタワー船橋」（地上51階・地下1階建て、総戸数677戸）の販売を開始します</li><li>「プレミストタワー船橋」は、JR中央・総武線、東武アーバンパークライン「船橋駅」徒歩2分、京成本線「京成船橋駅」徒歩4分の高い利便性を備えた立地に位置し、千葉県内で最高層※1の建築物となる、地上51階建て（高さ約192m）の大規模複合開発のタワーマンションです</li><li>本物件は、1LDK（43.71㎡）〜3LDK（134.02㎡）まで全63タイプの多彩なプランを揃えた住宅棟に加え、店舗や事務所などで構成される複合棟を併設</li><li>また、2階には緑豊かな植栽を施した広場「フォレストアリーナ」を設けるなど、市民の憩いの場および賑わいを創出する拠点として地域活性化に寄与するとともに、「船橋駅」南口エリアの新たなランドマークになることを目指します</li><li>本物件の共用部は、海や森など船橋周辺に広がる自然の風景をモチーフに、開放感と意匠性を兼ね備えたデザインを採用しました</li><li>2層吹き抜けの「グランドエントランスホール」をはじめ、ご入居者同士の交流が図れる「パーティールーム」や “森の中の空間” をテーマとした「フィットネスルーム」、さらに46階には眺望を楽しみながら利用できるワークスペース・ライブラリースペース・カフェスペースを備えた「パノラマラウンジ」など、多様なライフスタイルに応える幅広い共用施設を設けました</li><li>なお、本物件は2025年6月より資料請求の受付を開始し、マンションギャラリーのオープン以降、2026年2月1日時点で1,800組以上のお客さま</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260205.html" target="_blank" rel="noopener">https://tatemono.com/news/20260205.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-千葉市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">千葉市</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2025年12月19" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9739.html" target="_blank" rel="noopener">千葉県でZOZOマリンスタジアムの再整備計画が進行中。経済波及効果は1.24兆円、雇用誘発数は8,270人と想定</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 千葉市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年12月19</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>千葉市は、プロ野球・千葉ロッテマリーンズの本拠地であるZOZOマリンスタジアム（千葉マリンスタジアム）について「千葉マリンスタジアム再整備基本構想」（2025年9月）を公表した</li><li>現スタジアムは1990年開設から35年が経過し、機能更新が課題となっている</li><li>市は新スタジアムを幕張新都心内で移転建設する想定で、建設予定地は幕張メッセ駐車場（約16.8ヘクタール）のうちJR幕張豊砂駅寄りの約11ヘクタールとしている</li><li>ブランド化された本拠地に「空白期間を生じさせない」ため、再整備の間も現スタジアムの利用を継続しながら新施設建設を進める考えを明記した</li><li>立地選定の理由として市は以下のポイントを挙げている</li><li>①11haのまとまった敷地を確保でき、滞在・交流を生む「365日楽しめるスタジアム」を整備しやすいこと</li><li>②幕張豊砂駅から約500m（徒歩6分）で公共交通利用を促進でき「ウォーカブルなまちづくり」に資すること</li><li>③近接する大規模商業施設・幕張メッセ・豊砂公園などと連携し、幕張新都心の新たな価値創出が期待できること</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9739.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9739.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-15" data-end-year="2026" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9760.html" target="_blank" rel="noopener">成田空港と圏央道を直結「成田空港周辺IC（仮称）」 千葉県が事前評価で意見募集、物流効率化と地域活性化を狙う</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 千葉市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-15</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年度）に圏央道の未開通区間（大栄JCT～松尾横芝IC）が開通</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">📦物流</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>千葉県は、成田空港と首都圏中央連絡自動車道（圏央道）を直結する「成田空港周辺インターチェンジ（仮称）」について、公共事業の事前評価に関する意見募集を実施した</li><li>自己評価調書案では、空港の機能強化（第3滑走路、新貨物地区など）に伴う交通需要増に対応し、物流効率化や地域活性化を狙うと位置付けている</li><li>計画は、芝山町菱田から多古町間倉に至る延長2.4km、トランペット型の地域活性化インターチェンジで、総事業費は104億円（うち県負担72億円）</li><li>なお、想定されている事業期間は7年</li><li>関連する道路としては、令和8年度（2026年度）に圏央道の未開通区間（大栄JCT～松尾横芝IC）が開通見込みであるほか、北側の大栄JCT～多古ICは1年程度前倒しを目指すとされている</li><li>県が公表している自己評価調書によると、物流面では新貨物地区から近隣ICまで19分かかる所要時間について、圏央成田IC経由で10分、新設IC経由で10分となることを目標に掲げている</li><li>なお、救急車両に使われる場合には、多古町間倉から東千葉メディカルセンター（三次）までの輸送時間が、32分から26分へ短縮されるとした</li><li>費用便益分析（国交省マニュアルに基づく）では、走行時間短縮による便益が210億円、走行経費減少28億円、事故減少2.6億円を見込み、B/Cは2.4とされている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9760.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9760.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-津田沼"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">津田沼</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-19" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-construction">🔨 工事中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9764.html" target="_blank" rel="noopener">再開発で生まれ変わる？千葉県JR総武線・津田沼 イトーヨーカドーやパルコ跡地の行方は？交通の要衝、津田沼駅を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 津田沼</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-19</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>JR総武快速線・緩行線の津田沼駅は、東京駅から快速で約28分であり、途中の錦糸町駅で緩行線に乗り換えれば秋葉原などにも快適にアクセス可能な立地である</li><li>津田沼駅付近には、広大なJR東日本幕張車両センター（旧幕張電車区）が設置されており、車両運用の都合から津田沼駅発着の快速・緩行線は少なくない</li><li>平日朝7時台の快速は15本、緩行は23本であり、日中時間帯は快速が毎時5本～6本、緩行が毎時12本と不便を感じない運行本数が設定されている</li><li>津田沼駅から徒歩3分の場所には京成電鉄の新津田沼駅もあり、ターミナル性を有した繁華な駅勢圏となっている</li><li>再開発はどうなる？津田沼駅北口周辺の現状を取材 その津田沼駅周辺では、北口方面の 再開発 が進んでいる</li><li>現地で状況を探ってみよう</li><li>津田沼駅北口駅前には、もともとパルコが1977年より営業していたのだが、閉店となり現在は解体施工中だ</li><li>セゾングループ総帥の堤清二氏は積極的な拡大路線を高度経済成長期から昭和土地バブル期まで進め、パルコ津田沼店もその一環で設立された</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9764.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9764.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-宇都宮市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">宇都宮市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-01-20" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9744.html" target="_blank" rel="noopener">栃木県下野市が「自治医大駅周辺地区まちづくり基本構想」を策定。行政機能や医療環境を備えた質の高い定住環境の形成を目指す</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 宇都宮市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-20</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏥医療</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>市役所に隣接する約22haに新たな拠点を形成 下野市（しもつけし）は、関東平野の北部、栃木県の中南部に位置するまち</li><li>都心までは約85㎞圏にあり、首都圏の一端を構成している</li><li>北は宇都宮市、南は小山市、東は上三川町・真岡市、西は栃木市・壬生町に接しており、宇都宮市や小山市への通勤率が高い</li><li>少子高齢化が進行しているが、近年の人口は約6万人で推移</li><li>出生数がより死亡数が上回る自然減が顕著な一方、転入数が転出数を上回る社会増により、人口を維持している</li><li>「東の飛鳥」と呼ばれ、古代の仏教文化の中心地として栄えた歴史があり、まちのいたるところに史跡が点在</li><li>自治医科大学を中心とした最先端医療、JR宇都宮線や主要道路網に交通の利便性、かんぴょう生産日本一に代表される農業も盛んで、住みやすさや医療環境の充実から移住者にも注目されているまちだ</li><li>そんな下野市は2025年11月に「自治医大駅周辺地区まちづくり基本構想」を策定</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9744.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9744.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-福岡市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">福岡市</span><span class="ah-cnt">5 件</span></div><div class="plan-card" data-date="2026-03-15" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9882.html" target="_blank" rel="noopener">福岡市・地下鉄七隈線の車両増設と延伸の検討を開始。さらなる利便性の向上で沿線の住宅ニーズにもインパクト New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-15</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>2023年に天神南駅～博多駅間で延伸開業 七隈線は福岡市西区の橋本駅から博多区の博多駅を福岡市交通局の地下鉄路線だ</li><li>福岡市西南部と都心部を結ぶ路線として計画され、2005年2月に橋本駅～天神南駅間、23年3月に天神南駅～博多駅間が開業した</li><li>橋本や野芥、梅林などの住宅地を抜け、六本松、薬院を経由して都心部へつながる</li><li>沿線には中村学園大学、福岡大学などの大学があり、朝夕のラッシュ時は都心へ向かう通勤客と反対方向に向かう通学客を中心に利用者が増える</li><li>1日平均の乗客数は15万人を超えるほどだ</li><li>開業当初は約4.4万人と予想乗車人員の半分にも満たず、沿線の住宅開発も進んでいなかったことから利用は低迷していたが、徐々に増えることに</li><li>コロナ禍以前は約8万人だったのが、23年の延伸開業後はさらに利用者が増え、今日に至る</li><li>その間に増便を実施するなど、福岡市交通局は対応を図ってきた</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9882.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9882.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025-11-25" data-end-year="2026" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9587.html" target="_blank" rel="noopener">福岡市・博多駅南にある「音羽公園」を整備。レストラン、カフェを併設した緑豊かな公園が2027年に供用開始へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-11-25</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2026年度に工事に着工</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2026年度に工事に着工、27年冬にオープンを予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳公園 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>福岡市中心部に森を備えた公園を整備 近年は、都市公園に飲食店や売店などの収益施設を設置・管理する民間事業者を公募で選定する「Park-PFI制度」を採用する自治体が増えている</li><li>民間の活力を効果的に活用しつつ、効率的に都市公園の整備を推進するのが目的で、2017年6月の都市公園法の改正により創設された制度だ</li><li>2022年度末時点で、全国64自治体等・102か所で活用されている</li><li>活用が進むなか、福岡市も博多駅の南にある「音羽公園」の整備について同制度を採用</li><li>今夏に大和リース福岡支社を代表企業とするグループを優先交渉権者として決定した</li><li>9月以降に設計が始まり、2026年度に工事に着工、27年冬にオープンを予定している</li><li>音羽公園は博多駅筑紫口から南に徒歩5分、JRの高架と並行する形で所在する</li><li>博多駅からアクセスが良く、都市部にあるためビジネスパーソンなどの憩い場となっている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9587.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9587.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025-12-07" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9630.html" target="_blank" rel="noopener">福岡市近郊・JR福北ゆたか線の原町駅近くで大規模な土地区画整理事業が開始</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-07</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>福岡市内の主要エリア・施設からアクセスしやすい立地 原町（はるまち）駅は、福岡県糟屋郡粕屋町にある、JR九州福北ゆたか線の駅</li><li>2024年度における1日の平均乗車数は1749人と、決して多くない</li><li>駅周辺では、線路に並行する形で通る県道607号線沿いに商店が並び、さらには住宅地が広がっている</li><li>1998年に約600m東側に長者原駅が開業するまでは、原町駅が粕屋町の中心駅の役割を担っていた</li><li>そんな状況が今後再び到来するかもしれない</li><li>というのも、同駅の周辺で大規模な土地区画整理事業が始まるからだ</li><li>それが「（仮称）粕屋町仲原東・志免町別府土地区画整理事業」で、2025年秋には東急不動産・西松建設、JR九州で構成される共同企業体が業務代行予定者に選定されている</li><li>事業の計画地は原町駅から約1㎞、地区面積は約32.2ha（粕屋町仲原東地区が約28.3ha、志免町別府地区が約3.9ha）</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9630.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9630.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2025-12-16" data-end-year="2027" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9633.html" target="_blank" rel="noopener">福岡市・マリノアシティ福岡跡地に、三井アウトレットパーク九州初進出。2027年春開業に向け着工</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-16</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2025年11月に着工</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2027年春オープン予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">高さ</span><span class="spec-v">60m</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>九州最大規模となる約200店舗のアウトレットモールが、2027年春オープン予定 福岡市西区の「マリノアシティ福岡」跡地に、「（仮称） 三井アウトレットパーク 福岡」が九州初出店となり、2025年11月に着工した</li><li>三井不動産と福岡地所が共同で開発をすすめ、2027年春の開業を目指す</li><li>24年の歴史を持つ「 マリノアシティ福岡」跡地に マリノアシティ福岡は、九州初の本格的なアウトレットモールとして2000年10月に開業した</li><li>敷地面積約85,200㎡の広大な敷地に、2回の増床を経て約160店舗が入居する大型商業施設へと成長</li><li>施設内の高さ60mの観覧車がシンボルとなり、ショッピングだけでなく家族で楽しめるレジャー施設として親しまれてきた</li><li>しかし、開業から20年以上が経過し、建物や設備の老朽化が進んだことから、2024年8月に閉館</li><li>2024年5月に福岡地所と三井不動産が共同で建て替え計画の検討に着手することが発表されていた</li><li>現地は都心から近いハーバーリゾート 現地は福岡市西区小戸の、博多湾に面した海辺に立地している</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9633.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9633.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年1月21日" data-end-year="2026" data-end-month="2">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9798.html" target="_blank" rel="noopener">【福岡】西鉄「春日原」駅直結の商業施設が2月に先行オープン。交通・商業・行政の三位一体で駅周辺の開発が進む</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月21日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年2月27日に先行オープン</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏠居住</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>福岡近郊ベッドタウンの拠点駅が進化 福岡県春日市の西鉄天神大牟田線「春日原」駅に、駅直結型商業施設「レイリア春日原」が2026年2月27日に先行オープンすることが決定した</li><li>駅高架化・特急停車駅への昇格に続き、商業施設のオープンで、駅利用者の利便性が大きく向上し、駅周辺エリアのさらなる活性化が期待される</li><li>福岡市中心部へのアクセスが便利</li><li>進化を続ける西鉄「春日原」駅 西鉄「春日原」駅がある春日市は、福岡市の南東約10kmに位置するベッドタウンとして近年発展を続けている</li><li>西鉄「春日原」駅は、西鉄天神大牟田線の急行停車駅として天神など福岡市中心部へのアクセスの良さが注目されていた</li><li>2022年8月には西鉄天神大牟田線連続立体交差事業により高架化が完了</li><li>踏切による渋滞が解消されるとともに、線路によって分断されていた東西エリアがスムーズに行き来できるようになったことで、街の回遊性が向上した</li><li>2024年には新駅舎が完成し、駅周辺の開発も進むなど、エリア周辺の魅力がアップしている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9798.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9798.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-東京都"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">東京都</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年3月20日" data-end-year="2026" data-end-month="3">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9774.html" target="_blank" rel="noopener">「バスターミナル東京八重洲」第2期エリアの開業時期が今春3月20日に決定。東京駅のさらなる利便性向上に期待</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 東京都</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年3月20日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 開業予定日は2026年3月</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏠住宅 🏥医療</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>※引用： バスターミナル東京八重洲 東京駅の八重洲口前で整備が進む「バスターミナル東京八重洲」で、第2期エリアとして「地下A」が新設される</li><li>開発を進めるUR都市機構と京王電鉄バスによると、第2期エリアの整備位置はTOFROM YAESU TOWER内の地下になる</li><li>また、第2期エリアの完成によって、乗降用7バース・待機用2バースの計9バースが追加されることになる</li><li>ターミナル内にはチケットカウンター、待合スペース、トイレ、授乳室などの設備に加え、物販や観光案内所も併設されるとしている</li><li>※引用： バスターミナル東京八重洲 なお、第2期エリアの開業に合わせて、既存の第1期エリア（東京ミッドタウン八重洲内で運用中）は「地下B」へ呼称変更となる</li><li>今回整備される第2期エリアは「地下A」になる予定だ</li><li>利用者の混乱を避けるため、3地区にまたがるターミナル全体を地下A・地下B・地下Cに分類し、色覚バリアフリーに配慮したサイン計画を採用する方針も示された</li><li>第2期エリア（地下A）の開業予定日は2026年3月20日（金）だ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9774.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9774.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-西東京市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">西東京市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-03" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9781.html" target="_blank" rel="noopener">西東京市・東伏見公園で大規模な拡張工事進む。東伏見駅、西武柳沢駅間の変化で街はどう変わる？</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 西東京市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-03</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都下にある、西東京市の西武新宿線東伏見駅は、駅開設時には上保谷駅という名称であった</li><li>京都の伏見稲荷神社から分祀された神様を特別列車でお運びし、1929年に設立された東伏見稲荷神社に由来して現在の駅名となった</li><li>東伏見駅は、急行が通過する駅であり準急と各停のみが停車する</li><li>隣駅であり、本稿でも触れる西武柳沢駅も同様である</li><li>朝7時台の上りは7本、8時台は9本の設定がある</li><li>日中時間帯は、毎時6本であり、上石神井駅で急行に乗り換えるケースが一般的だ</li><li>上石神井駅での乗り換え時間を含めても、高田馬場駅までは20分かからない所要時間であり、比較的都心まで近い距離感といえるだろう</li><li>近隣に大学施設が存在する東伏見駅 東伏見駅付近には、アイスアリーナや早稲田大学の硬式と軟式野球場・サッカー競技場・ホッケー場や早稲田大学の学生寮なども設置されており、広々とした印象を受ける</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9781.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9781.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-福岡県"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">福岡県</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年2月14日" data-end-year="2026" data-end-month="2">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-construction">🔨 工事中</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9848.html" target="_blank" rel="noopener">【新道開通】小金井街道と新小金井街道を結ぶ新東京所沢線が間もなく開通！交通アクセスが大幅に向上しそうな現地を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 福岡県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月14日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年2月14日（土）15時から開通</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">📦物流</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都の小金井街道・新小金井街道は、東京都西部の市部と埼玉県西武辺りの南北を縦貫する大動脈であり、しかし片側1車線区間が多いために混雑する区間も少なくない</li><li>小金井街道と新小金井街道は、府中市から小金井市・小平市・東久留米市を通りながら清瀬市を結び、その先の埼玉県所沢市・新座市まで移動できる主要地方道であり、関越道所沢IC方面へのアクセスができる道路でもある</li><li>途中、甲州街道や東八道路、五日市街道や青梅街道、新青梅街道などと接続しており、物流・人流などの重要なライフラインとして、日々活用されている</li><li>そんな小金井街道と新小金井街道を横に結ぶ道路が、建設中である</li><li>小金井街道と新小金井街道を接続する新道とは それは東京都が清瀬市で整備を進めてきた都市計画道路 「東村山3・4・15の2 新東京所沢線」 であり、2026年2月14日（土）15時から開通すると発表している</li><li>この道路ができることで、小金井街道の清瀬橋から志木街道を経て新小金井街道に至る約1.6kmが開通することになり、これに伴い、もともと清瀬橋に通じていた小金井街道の道路線形が変更され、新東京所沢線が清瀬橋へ通じる道路となる</li><li>開通区間は2車線となっており、両側には自転車の専用通行帯（各2m幅）、歩道（各4m幅）を備えることとなる</li><li>埼玉側の東京狭山線は4車線であり、連続した道路ではあるものの、都県境をまたぐと機能性に違いが出てくることになってしまう</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9848.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9848.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-全国"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">全国</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-11" data-end-year="2027" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9791.html" target="_blank" rel="noopener">海老名駅西口開発ViNA GARDENS最終段階へ。ホテル・温浴施設や保育園など2027年春開業予定</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 全国</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-11</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2027年春に開業予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏨ホテル 🏨宿泊 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>小田急電鉄は、海老名駅西口の開発エリア「ViNA GARDENS」で、2027年春に開業予定の「（仮称）ファミリー棟」と、2028年開業予定の「（仮称）ホテル温浴棟」の計画を決定した</li><li>（仮称）ファミリー棟には、保育園・学童保育に加え、グローバルな視点を育む教育機能を備えた学習環境、トリミングや動物病院、ペットホテルなどのペット関連機能、子連れでも利用しやすい飲食空間などが整備される</li><li>（仮称）ホテル温浴棟では、開発エリアの地下約1,300mから湧出する温泉を活用した日帰り温浴施設（大浴場、大型サウナ、家族風呂）と、リラックススペース・キッズエリア・ワークスペースを備えるラウンジ、約120室のホテルなどを計画している</li><li>なお、宿泊者は滞在中に温浴施設を自由に利用できる</li><li>海老名駅の周辺エリアで長らく開発が続いてきたViNA GARDENSは全9開発区画で構成され、今回の2棟の開業により、ViNA GARDENSの開発は完了する</li><li>小田急は計画決定の背景として、海老名市では人口増加が続いており、特に0～4歳と30～44歳が増えている点を挙げ、若いファミリー層の流入が多いとの見立てを示した</li><li>（仮称）ファミリー棟と（仮称）ホテル温浴棟の開発は、ニーズを見込んだうえで決定されたということだ</li><li>ViNA GARDENSの開発は、2017年のコンビニ「ローソン ビナガーデンズ店」（4月）と商業施設「ViNA GARDENS TERRACE」（11月）の開業から始まった</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9791.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9791.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-水戸市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">水戸市</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2026-02-12" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9770.html" target="_blank" rel="noopener">茨城県と土浦市が霞ケ浦の港に観光・レクリエーション施設を整備。水辺空間のにぎわい創出を目指す</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 水戸市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-12</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>霞ケ浦を活かした施設の整備に向け事業者を募集・選定 土浦市は茨城県の県南地域に位置するまちだ</li><li>県の発足時から同エリアの商業・行政の中心的な役割を担っていた</li><li>現在は業務核都市、国際会議観光都市に指定されており、隣接するつくば市を中心としたつくば都市圏に含まれている</li><li>1990年以降は減少傾向が続いていたが、2020年以降は微増に転じている</li><li>日本第2位の湖である霞ケ浦と関東の名峰として知られる筑波山に恵まれた自然豊かな歴史のあるまちで、江戸時代には城下町、交通の要衝として栄えた</li><li>現在はJR常磐線や高速道路で都心へのアクセスもよい</li><li>中心市街地はJR土浦駅周辺から旧城下町エリアにかけて広がり、戦後は駅西口に百貨店や大型店舗が集積するなど商都として発展</li><li>ただし、1990年代以降のモータリゼーションの普及や郊外型店舗の増加により商業施設が撤退するなど、空洞化の課題が顕在化</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9770.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9770.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-03-13" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-medium">優先度: 中</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9918.html" target="_blank" rel="noopener">【茨城県つくば市】イオンの新業態「そよら」県下初オープン！研究学園駅付近はさらに商業施設集積で利便性向上へ New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 水戸市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-13</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏠居住</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>つくばエクスプレス（以下TX）は、秋葉原駅から茨城県のつくば市を結ぶ、まだ新しい路線だ</li><li>便利で注目度の高いつくばエクスプレス沿線 秋葉原駅はJR山手線の6大ターミナル駅（東京・品川・渋谷・新宿・上野・池袋）ほどの乗降客数はないが、京浜東北線・総武線・地下鉄日比谷線も使えるジャンクション駅であり、近年は住友不動産やダイビルなどのオフィスビルも増加傾向にあり、東京のプライムエリアとして発展しているターミナルといえる</li><li>TX自体の特徴としては、全線高架またはトンネル・橋梁などで完全立体交差が実現されているので、踏切が沿線には一切設置されていない部分が挙げられる</li><li>踏切がなく線路の敷設も比較的直線化しているので、高速運行が可能であることから、最高時速も130キロとかなり速い</li><li>完全な立体交差が実現している路線なので、沿線各駅の周辺道路は区画整理されており、踏切による渋滞がなく交通利便性も高い</li><li>TXは始発の秋葉原駅から途中の北千住駅までは、すべての運行車両が停車する</li><li>北千住を発車すると、南流山駅や流山おおたかの森駅など、他路線と乗り換えができる駅を中心に停車する、快速や区間快速の本領が発揮できる駅間となる</li><li>最速の快速電車の場合、秋葉原駅からつくば駅まで45分、北千住駅からつくば駅は35分と、物理的な距離がある区間なのに高速運行を活かして、かなり速く結んでいる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9918.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9918.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-川崎"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">川崎</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2026年1月29日" data-end-year="2030" data-end-month="10">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9917.html" target="_blank" rel="noopener">川崎駅前のアリーナ建設計画「Kawasaki Arena-City Project」開業は2030年を目標へ New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 川崎</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月29日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2027年中着工</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2027年中着工、2030年10月開業予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏨ホテル 🎪ホール 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>※引用： Kawasaki Arena-City Project 京急川崎駅の隣接地で進む「Kawasaki Arena-City Project（川崎アリーナシティ）」が、2023年の始動発表以降、計画規模とコンセプトを拡張しながら進行中だ</li><li>2023年11月には、建設予定地の面積を拡張することが公表されている</li><li>メインアリーナは最大1万5,000人規模、駅側にはホテルやスパ、フードホールを含む17階建て商業棟、最大2,000人規模のライブ等も想定するサブアリーナ兼ホールなど、複合施設としての姿が具体化した</li><li>直近で計画の大きな更新が発表されたのは2026年1月29日だ</li><li>事業主体のDeNAと京急は、名称を「Kawasaki Arena-City Project」として、アリーナ単体ではなく周辺地域を含めた一体開発とすることを前面に打ち出した</li><li>※引用： Kawasaki Arena-City Project 公表資料では、1万人超収容アリーナとして「世界初」をうたうルーフトップパーク（屋上公園）や、多摩川河川敷との連携などを掲げ、味の素・三菱化工機とのパートナーシップを第1弾として発表している</li><li>なお、同日資料で示された最新スケジュールは2027年中着工、2030年10月開業予定</li><li>当初目標（2028年頃）から後ろ倒しとなり、建築費高騰等を背景に約2年遅れと報じられている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9917.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9917.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年1月21日" data-end-year="2026" data-end-month="3">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9896.html" target="_blank" rel="noopener">川崎市麻生区で尻手黒川線（4期）トンネル区間が貫通へ。柿生駅周辺の基盤整備と「まちづくりビジョン」について New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 川崎</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月21日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2025年10月19日</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2026年3月31日</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>川崎市麻生区では、都市計画道路「尻手黒川線（Ⅳ期）」の片平2丁目交差点付近から西側へ延伸する区間（延長約680m）を対象に、トンネルを含む道路築造工事が進行している</li><li>区間内では、山岳トンネル（延長189.5m）と開削トンネル（延長97.5m）を組み合わせ、丘陵地形を貫く形で新たな道路を通す計画だ</li><li>トンネル掘削は片平2丁目交差点側から西へ約290mを施工し、川崎市は2026年1月21日に貫通予定としている</li><li>尻手黒川線は、幸区小倉から麻生区黒川方面へ至る骨格道路として、段階整備が続いている道路だ</li><li>南東へずっと進んでいくと川崎駅前に出る道路で、川崎市内を南北に縦断する形になっている</li><li>川崎駅の北東からアクアラインへつながる道路に接続しているため、多摩地方から千葉方面まで広域的につながっていると言えるだろう</li><li>房総半島方面から下道だけで多摩方面まで移動することは想定しづらいが、幹線道路がつながることの意義はあるのではないだろうか</li><li>また、間に東名高速道路の東名川崎インターチェンジを通るため、小田急多摩線の黒川駅周辺から東名高速まで直通で行けることになる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9896.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9896.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-愛知県"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">愛知県</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025年11月4日" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-completed">✅ 完成・供用中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9592.html" target="_blank" rel="noopener">愛知県初の本格的アウトレットモール【三井アウトレットパーク 岡崎】開業。岡崎市東部エリアの活性化を促す地域共生型モール</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 愛知県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年11月4日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🌳公園 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>2025年11月4日、愛知県岡崎市に【三井アウトレットパーク 岡崎】がグランドオープンした</li><li>愛知県内には既に大型ショッピングセンターが複数存在するが、本格的アウトレットモールは意外にも同施設が初めて</li><li>それもあって開業前から注目を集めていたのだが、実際に訪れてみると、「ラグジュアリーブランドが並ぶショッピング施設」というよりも、「食や遊びも充実した、地域色豊かな大型公園的スポット」という印象だ</li><li>アウトレット×マーケットが隣り合う施設構成 「バンテリンドーム ナゴヤ」の約3.3個分にあたる約15万8,400㎡の広大な敷地 に誕生した【三井アウトレットパーク 岡崎】</li><li>ショップ数は全部で180店舗あり、アウトレット施設としては32店舗が日本初出店で、35店舗が中京圏初出店</li><li>さらに、食関連の店舗数は45店舗でアウトレット日本一、ペット入店可能な店舗が114に上ることも中京圏商業施設の最多を誇っている</li><li>店舗の多彩さも魅力だが、その最大の特徴は『アウトレットゾーン』と『OKAZAKI MARKET（オカザキマーケット）』という隣り合う2つのゾーンが相互接続していること</li><li>両ゾーンを行き来しながら、従来のアウトレット施設とはひと味違う多彩な体験ができる構成とした</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9592.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9592.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-名古屋市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">名古屋市</span><span class="ah-cnt">3 件</span></div><div class="plan-card" data-date="2026年2月13日" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9657.html" target="_blank" rel="noopener">名古屋市で新たな路面公共交通システム。2026年2月13日より「SRT」の運行を開始</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 名古屋市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月13日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>都心の回遊性向上や賑わいの拡大を図るのが目的 愛知県の県庁所在地で、日本で3番目に人口が多い名古屋市</li><li>日本のほぼ中央に位置する経済・交通・産業の中心地のひとつだ</li><li>直近の人口は約233万人と、過去最多に達している</li><li>名古屋市は、都心における回遊性の向上や賑わいの拡大を図るため、まちづくりと一体となった新たな路面公共交通システムの導入を進めており、2026年2月13日より運行を始めると発表した</li><li>名称は「SRT」（Smart Roadway Transit）</li><li>技術の先進性による快適な乗り心地やスムーズな乗降、洗練されたデザインなどのスマート（Smart）さを備え、路面（Roadway）を走ることでまちの回遊性や賑わいを生み出す、今までにない新しい移動手段（Transit）であることから、その特性を表す概念として、こう名付けられた</li><li>事業主体は名古屋市で、運行事業者は名鉄バスだ</li><li>運行ルートは名古屋駅～栄間で、7か所の停留所を設ける</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9657.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9657.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-06" data-end-year="2026" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9653.html" target="_blank" rel="noopener">名古屋で栄駅直結の新商業施設「HAERA」が2026年初夏に開業予定。栄駅前の再開発が最終局面へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 名古屋市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-06</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年初夏に開業する予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上41階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🏨ホテル 🏨宿泊 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>名古屋・栄の一等地で進む「錦三丁目25番街区市有地等活用事業」で、商業施設「HAERA（ハエラ）」が2026年初夏に開業する予定だ</li><li>場所は、地上41階・高さ約211mの超高層複合ビル「ザ・ランドマーク名古屋栄」の地下2階～地上4階部分</li><li>J.フロント リテイリング、大丸松坂屋百貨店、パルコ、J.フロント都市開発が共同で企画・運営を担い、栄エリアの商業力を底上げする新たな拠点として注目を集めている</li><li>開発地は、かつて「栄広場」「栄角地」と呼ばれた名古屋市の市有地だ</li><li>戦前には日本銀行の名古屋支店が置かれていたが、戦災により建物は失われている</li><li>その後は本格的な建築物がないまま、イベント広場や暫定利用を中心とした「都心の空き地」として長年取り残されてきた経緯がある</li><li>名古屋市はこの土地を有効活用するため、公募型の事業者選定を実施し、三菱地所グループとJ.フロントグループによる現計画が採用された</li><li>ビル全体は、延床面積約10万9,700㎡、地下4階・地上41階・塔屋1階の複合施設として整備される</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9653.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9653.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年2月28日" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9808.html" target="_blank" rel="noopener">名古屋駅地区再開発計画の大幅変更。名鉄バスセンターは営業継続を発表</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 名古屋市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月28日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢事務所 🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>名鉄百貨店本店は営業終了、バスセンターの営業は継続 名鉄名古屋駅は、愛知県名古屋市中村区名駅1丁目にある、名古屋鉄道（名鉄）の駅</li><li>1941年に開業した名鉄最大のターミナル駅であり、名古屋本線のほか、犬山線・常滑線・空港線・河和線・津島線などに直通運転する全営業列車が停車する</li><li>JR東海と名古屋市営地下鉄が乗り入れる名古屋駅、近鉄名古屋駅、名鉄バスセンターと合わせて、名鉄名古屋駅は市内の重要な交通結節点</li><li>駅の直上には名鉄百貨店本店の本館があり、同店メンズ館のビルには名鉄の本社をはじめとする名鉄グループの拠点事務所が集積している</li><li>そんな名鉄名古屋駅に大きな転機が訪れたのは、2025年5月のこと</li><li>名鉄と名鉄都市開発、日本生命保険、近畿日本鉄道（近鉄）、近鉄不動産の5社は共同で検討を進めていた「名古屋駅地区再開発計画」の事業化を決定したことを明らかにした</li><li>壮大なプロジェクトであり、実現すれば名古屋駅周辺だけではなく、沿線を含めた広域の付加価値向上につながる可能性を秘めていたが、名鉄は2025年12月に、同計画のスケジュール変更とともに計画の再検証と見直しに着手することを発表した</li><li>これによる名鉄関連施設の運営だが、名鉄百貨店本店（本館・メンズ館）は予定通り2026年2月28日をもって営業終了、名鉄グランドホテル、スカイパーキングなどは未定</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9808.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9808.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-沖縄県"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">沖縄県</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2025-11-20" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-medium">優先度: 中</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9567.html" target="_blank" rel="noopener">沖縄県、国際通り至近の奥武山公園にJリーグ規格のスタジアムを整備へ。観光と地域経済の新拠点を目指す</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 沖縄県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-11-20</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏨宿泊 🎪ホール 🌳公園</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>「スポーツアイランド沖縄」構想の象徴 沖縄県は、Jリーグ規格に対応したサッカースタジアムの整備に向け、那覇市の奥武山公園（おうのやまこうえん）を計画地とする基本計画を取りまとめた</li><li>スタジアムの整備は、スポーツによる観光振興と地域経済の活性化を狙う「スポーツアイランド沖縄」の実現に向けた中核プロジェクトと位置づけられている</li><li>スタジアムの候補地には豊崎タウン、東浜マリンタウン、奥武山公園の3地点が挙げられていたが、アクセス性と用地費の観点から奥武山公園が最有力とされた</li><li>ゆいレールやバスターミナルなど公共交通の利便性が高く、都市公園であるため用地取得にお金がかからない点も評価された</li><li>奥武山公園は那覇市の中心部に位置し、那覇空港から車で10分、国際通りから徒歩圏にある</li><li>既存の陸上競技場や補助競技場が老朽化しており、これらを中心に再整備する方針だ</li><li>敷地の制約を踏まえ、スタジアムの収容規模は約2万人と設定されている</li><li>これはJリーグのJ1ライセンス要件を満たす規模であり、将来的に国際大会の誘致も可能になる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9567.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9567.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年4月1日" data-end-year="2026" data-end-month="4">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9870.html" target="_blank" rel="noopener">宮古島トゥリバー地区「キャノピーbyヒルトン沖縄宮古島」開業へ。賑わい施設の「Yard」も併設で観光の受け皿拡大</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 沖縄県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年4月1日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年4月1日の開業</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上12階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪店舗 🏨ホテル 🏨宿泊</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>宮古島市平良・トゥリバー地区で、ヒルトンブランドの進出が段階的に進んでいる</li><li>すでに稼働している「ヒルトン沖縄宮古島リゾート」に続き、隣接地で「キャノピーbyヒルトン沖縄宮古島リゾート」（310室）の開業が計画中だ</li><li>さらに、地域にも開かれた賑わい施設「Yard miyakojima」も2026年4月1日の開業が予定されている</li><li>ホテル滞在と街の回遊を同時に設計する「リゾート＋中庭」型の開発は、観光客の増加が続く宮古島の受け皿を広げる一方で、水資源や交通など、島特有の制約への対応も問われそうだ</li><li>特に、宮古島の水インフラは地下水に依存しているため、観光客増加に伴う水需要の増加はリスクにもなり得る</li><li>なお、トゥリバー地区では2023年6月、三菱地所・鹿島建設が開発しヒルトンが運営する「ヒルトン沖縄宮古島リゾート」が開業している</li><li>沖縄県の離島におけるヒルトン初進出として位置付けられ、みやこサンセットビーチに隣接する立地や、宮古空港・下地島空港の双方からアクセスできる点などが特徴だ</li><li>第2弾として計画される「キャノピーbyヒルトン沖縄宮古島リゾート」は、地上12階・310室で、オールデイダイニングやルーフトッププール、スパ、フィットネス、キッズクラブなどを備える計画となっている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9870.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9870.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-自由が丘"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">自由が丘</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-18" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9862.html" target="_blank" rel="noopener">2026年秋、東急線「自由が丘」駅前に15階建ての新ランドマークが誕生！「明治屋」とスターバックス「SHARE LOUNGE」も出店</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 自由が丘</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-18</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上15階・地下3階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪店舗 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>「モンブラン」や「一誠堂」など地元で人気の老舗店舗も出店 東京都・目黒区に位置する東急東横線・大井町線の「自由が丘」駅</li><li>東横線沿線のなかでは「代官山」、「中目黒」駅と並んでお洒落な街として注目を集めており、駅周辺には、人気の雑貨店やスイーツショップ、カフェなどが点在している</li><li>その一方で、駅正面口のロータリー周辺には比較的古い建物も多く、1953年に開業したレトロ感あふれる「自由が丘デパート」も存続中</li><li>昭和の古き良き雰囲気を残している一面も</li><li>「 住みたい街ランキング2025首都圏版 （SUUMO調べ）」では、30位にランクイン</li><li>以前よりやや順位を下げる傾向にあるものの、いまだその人気は顕在だ</li><li>そんな「自由が丘」駅正面口が、いま、大きく変わろうとしている</li><li>駅ロータリーに面する場所で新たな再開発（ 自由が丘一丁目29番地区第一種市街地再開発事業 ）が推し進められているのだ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9862.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9862.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-市川市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">市川市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-21" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9857.html" target="_blank" rel="noopener">千葉県市川市・京葉ガス市川工場跡地で進む街区整備。2026年春には大型商業施設がオープン</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 市川市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-21</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏠住宅 🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京・千葉双方へアクセスしやすい人気のまち 市川市は千葉県北西部に位置し、江戸川を挟んで東京都に隣接する文教・住宅都市</li><li>都心から20㎞圏内にあることから、東京都心部へ通勤・通学する住民が多い</li><li>人口は50万人弱で千葉県内では千葉市、船橋市に次いで3番目に多い</li><li>近年は転入者が多く社会増の傾向にある</li><li>市内の中心部をJR東日本の総武本線と京成電鉄の本線が東西に貫き、東京都23区以外で唯一東京の地下鉄2社局（東京メトロと東京都交通局）の地下鉄駅がある</li><li>南部の湾岸エリアには東京駅が起点の京葉線、北東部には武蔵野線、北部には北総線が通るなど、鉄道網が市内全域に広がっているのも特徴だ</li><li>なかでも、JR・私鉄・地下鉄の3路線が乗り入れる本八幡駅周辺は行政の中心として、JR総武線の緩行線および快速線の両方が乗り入れる市川駅周辺は商業の中心として、どちらも行政施設、複合商業施設、タワーマンション、オフィス、学校などが林立するエリアだ</li><li>とりわけ、市川駅周辺は江戸時代から別荘地として栄え、北口の菅野・八幡地区は屋敷町を形成する高級住宅街</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9857.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9857.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-新潟市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">新潟市</span><span class="ah-cnt">4 件</span></div><div class="plan-card" data-date="2025-12-01" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shinhoku/9625.html" target="_blank" rel="noopener">新潟県関川村で進む脱炭素化エネルギー事業。「わかぶな高原スキー場」跡地に大規模開発期待</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 新潟市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-01</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>新潟県・関川村は、山形県との県境に位置する人口5,000人弱の小さな村だ</li><li>その村で、環境省脱炭素先行地域モデルにも選定された、ユニークな脱炭素化エネルギーモデル構築の取り組みが進められている</li><li>東急不動産との包括連携協定も締結されて、開発に乗り出しており注目したい</li><li>■　2022年環境省脱炭素先行地域に選定 関川村は、新潟県の北東の端で山形県との県境に位置する</li><li>農業が基幹産業であるが、一方、近年は、豊かな自然を活かし、夏はアユ釣りやキャンプ、冬は温泉などの観光業も増えている</li><li>近年、観光客は増加しており、毎年100万人が訪れるようになっているが、一方、村の人口は減り続けている</li><li>このような現況下で、関川村は、豊富な自然資源を活用して地域振興を図るため、脱炭素化エネルギーの豪雪農山間地域モデルを構築することに力を入れている</li><li>その取り組みは、2022年の環境省脱炭素先行地域の計画モデルに選定された</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shinhoku/9625.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shinhoku/9625.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北信越・甲信越再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-01-03" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shinhoku/9720.html" target="_blank" rel="noopener">新潟市の中でも今後の再開発が期待される江南区。JR信越本線に新駅設置構想も</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 新潟市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-03</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>新潟市江南区は、新潟市のほぼ中心に位置し、稲作地帯の亀田郷を抱える地域だ</li><li>新潟市の中では、交通インフラや職住環境のバランスが良いことから、今後の再開発が期待されている</li><li>江南区のJR信越本線に新駅を設置する構想もあり、今後の動向に注目したい</li><li>■　新潟市江南区で進むJR線新駅設置構想 新潟市江南区は、新潟市のほぼ中心に位置する</li><li>海抜ゼロメートル地帯が多く、特に、亀田郷と呼ばれる地域は、稲作が行われていたものの低湿地帯で泥田で稲の質も良くなかった</li><li>それが、戦時中から戦後の食料政策によって、莫大な国家予算を投じて土地改良が進められ、日本有数の稲作地域に生まれ変わった</li><li>戦後の高度成長期にこうした大規模土地改良が進められたこともあり、1970年代から住宅開発も進められ、大型商業施設も多い地域である</li><li>1990年代以降に住宅団地や工業団地が整備された地域もあり、最近になっても大型商業施設の進出が継続している</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shinhoku/9720.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shinhoku/9720.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北信越・甲信越再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-02-07" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shinhoku/9819.html" target="_blank" rel="noopener">人口が戻りつつある新潟・湯沢でリゾートマンション再評価。十日町との境界訴訟確定も</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 新潟市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-07</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>近年、新潟・湯沢町では8年連続転入超過が続いており、活気が戻りつつある</li><li>バブル期の負の遺産と言われているリゾートマンションにも再評価の動きがみられる</li><li>ガーラ湯沢スキー場の山林地帯では十日町との境界確定訴訟も確定した</li><li>■　8年連続転入超過でリゾートマンションが再評価 湯沢町といえば、高度成長期からバブル期にかけてのスキーブームを背景に、多くのスキー場が開発され、その頃に建設されたリゾートマンションが乱立しているイメージがあるだろう</li><li>だが、バブル崩壊以降リゾートマンション開発は衰退し、当時のリゾートマンションは老朽化が進み、高い管理費などの影響もあって無料でも処分が難しい負の遺産と言われていることもよく知られている</li><li>だが、近年、リモートワーク、二拠点生活の拡大やインバウンドの活況などを背景に、湯沢町も8年連続で転入超過傾向が続いている</li><li>新潟県内の市区町村の中では、昨年、転入超過率はトップを記録している</li><li>元々の人口が少ない湯沢町は、転入人口数では新潟市を下回るものの、超過率は約1.5％である</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shinhoku/9819.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shinhoku/9819.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北信越・甲信越再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-03-03" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/shinhoku/9903.html" target="_blank" rel="noopener">「日本遺産」に登録の「究極の雪国・新潟県十日町の雪との共生文化」。観光資源化が加速</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 新潟市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-03</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>日本有数の豪雪地帯で、古来より雪と共生する文化を構築してきた究極の雪国・十日町</li><li>「十日町雪まつり」はその象徴ともいえよう</li><li>毎年この時期に開催され全国、海外から約30万人が訪れる</li><li>その十日町で文化庁の「日本遺産」登録を契機に、雪との共生文化を観光資源とした取り組みが加速している</li><li>■　究極の雪国、十日町と雪まつり 新潟県十日町市は、例年2メーター以上の積雪がある日本有数の豪雪地帯だ</li><li>戦前から戦後、高度成長期にかけて織物業で栄えたが、着物ニーズの減退後はソフトウェア産業のニアショア開発の拠点地域となっている</li><li>一方、日本有数の豪雪を活かした、いわゆる「雪国文化」の観光産業を早くから興隆させた地域でもある</li><li>そのメインといえるのが「雪まつり」だ</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shinhoku/9903.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shinhoku/9903.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北信越・甲信越再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-仙台市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">仙台市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025年12月14" data-end-year="2031" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/touhoku/9759.html" target="_blank" rel="noopener">仙台・青葉山で音楽ホール×震災メモリアルの複合施設計画が進行中。別途、宮城野原でも県民会館を2028年度開館へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 仙台市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025年12月14</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 竣工・開館時期は2031年度（令和13年</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🎪ホール 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>仙台市は、音楽ホールと中心部震災メモリアル拠点を併設する「（仮称）国際センター駅北地区複合施設」の基本設計（中間案）をまとめた</li><li>計画地は、地下鉄東西線・国際センター駅北側（青葉山エリア）の「せんだい青葉山交流広場」だ</li><li>建設工事費は548億円程度の見込みで、年間来場者数は約54万人（うち県外約4万人）、県内の経済波及効果は年額約47億円と試算されている</li><li>なお、竣工・開館時期は2031年度（令和13年度）の予定</li><li>もっとも、提示された548億円は「基本設計時点での見込み」で、今後の物価上昇分を含まず、外構工事費や土壌汚染対策費などが入っていない</li><li>市は2025年度末（令和7年度末）に基本設計を完了する見通しで、2025年12月14日には市民説明会が開催された</li><li>同施設の特徴は「文化芸術」と「災害文化」を一つの建物で扱うことだ</li><li>災害文化とは、東日本大震災の記録を残すことを意図するもの</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/touhoku/9759.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/touhoku/9759.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東北再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-北海道"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">北海道</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2025-12-10" data-end-year="2028" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/hokkaido/9634.html" target="_blank" rel="noopener">帯広駅南口再開発（仮称）、2028年春の開業へ。地元による駅前活性化の行方は</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 北海道</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-10</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2028年春の開業</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上14階</span></span><span class="spec-item"><span class="spec-k">総戸数</span><span class="spec-v">185戸</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏨ホテル 🏨宿泊 🏠住宅 🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>JR帯広駅南口で進む「（仮称）帯広駅南口再開発プロジェクト」が、2028年春の開業をめざして本格化している</li><li>事業主体は帯広市の地元企業・登寿ホールディングス</li><li>旧長崎屋帯広店跡地を含む約2万5000㎡の区域を一体的に開発し、分譲マンション、ホテル、商業施設、広場、自走式駐車場などを備えた複合街区を整備する計画だ</li><li>2025年秋にJR北海道、フージャースコーポレーション、エスコンの3社がマンション街区に参画を表明し、全体像が明らかになった</li><li>※引用： 株式会社フージャースホールディングス 旧長崎屋帯広店は長年、帯広駅前の主要商業施設として機能してきたが、食品フロアの撤退（2011年）や直営売場の縮小などを経て、近年はテナント数も減少</li><li>2023年7月末で直営売場が営業を終了し、2024年3月に建物全体が閉館した</li><li>親会社のPPIH（パン・パシフィック・インターナショナルHD）は、公式には明確な一因を示していない</li><li>その一方で、報道によると、郊外大型店との競合や来店動機の低下、建物老朽化など複合的な要因による業績低迷が背景とされる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/hokkaido/9634.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/hokkaido/9634.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北海道再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-広島市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">広島市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-09" data-end-year="2028" data-end-month="9">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/hokkaido/9877.html" target="_blank" rel="noopener">再開発が進む北海道北広島市。新駅や大学、ホテルに加えて36階建てのタワーマンションも整備</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 広島市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-09</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 竣工は2028年9月</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上36階</span></span><span class="spec-item"><span class="spec-k">高さ</span><span class="spec-v">130m</span></span><span class="spec-item"><span class="spec-k">総戸数</span><span class="spec-v">508戸</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏨ホテル 🏠マンション 🏥医療</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>球場と新駅と起点にさまざまな再開発事業 北広島市は、北海道札幌市と新千歳空港のほぼ中間に位置するまち</li><li>快速電車で双方へ約20分以内と好アクセスな、自然豊かな都市だ</li><li>同市といえば、2023年に開業したプロ野球・日本ハムファイターズのホーム球場「ES CON FIELD HOKKAIDO（エスコンフィールド北海道）」を擁する「Fビレッジ」が新名所として注目を集めている</li><li>球場だけではなく、屋外アスレチックやスキー体験エリア、ドッグラン、グランピング、農業学習など多様な施設があり、25年の来場者数は前年比10％増の約459万人にのぼった</li><li>Fビレッジ周辺では、2028年夏ごろにJR千歳新駅の開業が控えており、これにより札幌エリアや新千歳空港からの交通利便性は飛躍的に向上</li><li>28年4月には北海道医療大学の移転、27年秋頃には球場の近接地で開発を進めているホテルも開業予定など、さまざまなまちづくりが進められている</li><li>さらなる賑わいや発展が期待されているが、同所を運営するエスコンは「ES CON FIELD HOKKAIDO」の近接地において「（仮称）北広島新駅タワープロジェクト」の開発工事にも着手</li><li>高さ130mのタワーレジデンスの開発を計画している</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/hokkaido/9877.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/hokkaido/9877.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 北海道再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-三重県"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">三重県</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2026-01-25" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9779.html" target="_blank" rel="noopener">【三重県津市】津駅前再開発で利便性アップ？バスタもできるか？再開発計画が進み変化が期待される県庁所在地</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 三重県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-01-25</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>三重県津駅は津市の中心地であり、三重県の県庁所在地でもある</li><li>津駅は、近鉄名古屋線・JR紀勢線・伊勢鉄道伊勢線の3路線が乗り入れており、海運・工業都市で知られる四日市までは近鉄の急行で約34分、名古屋駅までは約70分となっている</li><li>実質的には特急に乗車することで利便性と快適性が向上するので、比較的近距離にある四日市はともかく、名古屋まで行く人は特急を使うケースが多い</li><li>特急で名古屋駅までは、約50分の乗車時間となっている</li><li>JR紀勢線は、本数がラッシュ時や日中でも毎時2本～3本と少なく、近鉄のシェアが大きい</li><li>近鉄は、ラッシュ時14本前後、日中時間帯はおおよそ毎時9本の設定がある</li><li>そんな津駅では、再開発計画が進んでいる</li><li>現状を取材し、雰囲気をつかんでみたい</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9779.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9779.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026-02-14" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      
+      <a href="https://www.kenbiya.com/ar/ns/region/toukai/9854.html" target="_blank" rel="noopener">三重県の鳥羽市が鳥羽駅周辺の2040ビジョン案を公表。「PorTOBA」掲げて観光の玄関口を再生へ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 三重県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-14</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳公園 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>鳥羽市の活性化に向けた総合的なビジョン 三重県の東部で伊勢神宮の東に位置する鳥羽市で、2040年を見据えた将来像「鳥羽駅周辺エリア 2040将来ビジョン（案）」が策定された</li><li>人口減少が進む中において、地域経済と交流の中心である鳥羽駅周辺の価値を再定義するためのものだ</li><li>鳥羽市は同ビジョンを、総合計画や都市計画マスタープラン、立地適正化計画、観光基本計画など上位・関連計画に即した「共通の指針」と位置づけている</li><li>今後は、ビジョンを正式なものにまとめたうえで、関係団体と連携して段階的に取り組みを進める算段だ</li><li>鳥羽市が将来像として掲げているのは「海の価値と可能性を世界に拓く国際観光文化の みなとまち（PorTOBA：ポルトバ）」というもの</li><li>鳥羽駅周辺エリアについて、観光地としての魅力だけでなく、離島航路を含む交通結節点としての機能や市民生活も重ね、来訪者と市民がともに使える拠点にすることを大きな狙いとしている</li><li>ビジョンで示されたまちづくりの目標は5つある</li><li>里山里海とともに観光客と市民がにぎわう「ニューゲート」 市民も観光客も安心して過ごせる「防災のまちづくり」 鳥羽うみ文化・歴史を引継ぎ時代とともに進化する オールストレスフリーで海にもまちにも行き届く たたずみ歩いて楽しい「かもめと海城の散歩道」 具体的には、駅周辺エリアを大きく以下の3地区に分けて、機能と動線ごとに役割分担させる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/toukai/9854.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/toukai/9854.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東海再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-鹿児島市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">鹿児島市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-28" data-end-year="2027" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9867.html" target="_blank" rel="noopener">JR九州・鹿児島本線千早駅～箱崎駅間に新駅「JR貝塚駅」が誕生。2027年に開業予定</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 鹿児島市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-28</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2027年に開業</span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>鹿児島本線は、福岡県北九州市門司区の門司港駅から小倉駅・博多駅・熊本駅などを経由して、熊本県八代市の八代駅まで、鹿児島県薩摩川内市の川内駅から鹿児島市の鹿児島中央駅を経て鹿児島駅までを結ぶ、JR九州の鉄道路線だ</li><li>もともとは門司港駅から鹿児島駅までを途切れることなく結んでいたが、2004年に九州新幹線の新八代駅～鹿児島中央駅間が開業した際に、八代駅から河内駅間が第三セクター鉄道に移管されたため、現在は上記の路線となっている</li><li>北九州・福岡都市圏では快速・普通列車が数多く走り、特に北九州市内では主要な市街地を多く経由することから、市内交通の大動脈を担っている</li><li>小倉駅から博多駅間はJR西日本の山陽新幹線や西鉄バスの高速バスに対抗するため、多数の特急列車や快速列車が運行</li><li>博多駅から大牟田駅間は福岡都心側の西鉄（西日本鉄道）の天神大牟田線と並行し競合関係にある</li><li>福岡県内における通勤・通学になくてはならない路線のひとつだが、福岡市の東区の千早駅から箱崎駅の間に新たな駅が2027年に開業するという</li><li>新駅の予定地は千早駅から2.3㎞、箱崎駅から1.7㎞の場所で、九州大学箱崎キャンパス跡地から至近</li><li>西側には西鉄貝塚線の貝塚駅があり、周辺では再開発事業が進められている</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9867.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kyusyu/9867.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 九州再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-奈良県"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">奈良県</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-06" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/kansai/9875.html" target="_blank" rel="noopener">奈良県橿原市・近鉄大和八木駅周辺で再開発を実施。橿原文化会館跡地に収益施設などを整備する構想</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 奈良県</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-06</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏨ホテル 🏠住宅 🏠マンション 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>大阪線と橿原線が交差する交通の要衝付近で再開発 大和八木駅は奈良県橿原市にある、近鉄（近畿日本鉄道）の駅</li><li>大阪市、京都市、名古屋市、奈良市、伊勢志摩などから列車が集まる巨大ターミナル駅、かつ橿原市の玄関口として機能している</li><li>駅の北口には駅前広場が広がり、地域住民の暮らしを支える近鉄百貨店もあり、ロータリーを抜けると分譲マンションが建ち並ぶ</li><li>南口を出るとバス・タクシー乗り場や観光交流センター、橿原市役所があり、少し離れると奈良県立医科大学附属病院や橿原警察署も</li><li>歴史的な遺跡やまちなみが残るまちとして知られている</li><li>北口周辺では新たなまちづくりが始まる</li><li>それが、奈良県と橿原市が連携して検討することで合意した「近鉄大和八木駅周辺プロジェクト」だ</li><li>対象地は大和八木駅のすぐ北側で、橿原文化会館（県有地）、市営駐輪場（市有地）、周辺の民間所有地等が含まれる約5.5ha</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/kansai/9875.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/kansai/9875.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 関西再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-大阪府"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">大阪府</span><span class="ah-cnt">2 件</span></div><div class="plan-card" data-date="2025-12-13" data-end-year="2027" data-end-month="7">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-pre_construction">📐 着工予定</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/osaka/9635.html" target="_blank" rel="noopener">大阪府箕面市の川合・山之口地区、噂通りコストコ出店か⁉</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪府</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2025-12-13</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2026年5月</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2027年7月</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上3階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🎪ホール 📦物流</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>商業施設や物流拠点に最適なエリア 大阪府箕面市の東部に位置する川合・山之口地区で、かねてより進められている土地区画整理事業</li><li>かねてより北米倉庫型商業施設の誘致が囁かれていたが、ついに出店の現実味が帯びてきた</li><li>川合・山之口地区は茨木市との境界に位置し、もともとは水田や畑などの農地が広がるエリアだ</li><li>しかし、農業従事者の高齢化や後継者不足などの影響で休耕地が増加傾向に</li><li>継続的な営農が難しい状況となり、地域の衰退が危惧されていた</li><li>そこで2021年8月、土地区画整理準備組合を設立</li><li>北摂地域の幹線道路である府道1号茨木摂津線や、国道171号が交わるという交通利便性の高さを考慮し、大型商業施設や物流拠点の建設などを計画</li><li>2024年から着々と工事が進められていた</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/osaka/9635.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/osaka/9635.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 大阪再開発ニュース</span></dd>
+  </div>
+</dl>
+</div>
+<div class="plan-card" data-date="2026年2月7日" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-construction">🔨 工事中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://tatemono.com/news/20260209.html" target="_blank" rel="noopener">2026年02月09日 都市開発・ビル イノベーション拠点 東京建物初となる賃貸ラボ・オフィス、大阪府箕面市で着工</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 大阪府</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月7日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2026年2月7日に着工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏥医療</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京建物株式会社（本社：東京都中央区、代表取締役 社長執行役員 小澤 克人、以下「東京建物」）は、大阪府箕面市において東京建物として初となる賃貸ラボ・オフィス「（仮称）箕面船場東一丁目賃貸ラボプロジェクト」（以下「本物件」）を2026年2月7日に着工しましたので、お知らせします</li><li>日本は長年、開業率やユニコーン企業数が欧米と比較して低く、イノベーション創出力や産業の新陳代謝の面で課題を抱えてきました</li><li>こうした状況を受け、政府は2022年を「スタートアップ創出元年」と位置付け、成長領域に対する支援強化を進めています</li><li>その中でも、創薬・再生医療・バイオテックといったライフサイエンス分野は、研究設備や安全基準等の高度な環境を必要とし、多くのスタートアップ企業にとって高い参入障壁となっていました</li><li>また、スタートアップ企業と協業できる場やプロジェクト単位で柔軟に共同研究施設を構えたいという企業のニーズも増加傾向にあります</li><li>こうした背景から、実験環境や産学官ネットワークを一体的に提供する賃貸型のライフサイエンスラボの整備は、研究開発型スタートアップ企業の成長や技術革新を加速させる不可欠な基盤として注目されています</li><li>他方で、現時点ではこうしたニーズに対応する施設の供給は限定的です</li><li>東京建物ではこれらの点に着目した施設を開発することで、大学発シーズの事業化の側面支援や協業機会を拡大し、日本が目指すスタートアップエコシステムの強化・促進に貢献します</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260209.html" target="_blank" rel="noopener">https://tatemono.com/news/20260209.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-小平市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">小平市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-24" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9885.html" target="_blank" rel="noopener">【東京都小平市】再開発は本当に進むのか？西武新宿線における交通の要衝 小平駅北口を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 小平市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-24</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都小平市にある小平駅は、西武新宿線のなかでも高田馬場駅や所沢駅に次いで、交通の要衝といった趣がある</li><li>小平駅の利便性　都心へのアクセスが良い一方で駅周辺環境は？ 小平駅平日朝7時台の上り電車本数は13本の設定であり、8時台も14本となっている</li><li>平日日中は毎時9本の設定で、内訳は各停が3本で急行電車が10分間隔の6本となっている</li><li>JR山手線と東京メトロ東西線の乗り換え口である高田馬場駅まで、急行電車に乗ると日中時間帯は約24分の乗車時間なので利便性はそこそこ高い</li><li>下り方面の電車で見てみると小平駅で、所沢・本川越方面の本線と支線系統の拝島線が分離するので、小平以遠では電車の本数がそれなりに減少する</li><li>逆に言うと西武新宿駅から小平駅までは、電車の運行本数が多いことになる</li><li>他の大手私鉄の場合でも例えば、京王線の調布駅や小田急線の新百合ヶ丘駅・相模大野駅などが小平駅と似ており、本線と支線が分岐する駅としての役割を果たしている</li><li>しかし小平駅は、同じく交通の要衝である調布や新百合ヶ丘のような繁華性はない</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9885.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9885.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-飯田橋"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">飯田橋</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-02-26" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9871.html" target="_blank" rel="noopener">東京・飯田橋駅前で2つの再開発計画が進行中。既存市街地との相乗効果を期待できるか</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 飯田橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-02-26</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2029年度着工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上32階・地下2階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏪店舗 🏨ホテル 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京・飯田橋の駅前で（仮称）下宮比町地区（しもみやびちょうちく）の再開発と、富士見二丁目3番地区の再開発が進行中だ</li><li>（仮称）下宮比町地区の再開発は、飯田橋駅の北西側で進んでおり、延床面積約20.8万㎡の大規模複合開発事業だ</li><li>計画はA～C棟の複数棟構成とされており、以下の用途がそれぞれ想定されている</li><li>A棟：オフィス・ホテル・商業施設等 B棟：住宅・商業施設等 C棟：住宅・オフィス等の用途を想定</li><li>各建物の規模は、A棟が地上32階・地下2階建てで延床面積約10.6万㎡、B棟が地上47階・地下2階建てで延床面積約9.2万㎡、C棟が地上14階・地下2階建てで延床面積約1.0万㎡となる予定だ</li><li>なお、A～C棟ともに、地下は駐車場と機械室として利用される想定</li><li>A棟とB棟の低層部は商業施設で、A棟の大半はオフィス、高層階がホテルとなる</li><li>B棟は大半が住宅、C棟は低層階がオフィスで中層以上が住宅となる予定</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9871.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9871.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-新橋"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">新橋</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-02" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9883.html" target="_blank" rel="noopener">東京都港区・新橋駅の基盤整備が本格始動。交通結節機能の強化、歩行・滞留空間の拡充など方針案が明らかに</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 新橋</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-02</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🌳公園 🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>新橋駅は東京都港区にある、JR東日本、東京メトロ、都営地下鉄、ゆりかもめが乗り入れるターミナル駅</li><li>2024年度の1日平均乗車数は約23.1万人と、JR東日本の駅では大宮駅に次いで8番目に多い</li><li>駅前のSL広場や新橋駅ビルなど周辺に有名スポットが広がり、ビジネス街であることから飲食店や居酒屋なども多い</li><li>日本有数のオフィス・歓楽スポットとして知られる</li><li>昭和風情が残りつつ再開発により超高層ビルが建ち並ぶなど、新旧が混在したエリアだ</li><li>そんな新橋駅周辺について、東京都は2025年12月に「新橋駅周辺基盤整備方針」を策定した</li><li>交通結節機能の強化や歩行・滞留空間の拡充を掲げており、30年代の完了を見込んでいる</li><li>ここからは同方針の内容をもとに、具体的な取り組みについて解説しよう</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9883.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9883.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-府中市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">府中市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年1月5日" data-end-year="2040" data-end-month="3">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-planning">📋 計画・検討中</span>
+      <span class="pri-medium">優先度: 中</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/tokyo/9897.html" target="_blank" rel="noopener">東京・府中市で「狛江国立線」の道路整備が始動。多摩川沿いの東西軸を補強、幹線道路のつながりはどこまで広がる？</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 府中市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月5日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2026年1月5日</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2040年3月31日</span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京都は府中市内で、都市計画道路「府中3・4・3号 狛江国立線」の未整備区間について事業を進めている</li><li>今回整備するのは、多摩川沿いの北多摩地域を東西につなぐ地域幹線道路だ</li><li>全線がつながれば調布～国立間の新たな東西軸となり、国道20号（甲州街道）のバイパス的な役割も見込まれる</li><li>中央道の稲城IC・府中スマートIC・国立府中ICへのアクセス強化、延焼防止や災害時の東西連絡ルート確保も期待される</li><li>その一方で、幹線同士の結節点では新たな交通集中が起きやすく、沿道環境の変化にも目配りが必要だ</li><li>先行する「Ⅰ期」は、未整備区間のうち府中市是政3丁目（府中街道）～南町1丁目（かえで通り）に至る延長約1,285m（資料によっては1,275mと記載されているものもある）</li><li>新たな道路は2車線で、JR南武線・武蔵野線の道路とはアンダーパスで立体交差する</li><li>事業施行期間は2026年1月5日～2040年3月31日と整理されている（※公開情報の表記ベース）</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/tokyo/9897.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/tokyo/9897.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 東京再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-浦和"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">浦和</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-01" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9895.html" target="_blank" rel="noopener">【埼玉県さいたま市】武蔵浦和駅は新改札口設置でさらに進化！交通・生活利便性が高いジャンクション駅を取材</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 浦和</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-01</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏠マンション</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>埼玉県さいたま市南区にある武蔵浦和駅は、交通の要衝として朝晩はもちろん、終日混雑する駅として知られている</li><li>通勤アクセスと生活利便性、どちらも期待できる武蔵浦和駅 JR埼京線とJR武蔵野線が交差することから、東西南北に移動しやすい駅であり駅前の開発に関しては、さいたま市としても重視してきた経緯があり、タワーマンションなどが近年は継続して開発されている</li><li>武蔵浦和からは埼京線快速電車を使うと赤羽駅まで約10分であり、池袋駅まで18分、新宿駅までは約26分、下り方面の大宮駅までは12分と交通利便性がそこそこ高いことから、ジャンクション機能を持つ主要駅と言える</li><li>朝通勤時上り電車は7時台が16本、8時台が14本の設定であり、通勤快速は共に4本ずつとなっている</li><li>終日武蔵浦和止まりや始発電車があり、都内への通勤客ニーズが強い駅でもある</li><li>もう一つの路線である武蔵野線の南浦和・西船橋方面は、朝通勤時の6時台・7時台は毎時10本であり、上り下り電車共に日中時間帯はおおむね毎時6本の設定となっている</li><li>武蔵野線も最近は開発が進み、越谷レイクタウン駅前にある首都圏最大級の大きさを誇るイオンや、新三郷駅付近にもららぽーとやコストコなどが新設され、沿線全体でファミリー世帯の人気が高まっている</li><li>新たな改札口の設置でさらに進む再開発 そんな二つの路線が交差する武蔵浦和駅は、新しい改札口を再開発に合わせて造る計画が進んでいる</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9895.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9895.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-横須賀中央"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">横須賀中央</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年1月21日" data-end-year="2029" data-end-month="12">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.kenbiya.com/ar/ns/region/shutoken/9919.html" target="_blank" rel="noopener">神奈川の横須賀中央駅前で「第2の塔」となる若松町一丁目地区の再開発建物が着工。「まちなか居住」再加速のきっかけになるか New</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 横須賀中央</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月21日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 竣工は2029年12月</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上33階・地下1階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏪商業 🏪店舗 🏨ホテル 🏨宿泊 🏠住宅</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>再開発建物の概要と周辺とのシナジー 京急本線・横須賀中央駅前で進む「若松町1丁目地区第一種市街地再開発事業」が、2026年1月21日の起工式を経て新築工事に入った</li><li>計画地は、2024年2月に閉館した商業施設「横須賀プライム」など老朽建物が集積していた街区で、駅直結の複合高層ビルへと更新される</li><li>横須賀市が掲げてきた中心市街地の再生方針とも整合する形で、駅前の滞在・居住機能を厚くする動きが本格化する</li><li>新たに整備される建物は、地上33階・地下1階、高さ約130mの高層複合ビルだ</li><li>用途は商業・宿泊・住宅を「縦積み」でまとめ、商業（1～4階）、ホテル129室（6～10階）、住宅273戸（11～33階＋5階）などが計画されている</li><li>竣工は2029年12月の予定だ</li><li>当初の計画では2028年7月だったので、昨今の業界事情も相まってだいぶ遅れていることにはなる</li><li>施行者は「若松町1丁目地区市街地再開発組合」で、京浜急行電鉄がホテル保留床取得者として参画</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.kenbiya.com/ar/ns/region/shutoken/9919.html" target="_blank" rel="noopener">https://www.kenbiya.com/ar/ns/region/shutoken/9919.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 健美家 首都圏再開発ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-神戸市"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">神戸市</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年1月30日" data-end-year="2026" data-end-month="1">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-completed">✅ 完成・供用中</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.mori-trust.co.jp/news/2026/20260302/" target="_blank" rel="noopener">賃貸冷凍冷蔵倉庫をエスリードグループと共同開発 森トラスト　物流施設事業へ参入 「神戸六甲MT Logi Cold」竣工</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 神戸市</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年1月30日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年1月30日に竣工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上４階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">📦物流</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>森トラスト株式会社は、当社グループのエスリードリアルティ株式会社と共同で、兵庫県神戸市の六甲アイランドにおいて冷凍・冷蔵機能を備えた賃貸物流施設「神戸六甲MT Logi Cold」を開発したことをお知らせいたします</li><li>当社グループにとって、物流施設事業は初の事業領域となります</li><li>本施設は、2026年1月30日に竣工いたしました</li><li>森トラストは、ポートフォリオと事業領域の拡大に資する好機と判断し、物流施設事業に参入いたしました</li><li>物流施設の需要は従来から堅調に推移しており、特に近年は食品EC市場の拡大や冷凍食品の需要増加を背景に、冷凍冷蔵倉庫への需要が高まっています</li><li>また、既存の冷凍冷蔵倉庫の老朽化や冷媒規制強化などの影響により建替需要も増加しています</li><li>さらに、冷凍冷蔵倉庫は自社所有施設が主流でしたが、建築費高騰などの影響で自社保有にこだわらない柔軟な拠点戦略をとる物流会社が増えてきており、賃貸冷凍冷蔵倉庫の需要は今後も成長が見込まれます</li><li>本施設が位置する六甲アイランドは、物流マーケットが好調な近畿圏の中でも湾岸エリア（神戸港）に位置しており、コンテナターミナルを備え、関西主要都市へのアクセスが良好な立地です</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.mori-trust.co.jp/news/2026/20260302/" target="_blank" rel="noopener">https://www.mori-trust.co.jp/news/2026/20260302/</a><span style="margin-left:6px;font-size:11px;color:#888">— 森トラスト プレスリリース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-秩父宮"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">秩父宮</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年2月3日" data-end-year="2030" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://tatemono.com/news/20260212.html" target="_blank" rel="noopener">2026年02月12日 不動産活用 「新秩父宮ラグビー場（仮称）整備・運営等事業」着工  トップパートナーは三井住友フィナンシャルグループ</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 秩父宮</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月3日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-s">▶ 着工: 2026年2月3日に着工</span><span class="period-arrow">→</span><span class="period-e">◀ 完成: 2030年に開業予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🌳広場</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>＜本リリースのポイント＞ ・ 「新秩父宮ラグビー場」が2026年2月3日に着工</li><li>・ 4駅4路線が利用可能な都心好立地に、国内初の屋内全天候型多目的ラグビー場（ラグビー開催時：約1.5万人収容）が誕生</li><li>・ 多彩な観戦体験を支える環境を整備し、ラグビーの試合に加え、音楽コンサートを中心とした各種イベントの開催も予定</li><li>（イベント時：約2.5万人収容） ・ トップパートナーとして三井住友フィナンシャルグループが決定</li><li>鹿島建設株式会社（本社：東京都港区、代表取締役会長兼社長：押味 至一）を代表企業として、三井不動産株式会社（本社：東京都中央区、代表取締役社長：植田 俊）、東京建物株式会社（本社：東京都中央区、代表取締役社長執行役員：小澤 克人）、株式会社東京ドーム（本社：東京都文京区、代表取締役社長 COO：長岡 勤）の4社が構成企業となる「秩父宮ラグビー場株式会社」は、東京都新宿区において収容人数約1.5万人（ラグビー開催時）、約2.5万人（イベント時）の屋内全天候型多目的ラグビー場である「新秩父宮ラグビー場」を2026年2月3日に着工したことをお知らせします</li><li>本施設はラグビーの聖地として長年親しまれてきた現秩父宮ラグビー場の歴史と想いを継承し、引き続きラグビー場として利用されるほか、さらなる発展を見据え、音楽コンサート、スポーツイベント、企業の展示会などの様々なイベントに対応可能な施設として整備し、Ⅰ期工事完了後の2030年に開業を予定しています（その後のⅡ期工事にて南側広場の整備を行う予定）</li><li>また、この度、歴史を継承しながら新たなラグビー場とともに歩んでいくトップパートナーとして、三井住友フィナンシャルグループ（以下「SMBCグループ」という）が決定しました</li><li>さらに、歴史ある「秩父宮ラグビー場」の名と併用する、副名称は「SMBC Olive S</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260212.html" target="_blank" rel="noopener">https://tatemono.com/news/20260212.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-中央区"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">中央区</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026年2月28日" data-end-year="2026" data-end-month="2">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://tatemono.com/news/20260302-2.html" target="_blank" rel="noopener">2026年03月02日 都市開発・ビル 商業施設 東京駅直結の大規模再開発「TOFROM YAESU TOWER」竣工</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 中央区</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026年2月28日</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: 2026年2月28日に竣工</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">規模</span><span class="spec-v">地上51階</span></span><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏪店舗 🏥医療</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>東京建物株式会社（本社：東京都中央区、代表取締役 社長執行役員 小澤 克人、以下「東京建物」）が、再開発組合の一員として参画し、東京駅前八重洲一丁目東B地区市街地再開発組合が推進する「TOFROM YAESU TOWER（トフロム ヤエス タワー）」（東京駅前八重洲一丁目東B地区第一種市街地再開発事業、以下「本事業」）が2026年2月28日に竣工したことをお知らせします</li><li>本事業は、東京駅八重洲口前に所在する地下4階、地上51階の大規模複合ビルです</li><li>八重洲地下街（ヤエチカ）を介し東京駅に直結し、オフィス、商業施設、劇場・カンファレンス、バスターミナル、医療施設など多様な用途で構成され、国際都市東京の玄関口にふさわしい都市機能の強化と国際競争力の向上に貢献します</li><li>名称の「TOFROM」は、英語の「TO」と「FROM」を組み合わせた造語で、日本中、ひいては世界中のヒト・モノ・コトがここに集まってつながり、ここから多様な価値が生み出され、発信されていく場所になってほしいという思いが込められています</li><li>なお本事業は、「TOFROM YAESU THE FRONT（トフロム ヤエス ザ フロント）」とともに一体街区を構成しており、2026年7月（予定）の「TOFROM YAESU THE FRONT」竣工をもって、「TOFROM YAESU」街区全体が完成を迎えます</li><li>TOFROM YAESU 公式サイト ： https://tofrom-yaesu.com/ オフィスや飲食を中心とした商業店舗に加え、交通・医療・文化といった異なる要素が融合し、八重洲から新たな価値を発信します</li><li>国際都市・東京の玄関口にふさわしい多様な施設を順次開業してまいります</li><li>独立行政法人都市再生機構が整備し、京王電鉄バス株式会社が運営する「バスターミナル東京八重洲」第2期エリア（地下A）が2026年3月20日</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://tatemono.com/news/20260302-2.html" target="_blank" rel="noopener">https://tatemono.com/news/20260302-2.html</a><span style="margin-left:6px;font-size:11px;color:#888">— 東京建物 ニュース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-赤坂"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">赤坂</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-12" >
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.mori-trust.co.jp/news/2026/20260226/" target="_blank" rel="noopener">東京ワールドゲート赤坂 ショップ＆レストラン オープン 1万人超のワーカーの日常とビジネスを支える商業エリアを形成</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 赤坂</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-12</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><span class="no-period">記載なし（詳細を参照）</span></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏢オフィス 🏪商業 🏪店舗 🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>森トラスト株式会社は、大規模複合開発プロジェクト「東京ワールドゲート赤坂」において、新たなショップ＆レストランがオープンすることをお知らせいたします</li><li>今回、4つの新業態を含む14店舗が加わることで、全18店舗の構成となります</li><li>■実用性と上質さを備えた店舗ラインナップで、館内1万人超のオフィスワーカーの日常をサポート 「東京ワールドゲート赤坂」は、街区コンセプトに「Next Destination」を掲げ、従業員エンゲージメントの向上に資するオフィスフロアの整備と、国際水準のホテル・サービスレジデンスの展開を通じて、ビジネスと観光の両面から、国際都市・東京の価値向上に資する拠点となることを目指しています</li><li>このたび発表するショップ＆レストランは、「東京ワールドゲート赤坂」のオフィスで働く1万人超のワーカーをはじめ、ホテル・サービスレジデンス利用者、近隣の方々やオフィスワーカーにとって、日常的なランチ利用から、仕事終わりのひととき、同僚とのコミュニケーション、取引先との会食まで、多様な食のシーンに対応するラインナップとなっています</li><li>東京ワールドゲート赤坂で働く人、滞在する人、来訪者など、あらゆる施設利用者にとって、実用性と上質さを兼ね備えた商業スポットとして、赤坂エリアの新たなコミュニケーションハブを目指してまいります</li><li>■4つの新業態を含む、合計18店舗を展開 今回の店舗構成については、ランチでの日常使いからフォーマルなビジネスシーンまで、利用する時間帯や目的が異なる人たちが、それぞれにとって使いやすい形で活用できるラインナップが実現いたしました</li><li>博多の有名うどん居酒屋「二○加屋長介（にわかやちょうすけ）」と大阪のお好み焼き酒場「お好みたまちゃん」のハイブリッド居酒屋や創業100年超えの焼き鳥専門店 伊勢廣など、多彩な店舗を通じ、赤坂の魅力向上と快適な日常の創出に努めてま</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.mori-trust.co.jp/news/2026/20260226/" target="_blank" rel="noopener">https://www.mori-trust.co.jp/news/2026/20260226/</a><span style="margin-left:6px;font-size:11px;color:#888">— 森トラスト プレスリリース</span></dd>
+  </div>
+</dl>
+</div></div>
+<div class="ab" id="ab-熱海"><div class="ah"><span style="font-size:18px">📍</span><span class="ah-name">熱海</span><span class="ah-cnt">1 件</span></div><div class="plan-card" data-date="2026-03-12" data-end-year="2026" data-end-month="0">
+<dl class="fields">
+  <div class="title-row">
+    <dt>計画名</dt>
+    <dd>
+      <span class="pb pb-info">📄 情報</span>
+      <span class="pri-high">優先度: 高</span>
+      <a href="https://www.sumitomo-rd.co.jp/uploads/20260203_release_vf_village_atami.pdf" target="_blank" rel="noopener">2026.02.03 グループ会社 住友不動産のホテルシリーズ リゾートホテル「ヴィラージュ」が熱海に誕生 ２０２６年夏 開業予定、公式サイト本日公開 （PDF 588.4 KB）</a>
+    </dd>
+  </div>
+  <div>
+    <dt>エリア</dt>
+    <dd><span class="area-chip">📍 熱海</span></dd>
+  </div>
+  <div>
+    <dt>情報取得日</dt>
+    <dd>2026-03-12</dd>
+  </div>
+  <div>
+    <dt>開発期間</dt>
+    <dd><div class="period-box"><span class="period-e">◀ 完成: ２０２６年夏 開業予定</span></div></dd>
+  </div>
+  <div>
+    <dt>規模・用途</dt>
+    <dd><div class="specs-bar"><span class="spec-item"><span class="spec-k">用途</span><span class="spec-v">🏨ホテル</span></span></div></dd>
+  </div>
+  <div class="detail-row">
+    <dt>計画詳細</dt>
+    <dd><ul class="detail-list"><li>2026.02.03 グループ会社 住友不動産のホテルシリーズ リゾートホテル「ヴィラージュ」が熱海に誕生 ２０２６年夏 開業予定、公式サイト本日公開 （PDF 588.4 KB）</li></ul></dd>
+  </div>
+  <div>
+    <dt>参照先（URL）</dt>
+    <dd><a class="src-link" href="https://www.sumitomo-rd.co.jp/uploads/20260203_release_vf_village_atami.pdf" target="_blank" rel="noopener">https://www.sumitomo-rd.co.jp/uploads/20260203_release_vf_village_atami.pdf</a><span style="margin-left:6px;font-size:11px;color:#888">— 住友不動産 ニュースリリース</span></dd>
+  </div>
+</dl>
+</div></div>
+</div>
+<footer>urban-dev-tracker が自動生成 — 2026年03月16日 12:27</footer>
+<script>
+// ── フィルタ状態 ──────────────────────────────────────────────
+let _currentDays = 365;
+let _dateFrom = null;   // "YYYY-MM-DD" or null
+let _dateTo   = null;   // "YYYY-MM-DD" or null
+
+// ── メインフィルタ関数 ────────────────────────────────────────
+function applyFilter() {
+  const showCompleted = document.getElementById('show-completed')?.checked ?? false;
+  // 日付範囲 or 相対日数でカットオフを決定
+  let cutoffFrom = null, cutoffTo = null;
+  if (_dateFrom || _dateTo) {
+    if (_dateFrom) cutoffFrom = new Date(_dateFrom);
+    if (_dateTo)   cutoffTo   = new Date(_dateTo + 'T23:59:59');
+  } else if (_currentDays > 0) {
+    cutoffFrom = new Date(Date.now() - _currentDays * 86400000);
+  }
+
+  let total = 0;
+  document.querySelectorAll('.ab').forEach(ab => {
+    let visible = 0;
+    ab.querySelectorAll('.plan-card').forEach(card => {
+      const d        = card.dataset.date;
+      const endYear  = parseInt(card.dataset.endYear  || '0');
+      const endMonth = parseInt(card.dataset.endMonth || '0');
+      // 取得日フィルタ
+      let dateOk = true;
+      if (d) {
+        const cd = new Date(d);
+        if (cutoffFrom && cd < cutoffFrom) dateOk = false;
+        if (cutoffTo   && cd > cutoffTo)   dateOk = false;
+      }
+      // 完了済みフィルタ（2026年4月より前）
+      let isOldCompleted = false;
+      if (endYear > 0) {
+        if (endYear < 2026) isOldCompleted = true;
+        else if (endYear === 2026 && endMonth > 0 && endMonth < 4) isOldCompleted = true;
+      }
+      const show = dateOk && (!isOldCompleted || showCompleted);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    ab.style.display = visible > 0 ? '' : 'none';
+    const cnt = ab.querySelector('.ah-cnt');
+    if (cnt) cnt.textContent = visible + ' 件';
+    total += visible;
+  });
+  // ナビリンク同期
+  document.querySelectorAll('.anav a').forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    const ab = document.getElementById(id);
+    a.style.display = (ab && ab.style.display !== 'none') ? '' : 'none';
+  });
+  const fc = document.getElementById('filter-count');
+  if (fc) fc.textContent = total + ' 件表示中';
+}
+
+// ── クイックボタン（1ヶ月/3ヶ月/…）────────────────────────────
+document.querySelectorAll('.fbtn[data-days]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    _currentDays = parseInt(this.dataset.days);
+    _dateFrom = null; _dateTo = null;
+    document.getElementById('date-from').value = '';
+    document.getElementById('date-to').value   = '';
+    document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    applyFilter();
+  });
+});
+
+// ── 日付入力（開始/終了）────────────────────────────────────
+function onDateInput() {
+  _dateFrom = document.getElementById('date-from').value || null;
+  _dateTo   = document.getElementById('date-to').value   || null;
+  // 日付指定中はクイックボタンの active を外す
+  document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+  applyFilter();
+}
+document.getElementById('date-from')?.addEventListener('change', onDateInput);
+document.getElementById('date-to')?.addEventListener('change', onDateInput);
+
+// ── 日付クリアボタン ─────────────────────────────────────────
+document.getElementById('date-clear')?.addEventListener('click', function() {
+  _dateFrom = null; _dateTo = null;
+  document.getElementById('date-from').value = '';
+  document.getElementById('date-to').value   = '';
+  _currentDays = 365;
+  document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.fbtn[data-days="365"]');
+  if (btn) btn.classList.add('active');
+  applyFilter();
+});
+
+// ── 完了済みトグル ───────────────────────────────────────────
+document.getElementById('show-completed')?.addEventListener('change', applyFilter);
+
+// 初期化: 1年以内 + 2026-04以前完了案件は非表示
+applyFilter();
+
+// ── エリアナビ スクロール連動 ─────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.anav a').forEach(a => a.classList.remove('active'));
+      const a = document.querySelector(`.anav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, {threshold: 0.05, rootMargin:'-60px 0px -60% 0px'});
+document.querySelectorAll('.ab').forEach(el => obs.observe(el));
+// ── sticky top 値を動的に計算 ──────────────────────────────────
+function updateStickyOffsets() {
+  const hdrH   = (document.querySelector('.hdr')        || {}).offsetHeight || 0;
+  const statsH = (document.querySelector('.stats')      || {}).offsetHeight || 0;
+  const fbH    = (document.querySelector('.filter-bar') || {}).offsetHeight || 0;
+  const r = document.documentElement;
+  r.style.setProperty('--stats-top', hdrH + 'px');
+  r.style.setProperty('--fb-top',   (hdrH + statsH) + 'px');
+  r.style.setProperty('--anav-top', (hdrH + statsH + fbH) + 'px');
+}
+updateStickyOffsets();
+window.addEventListener('resize', updateStickyOffsets);
+</script>
+</body>
+</html>

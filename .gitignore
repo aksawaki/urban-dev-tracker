@@ -1,0 +1,24 @@
+# 機密情報・認証情報
+config.yaml
+
+# データファイル（大容量・個人情報含む可能性）
+data/
+
+# ログ・一時ファイル
+*.log
+*.bak
+*.bak2
+.last_notified_at
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# レポート（docs/index.html のみ管理）
+reports/
+
+# macOS
+.DS_Store
