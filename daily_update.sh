@@ -1,8 +1,10 @@
 #!/bin/bash
-# daily_update.sh - 毎朝の情報収集 & ChatWork 投稿
+# daily_update.sh - 毎朝の情報収集 & HTML更新
 #
 # 動作:
-#   - 毎朝10時に launchd から自動実行
+#   - 毎朝9時に launchd から自動実行
+#   - クローリング → HTML再生成 → GitHub Pagesデプロイ
+#   - ChatWork配信は手動（send_chatwork.sh）で行う
 #   - 手動実行: bash daily_update.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -49,76 +51,13 @@ else
     echo "$(date '+%H:%M:%S') [2/3] HTML生成エラー" >> "$LOG"
 fi
 
-# 3. 新着記事を ChatWork に投稿
-echo "$(date '+%H:%M:%S') [3/3] ChatWork投稿" >> "$LOG"
-"$PYTHON" - << 'PYEOF' >> "$LOG" 2>&1
-import json, sys
-from datetime import datetime, timezone
-from pathlib import Path
-
-sys.path.insert(0, '.')
-
-STAMP_FILE = Path('.last_notified_at')
-
-# 前回通知時刻を読み込む（なければ epoch）
-if STAMP_FILE.exists():
-    try:
-        last_ts = datetime.fromisoformat(STAMP_FILE.read_text().strip())
-        if last_ts.tzinfo is None:
-            last_ts = last_ts.replace(tzinfo=timezone.utc)
-    except ValueError:
-        last_ts = datetime.fromtimestamp(0, tz=timezone.utc)
-else:
-    last_ts = datetime.fromtimestamp(0, tz=timezone.utc)
-
-# 全記事を読み込み、HTMLと同じフィルタ（重複統合・完了済み除外）を適用
-with open('data/processed/articles.json') as f:
-    raw = json.load(f)
-import viewer
-active = viewer.get_active_articles(list(raw.values()))
-
-# fetched_at が前回通知より新しいものだけ抽出
-new_articles = []
-for a in active:
-    ft = a.get('fetched_at', '')
-    if not ft:
-        continue
-    try:
-        art_ts = datetime.fromisoformat(ft)
-        if art_ts.tzinfo is None:
-            art_ts = art_ts.replace(tzinfo=timezone.utc)
-    except ValueError:
-        continue
-    if art_ts > last_ts:
-        new_articles.append(a)
-
-if not new_articles:
-    print(f"ChatWork: 新着なし（前回通知: {last_ts.strftime('%Y-%m-%d %H:%M')} UTC）")
-else:
-    import yaml
-    with open('config.yaml') as f:
-        config = yaml.safe_load(f)
-    from notifier import ChatWorkNotifier
-    notifier = ChatWorkNotifier.from_config(config)
-    if notifier is None:
-        print("ChatWork: 設定なし、スキップ")
-    else:
-        ok = notifier.send(new_articles, datetime.now().strftime('%Y年%m月%d日'))
-        if ok:
-            STAMP_FILE.write_text(max(a.get('fetched_at','') for a in new_articles))
-            print(f"ChatWork: {len(new_articles)}件 投稿完了")
-        else:
-            print("ChatWork: 投稿エラー")
-PYEOF
-echo "$(date '+%H:%M:%S') [3/3] ChatWork投稿完了" >> "$LOG"
-
-# 4. GitHub Pages にデプロイ
-echo "$(date '+%H:%M:%S') [4/4] GitHub Pages デプロイ" >> "$LOG"
+# 3. GitHub Pages にデプロイ
+echo "$(date '+%H:%M:%S') [3/3] GitHub Pages デプロイ" >> "$LOG"
 cp "$SCRIPT_DIR/reports/timeline_latest.html" "$SCRIPT_DIR/docs/index.html"
 cd "$SCRIPT_DIR"
 git add docs/index.html
 git commit -m "chore: update timeline $(date '+%Y-%m-%d')" >> "$LOG" 2>&1
 git push origin main >> "$LOG" 2>&1
-echo "$(date '+%H:%M:%S') [4/4] デプロイ完了" >> "$LOG"
+echo "$(date '+%H:%M:%S') [3/3] デプロイ完了" >> "$LOG"
 
-echo "$(date '+%Y-%m-%d %H:%M:%S') 日次更新終了" >> "$LOG"
+echo "$(date '+%Y-%m-%d %H:%M:%S') 日次更新終了（ChatWork配信は send_chatwork.sh で手動実行）" >> "$LOG"
