@@ -15,7 +15,7 @@ notifier.py - ChatWork 送信モジュール
 import logging
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -24,6 +24,9 @@ logger = logging.getLogger(__name__)
 CHATWORK_API = "https://api.chatwork.com/v2/rooms/{room_id}/messages"
 PRIORITY_RANK = {"high": 3, "medium": 2, "normal": 1}
 PRIORITY_ICON = {"high": "[toaster]", "medium": "[alarm]", "normal": "[info]"}
+
+# チャット通知する記事の公開日上限（これより古い記事は通知しない）
+_NOTIFY_RECENCY_DAYS = 30
 
 # タイトル・本文から実際の所在地を検出するためのキーワードマップ
 # 長いものを先にマッチさせるため降順ソート済みリストで管理
@@ -291,6 +294,21 @@ def _content_is_real(content: str) -> bool:
     return sum(len(l) for l in good) >= 30
 
 
+_PUB_DATE_RE_NOTIFY = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日')
+
+
+def _parse_pub_date_notify(s: str) -> str | None:
+    """'YYYY年M月D日' または 'YYYY-MM-DD' → 'YYYY-MM-DD'。解析不能なら None。"""
+    if not s:
+        return None
+    m = _PUB_DATE_RE_NOTIFY.match(s)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    if re.match(r'\d{4}-\d{2}-\d{2}', s):
+        return s[:10]
+    return None
+
+
 def is_development_relevant(a: dict) -> bool:
     """都市開発に関連する情報かどうかを判定する。
 
@@ -299,6 +317,7 @@ def is_development_relevant(a: dict) -> bool:
     - タイトルが極端に短い（12文字未満）
     - コンテンツが JS通知・UIボイラープレートのみ（実質コンテンツなし）
     - タイトル＋本文に開発関連キーワードが1つも含まれない
+    - 公開日が _NOTIFY_RECENCY_DAYS 日より前（古すぎる記事は通知しない）
     """
     title = (a.get("title") or "").strip()
     content = (a.get("content") or a.get("summary") or "").strip()
@@ -320,6 +339,13 @@ def is_development_relevant(a: dict) -> bool:
     # コンテンツ品質チェック: JS必須ページ・UIボイラープレートのみは除外
     if not _content_is_real(content):
         return False
+
+    # 公開日の新しさチェック: 日付が判明していて古すぎる記事は通知しない
+    pub = _parse_pub_date_notify(a.get("published_at") or "")
+    if pub is not None:
+        cutoff = (datetime.now() - timedelta(days=_NOTIFY_RECENCY_DAYS)).strftime('%Y-%m-%d')
+        if pub < cutoff:
+            return False
 
     # 開発キーワード必須チェック
     for kw in _DEV_KEYWORDS:
