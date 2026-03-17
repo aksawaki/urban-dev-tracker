@@ -1113,6 +1113,41 @@ function updateStickyOffsets() {{
 updateStickyOffsets();
 window.addEventListener('resize', updateStickyOffsets);
 </script>
+<!-- パスワード認証オーバーレイ -->
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#1a1a2e;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="background:#fff;border-radius:12px;padding:40px 48px;box-shadow:0 8px 32px rgba(0,0,0,0.4);text-align:center;max-width:380px;width:90%;">
+    <div style="font-size:36px;margin-bottom:8px;">🏙️</div>
+    <h2 style="margin:0 0 4px;font-size:18px;color:#1a1a2e;">都市開発計画 情報レポート</h2>
+    <p style="margin:0 0 24px;font-size:13px;color:#666;">アクセスにはパスワードが必要です</p>
+    <input id="auth-pw" type="password" placeholder="パスワードを入力" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1px solid #ccc;border-radius:6px;font-size:15px;outline:none;" onkeydown="if(event.key==='Enter')authCheck()">
+    <div id="auth-err" style="color:#e53;font-size:13px;margin-top:8px;min-height:18px;"></div>
+    <button onclick="authCheck()" style="margin-top:12px;width:100%;padding:11px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:15px;cursor:pointer;">ログイン</button>
+  </div>
+</div>
+<script>
+(function(){{
+  var PASS = 'salowin-tenpo';
+  var KEY  = 'auth_ok';
+  var overlay = document.getElementById('auth-overlay');
+  if (sessionStorage.getItem(KEY) !== '1') {{
+    overlay.style.display = 'flex';
+    setTimeout(function(){{ document.getElementById('auth-pw').focus(); }}, 50);
+  }} else {{
+    overlay.style.display = 'none';
+  }}
+  window.authCheck = function() {{
+    var pw = document.getElementById('auth-pw').value;
+    if (pw === PASS) {{
+      sessionStorage.setItem(KEY, '1');
+      overlay.style.display = 'none';
+    }} else {{
+      document.getElementById('auth-err').textContent = 'パスワードが違います';
+      document.getElementById('auth-pw').value = '';
+      document.getElementById('auth-pw').focus();
+    }}
+  }};
+}})();
+</script>
 </body>
 </html>"""
 
@@ -1401,6 +1436,25 @@ _DISPLAY_BAD_TITLE_PATTERNS = [
     'アクアシンフォニー',
     # 子供公園・遊び場（建物開発でないもの追加）
     'こどもふっかパーク',
+    # 鉄道会社CM・MV・キャンペーン（開発でない）
+    'ミュージックビデオ', 'オフィシャルMV', 'MV公開', 'アニメーションCM',
+    'ライオンズ応援', 'チームカラー', '応援施策',
+    # ダム・治水インフラ（都市開発でない）
+    'ダム管理', 'ダム高度化', '治水計画', '河川管理',
+    # 地方港湾・客船（都市開発でない）
+    '客船乗り場', '客船ターミナル', '旅客ターミナル整備',
+    # 地方公共施設（保健センター・新庁舎など）
+    '総合保健センター', '保健センター新築', '新庁舎建設基本構想',
+    # 統計・調査系（追加）
+    '受注動態統計', '建設工事受注動態',
+    # 学校施設（給食・校舎）
+    '給食センター', '校舎棟解体', '学校給食',
+    # アーバンスポーツ・ダンスイベント系
+    'アーバンスポーツ', 'ダンスイベント', 'ダンスワークショップ',
+    # 行政委員会委員募集（環境・景観系）
+    '環境基本計画改定委員', '環境計画委員',
+    # イベント系（みなとフェスタ等）追加
+    'みなとフェスタ', 'ポートフェスタ',
 ]
 
 # カバー対象外エリア（国内は除外しない）
