@@ -387,6 +387,15 @@ _BOILERPLATE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# enrich_content (Google News RSS) の建設関連フィルタ
+_ENRICH_RELEVANT_RE = re.compile(
+    r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|'
+    r'不動産|業務代行|入札|落札|タワー|'
+    r'区画整理|土地区画|公共工事|橋梁|港湾|'
+    r'人事異動|機構改革|代表取締役|専務|常務'
+)
+
+
 def _to_bullets(content: str) -> list[str]:
     """コンテンツ文字列を箇条書きリストに変換する（最大8件）"""
     if not content:
@@ -404,6 +413,9 @@ def _to_bullets(content: str) -> list[str]:
         if p.startswith('注\u3000') or p.startswith('注 '):
             continue
         if _BOILERPLATE_RE.match(p):
+            continue
+        # JavaScriptが含まれる行は除外（^アンカー非マッチの場合も）
+        if re.search(r'[Jj]ava[Ss]cript', p):
             continue
         if p not in bullets:
             bullets.append(p)
@@ -876,12 +888,6 @@ def _card_html(a: dict) -> str:
                 break
         if not bullets and enrich_content:
             content = ""
-    _ENRICH_RELEVANT_RE = re.compile(
-        r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|'
-        r'不動産|業務代行|入札|落札|タワー|'
-        r'区画整理|土地区画|公共工事|橋梁|港湾|'
-        r'人事異動|機構改革|代表取締役|専務|常務'   # 企業人事（殺人事件と区別）
-    )
     if not content and enrich_content:
         is_gnews = enrich_content.startswith("【関連報道】")
         raw_lines = [l.strip().lstrip("・") for l in enrich_content.splitlines()
@@ -957,7 +963,31 @@ def generate_rich_html(articles: list[dict]) -> str:
                     return False
             if _BAD_TITLE_RE.search(title):
                 return False
-            return True
+            # 実際に表示できるbulletがあるか試算（タイトルのみカードは除外）
+            content = (a.get("content") or a.get("summary") or "").strip()
+            enrich = (a.get("enrich_content") or "").strip()
+            # content bullets（タイトルと重複除外）
+            title_norm = re.sub(r"\s", "", _clean_title(title))
+            raw_bullets = _to_bullets(content)
+            content_bullets = [
+                b for b in raw_bullets
+                if re.sub(r"\s", "", b) not in title_norm
+                and title_norm not in re.sub(r"\s", "", b)
+            ]
+            if content_bullets:
+                return True
+            # enrich bullets（建設関連フィルタ後）
+            if enrich:
+                is_gnews = enrich.startswith("【関連報道】")
+                raw_lines = [l.strip().lstrip("・") for l in enrich.splitlines()
+                             if l.strip() and l.strip() != "【関連報道】"]
+                enrich_bullets = (
+                    [l for l in raw_lines if _ENRICH_RELEVANT_RE.search(l)]
+                    if is_gnews else raw_lines
+                )
+                if enrich_bullets:
+                    return True
+            return False
         return _is_dev_relevant(a)
 
     articles = [a for a in articles if _is_relevant(a)]
