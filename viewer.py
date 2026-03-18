@@ -949,6 +949,8 @@ footer{{text-align:center;padding:18px;font-size:11px;color:#aaa}}
 .fb-date-clear{{background:none;border:none;color:#aaa;cursor:pointer;font-size:14px;padding:0 2px;line-height:1;vertical-align:middle}}
 .fb-date-clear:hover{{color:#e53e3e}}
 .filter-count{{margin-left:auto;font-size:11px;color:#888}}
+.fbtn.today-btn{{background:#e8f4ec;border-color:#4caf82;color:#1a6e42}}
+.fbtn.today-btn.active{{background:#1a6e42;color:#fff;border-color:#1a6e42}}
 .fb-toggle{{margin-left:4px;font-size:12px;color:#555;cursor:pointer;display:flex;align-items:center;gap:4px}}
 .fb-toggle input{{cursor:pointer;accent-color:#1e3a6e}}
 @media(max-width:600px){{
@@ -971,6 +973,7 @@ footer{{text-align:center;padding:18px;font-size:11px;color:#aaa}}
 </div>
 <div class="filter-bar">
   <span class="fb-label">📅 期間</span>
+  <button class="fbtn today-btn" id="btn-today">本日分</button>
   <button class="fbtn" data-days="0">全期間</button>
   <button class="fbtn" data-days="30">1ヶ月</button>
   <button class="fbtn" data-days="90">3ヶ月</button>
@@ -1047,6 +1050,18 @@ function applyFilter() {{
   if (fc) fc.textContent = total + ' 件表示中';
 }}
 
+// ── 本日分ボタン ─────────────────────────────────────────────
+document.getElementById('btn-today')?.addEventListener('click', function() {{
+  const today = new Date().toISOString().slice(0, 10);
+  _dateFrom = today; _dateTo = today;
+  _currentDays = -1;
+  document.getElementById('date-from').value = today;
+  document.getElementById('date-to').value   = today;
+  document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+  this.classList.add('active');
+  applyFilter();
+}});
+
 // ── クイックボタン（1ヶ月/3ヶ月/…）────────────────────────────
 document.querySelectorAll('.fbtn[data-days]').forEach(btn => {{
   btn.addEventListener('click', function() {{
@@ -1055,6 +1070,7 @@ document.querySelectorAll('.fbtn[data-days]').forEach(btn => {{
     document.getElementById('date-from').value = '';
     document.getElementById('date-to').value   = '';
     document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-today')?.classList.remove('active');
     this.classList.add('active');
     applyFilter();
   }});
@@ -1078,6 +1094,7 @@ document.getElementById('date-clear')?.addEventListener('click', function() {{
   document.getElementById('date-to').value   = '';
   _currentDays = 365;
   document.querySelectorAll('.fbtn[data-days]').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-today')?.classList.remove('active');
   const btn = document.querySelector('.fbtn[data-days="365"]');
   if (btn) btn.classList.add('active');
   applyFilter();
