@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>都市開発情報</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: #eef2f7;
+    color: #222;
+    line-height: 1.7;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
+    color: white;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header h1 { font-size: 18px; font-weight: 700; }
+  .header .meta { font-size: 11px; opacity: 0.75; margin-left: auto; }
+  /* ── フィルターバー ── */
+  .filter-bar {
+    background: #fff;
+    border-bottom: 1px solid #d0daea;
+    padding: 8px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    position: sticky;
+    top: 53px;
+    z-index: 190;
+    font-size: 12px;
+  }
+  .fb-label { color: #666; font-weight: 600; white-space: nowrap; }
+  .fb-sep { color: #ccc; padding: 0 4px; }
+  .fbtn {
+    background: #f4f7fc;
+    border: 1px solid #c8d4e8;
+    border-radius: 14px;
+    padding: 3px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #445;
+    white-space: nowrap;
+    transition: .15s;
+  }
+  .fbtn:hover { background: #e2eaf6; }
+  .fbtn.active { background: #1e3a6e; color: #fff; border-color: #1e3a6e; }
+  .filter-count { margin-left: auto; font-size: 11px; color: #888; }
+  /* ── エリアナビ ── */
+  .area-nav {
+    background: #f0f4fb;
+    border-bottom: 1px solid #d0daea;
+    padding: 6px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: sticky;
+    top: 102px;
+    z-index: 180;
+  }
+  .area-btn {
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #c8d4e8;
+    border-radius: 12px;
+    padding: 2px 10px;
+    cursor: pointer;
+    color: #334;
+    white-space: nowrap;
+    transition: .15s;
+  }
+  .area-btn:hover { background: #e2eaf6; }
+  .area-btn.active { background: #1e3a6e; color: #fff; border-color: #1e3a6e; }
+  /* ── カードグリッド ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 20px 40px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 14px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-left: 4px solid #3182ce;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 5px 18px rgba(0,0,0,0.12); }
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 11px;
+    background: #eef2f7;
+    color: #1a3a5c;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .date { font-size: 11px; color: #999; margin-left: auto; }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+  .card-title a { color: #1a3a5c; text-decoration: none; }
+  .card-title a:hover { color: #2d6a9f; text-decoration: underline; }
+  .card-source { font-size: 11px; color: #888; }
+  .card-content { flex-grow: 1; }
+  .card-bullets {
+    margin: 2px 0 0 0;
+    padding-left: 14px;
+    font-size: 12px;
+    color: #444;
+    line-height: 1.65;
+    list-style: disc;
+  }
+  .card-bullets li { margin-bottom: 1px; }
+  .enrich-note { font-size: 11px; color: #aaa; margin-top: 2px; }
+  .enrich-note a { color: #aaa; text-decoration: none; }
+  .enrich-note a:hover { text-decoration: underline; }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+  .btn-source {
+    display: inline-block;
+    font-size: 11px;
+    background: #1a3a5c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .btn-source:hover { background: #2d6a9f; }
+  .tags { display: flex; gap: 3px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px;
+    background: #f0f4ff;
+    color: #2d6a9f;
+    padding: 1px 7px;
+    border-radius: 8px;
+  }
+  .card.hidden { display: none; }
+  .empty { color: #999; font-size: 14px; padding: 40px; text-align: center; }
+  footer { text-align: center; padding: 20px; font-size: 11px; color: #bbb; }
+  @media (max-width: 600px) {
+    .header { padding: 12px 14px; }
+    .cards { grid-template-columns: 1fr; }
+    .filter-bar, .area-nav { top: unset; position: static; }
+  }
+  /* ── パスワードゲート ── */
+  #pw-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(15,32,68,0.97);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pw-box {
+    background: #fff; border-radius: 14px;
+    padding: 44px 40px 36px; max-width: 380px; width: 90%;
+    text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .pw-logo { font-size: 44px; margin-bottom: 10px; }
+  .pw-box h2 { font-size: 20px; font-weight: 700; color: #1a3a5c; margin-bottom: 4px; }
+  .pw-box p { font-size: 13px; color: #888; margin-bottom: 28px; }
+  .pw-input {
+    width: 100%; padding: 11px 14px; box-sizing: border-box;
+    border: 1.5px solid #c8d4e8; border-radius: 8px;
+    font-size: 15px; outline: none; margin-bottom: 12px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .pw-input:focus { border-color: #2d6a9f; box-shadow: 0 0 0 3px rgba(45,106,159,0.15); }
+  .pw-btn {
+    width: 100%; padding: 11px; background: #1a3a5c; color: white;
+    border: none; border-radius: 8px; font-size: 15px;
+    font-weight: 700; cursor: pointer; transition: background .2s;
+  }
+  .pw-btn:hover { background: #2d6a9f; }
+  .pw-error { color: #e74c3c; font-size: 13px; margin-top: 10px; min-height: 18px; }
+</style>
+</head>
+<body>
+<!-- パスワードゲート -->
+<div id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">🏙️</div>
+    <h2>都市開発情報</h2>
+    <p>メンバー専用ページです。<br>パスワードを入力してください。</p>
+    <input id="pw-input" class="pw-input" type="password"
+           placeholder="パスワード" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')pwCheck()">
+    <button class="pw-btn" onclick="pwCheck()">ログイン</button>
+    <div id="pw-error" class="pw-error"></div>
+  </div>
+</div>
+<div class="header">
+  <span style="font-size:24px">🏙️</span>
+  <h1>都市開発情報</h1>
+  <div class="meta">生成: 2026年03月18日 14:03 &nbsp;|&nbsp; 47件</div>
+</div>
+<!-- 日付フィルター -->
+<div class="filter-bar" id="filter-bar">
+  <span class="fb-label">📅</span>
+  <button class="fbtn" id="btn-today" onclick="setToday()">本日分</button>
+  <button class="fbtn fbtn-days active" data-days="0" onclick="setDays(0)">全期間</button>
+  <button class="fbtn fbtn-days" data-days="7" onclick="setDays(7)">1週間</button>
+  <button class="fbtn fbtn-days" data-days="30" onclick="setDays(30)">1ヶ月</button>
+  <button class="fbtn fbtn-days" data-days="90" onclick="setDays(90)">3ヶ月</button>
+  <span class="fb-sep">|</span>
+  <span class="fb-label">📍</span>
+  <button class="fbtn area-btn" data-area="東京都" onclick="setArea('東京都')">東京都</button><button class="fbtn area-btn" data-area="赤坂" onclick="setArea('赤坂')">赤坂</button><button class="fbtn area-btn" data-area="品川区" onclick="setArea('品川区')">品川区</button><button class="fbtn area-btn" data-area="高輪" onclick="setArea('高輪')">高輪</button><button class="fbtn area-btn" data-area="新宿区" onclick="setArea('新宿区')">新宿区</button><button class="fbtn area-btn" data-area="京都市" onclick="setArea('京都市')">京都市</button><button class="fbtn area-btn" data-area="江東区" onclick="setArea('江東区')">江東区</button><button class="fbtn area-btn" data-area="渋谷" onclick="setArea('渋谷')">渋谷</button><button class="fbtn area-btn" data-area="さいたま市" onclick="setArea('さいたま市')">さいたま市</button><button class="fbtn area-btn" data-area="板橋区" onclick="setArea('板橋区')">板橋区</button><button class="fbtn area-btn" data-area="千住" onclick="setArea('千住')">千住</button><button class="fbtn area-btn" data-area="日本橋" onclick="setArea('日本橋')">日本橋</button><button class="fbtn area-btn" data-area="西新宿" onclick="setArea('西新宿')">西新宿</button><button class="fbtn area-btn" data-area="福岡市" onclick="setArea('福岡市')">福岡市</button><button class="fbtn area-btn" data-area="水戸市" onclick="setArea('水戸市')">水戸市</button><button class="fbtn area-btn" data-area="有明" onclick="setArea('有明')">有明</button><button class="fbtn area-btn" data-area="虎ノ門" onclick="setArea('虎ノ門')">虎ノ門</button><button class="fbtn area-btn" data-area="中央区" onclick="setArea('中央区')">中央区</button><button class="fbtn area-btn" data-area="丸の内" onclick="setArea('丸の内')">丸の内</button><button class="fbtn area-btn" data-area="熱海" onclick="setArea('熱海')">熱海</button><button class="fbtn area-btn" data-area="広島市" onclick="setArea('広島市')">広島市</button><button class="fbtn area-btn" data-area="奈良県" onclick="setArea('奈良県')">奈良県</button><button class="fbtn area-btn" data-area="葛飾区" onclick="setArea('葛飾区')">葛飾区</button><button class="fbtn area-btn" data-area="新潟市" onclick="setArea('新潟市')">新潟市</button><button class="fbtn area-btn" data-area="新橋" onclick="setArea('新橋')">新橋</button><button class="fbtn area-btn" data-area="浦和" onclick="setArea('浦和')">浦和</button><button class="fbtn area-btn" data-area="鹿児島市" onclick="setArea('鹿児島市')">鹿児島市</button><button class="fbtn area-btn" data-area="飯田橋" onclick="setArea('飯田橋')">飯田橋</button><button class="fbtn area-btn" data-area="羽田" onclick="setArea('羽田')">羽田</button><button class="fbtn area-btn" data-area="小平市" onclick="setArea('小平市')">小平市</button><button class="fbtn area-btn" data-area="市川市" onclick="setArea('市川市')">市川市</button><button class="fbtn area-btn" data-area="自由が丘" onclick="setArea('自由が丘')">自由が丘</button>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+<div class="container">
+  <div class="cards" id="cards-grid">
+<div class="card" data-area="高輪" data-date="2026-03-02">
+  <div class="card-top">
+    <span class="chip">高輪</span>
+    <span class="date">2026-03-02</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9933.html" target="_blank" rel="noopener">ビジネスエリアへと生まれ変わる品川駅高輪口 次世代型オフィスビル「Ave.Takanawa」の先進性とは？</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>品川駅高輪口の大規模開発に先駆けて生まれた先進オフィスビル 今、品川駅高輪口エリ…</li><li>現在でも在来線、新幹線、羽田に向かう京急線などの重要なターミナル駅だが、さらにア…</li><li>そんな注目のエリアで品川駅高輪口から徒歩4分という好立地に2026年3月2日に開…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9933.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="渋谷" data-date="2026-03-17">
+  <div class="card-top">
+    <span class="chip">渋谷</span>
+    <span class="date">2026-03-17</span>
+  </div>
+  <div class="card-title"><a href="https://www.tokyu-land.co.jp/news/2026/001676.html" target="_blank" rel="noopener">「東急ステイ渋谷 恵比寿」2026年3月17日(火)開業 広域渋谷圏のハブとなる“都市滞在の拠点”へ</a></div>
+  <div class="card-source">東急不動産 ニュースリリース</div>
+  <div class="card-content"><ul class="card-bullets"><li>東急不動産株式会社（本社：東京都渋谷区、代表取締役社長：星野 浩明、以下「東急不…</li><li>本ホテルは、全国に展開する「東急ステイ」の33施設目として、恵比寿駅至近エリアに…</li><li>都市滞在のハブとして“住まい”のように快適な客室を起点に、都市とゲストをつなぐ時…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.tokyu-land.co.jp/news/2026/001676.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東急不動産</span><span class="tag">渋谷</span><span class="tag">二子玉川</span><span class="tag">再開発</span><span class="tag">複合施設</span></div>
+  </div>
+</div>
+<div class="card" data-area="赤坂" data-date="2026-03-10">
+  <div class="card-top">
+    <span class="chip">赤坂</span>
+    <span class="date">2026-03-10</span>
+  </div>
+  <div class="card-title"><a href="https://www.mori-trust.co.jp/news/2026/20260310/" target="_blank" rel="noopener">赤坂トラストタワー竣工後初 森トラストグループ春季総合震災訓練のご報告 首都直下地震を想定した帰宅困難者受け入れ体制の実効性を検証</a></div>
+  <div class="card-source">森トラスト プレスリリース</div>
+  <div class="card-content"><ul class="card-bullets"><li>株式会社森トラスト・ホールディングス、森トラスト株式会社および森トラスト・ビルマ…</li><li>本訓練は、赤坂トラストタワー（東京都港区赤坂2-17-22）の竣工後初の震災訓練…</li><li>■都心部に求められる“現場での災害対応力”を高める 当社は、首都直下地震等の大規…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.mori-trust.co.jp/news/2026/20260310/" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">森トラスト</span><span class="tag">再開発</span><span class="tag">虎ノ門</span><span class="tag">赤坂</span></div>
+  </div>
+</div>
+<div class="card" data-area="高輪" data-date="2026-02-27">
+  <div class="card-top">
+    <span class="chip">高輪</span>
+    <span class="date">2026-02-27</span>
+  </div>
+  <div class="card-title"><a href="https://www.keikyu.co.jp/company/news/2025/20260227HP_25223MK.html" target="_blank" rel="noopener">京急 EXホテル 高輪と京急 EXイン 横浜駅東口、2026年2月27日（金）同時リニューアルオープン！</a></div>
+  <div class="card-source">京急電鉄 ニュース(2025)</div>
+  <div class="card-content"><ul class="card-bullets"><li>京急線は平常通り運転しています</li><li>株式会社京急イーエックスイン（取締役社長：染崎 素洋）は、ビジネス‧観光需要の高…</li><li>（金）に同時リニューアルオープンいたします</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.keikyu.co.jp/company/news/2025/20260227HP_25223MK.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">京急</span><span class="tag">鉄道</span><span class="tag">再開発</span><span class="tag">品川</span></div>
+  </div>
+</div>
+<div class="card" data-area="さいたま市" data-date="2026-02-24">
+  <div class="card-top">
+    <span class="chip">さいたま市</span>
+    <span class="date">2026-02-24</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.saitama.lg.jp/001/010/014/002/p116032.html" target="_blank" rel="noopener">さいたま市立地適正化計画</a></div>
+  <div class="card-source">さいたま市 まちづくり・都市整備</div>
+  <div class="card-content"></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.saitama.lg.jp/001/010/014/002/p116032.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">さいたま市</span><span class="tag">大宮</span><span class="tag">再開発</span><span class="tag">駅前</span><span class="tag">大宮グランドセントラル</span><span class="tag">都市計画</span></div>
+  </div>
+</div>
+<div class="card" data-area="板橋区" data-date="2026-03-18">
+  <div class="card-top">
+    <span class="chip">板橋区</span>
+    <span class="date">2026-03-18</span>
+  </div>
+  <div class="card-title"><a href="https://www.kensetsunews.com/archives/1201248" target="_blank" rel="noopener">板橋区に都市型物流/28年末の竣工目指す/プロロジス</a></div>
+  <div class="card-source">建設通信新聞 関東甲信越</div>
+  <div class="card-content"><ul class="card-bullets"><li>プロロジス、東京・板橋の駅徒歩5分エリアに都市型物流施設を開発へ [月刊ロジステ…</li></ul></div>
+  <div class="enrich-note">📎 <a href="https://news.google.com/search?q=%E6%9D%BF%E6%A9%8B%E5%8C%BA%E3%81%AB%E9%83%BD%E5%B8%82%E5%9E%8B%E7%89%A9%E6%B5%81&amp;hl=ja&amp;gl=JP&amp;ceid=JP:ja" target="_blank" rel="noopener">Google Newsで関連報道を検索</a></div>
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kensetsunews.com/archives/1201248" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">建設通信</span><span class="tag">再開発</span><span class="tag">関東</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">組合設立</span></div>
+  </div>
+</div>
+<div class="card" data-area="千住" data-date="2026-03-18">
+  <div class="card-top">
+    <span class="chip">千住</span>
+    <span class="date">2026-03-18</span>
+  </div>
+  <div class="card-title"><a href="https://www.kensetsunews.com/archives/1201246" target="_blank" rel="noopener">千住大川端地区再開発/B-3地区は住友不動産/7.3万㎡の共…</a></div>
+  <div class="card-source">建設通信新聞 関東甲信越</div>
+  <div class="card-content"><ul class="card-bullets"><li>【竣工1-2年遅れ見通しに】工事費高騰など影響/東京・千住大川端再開発 [建設通…</li><li>🏗️千住大川端再開発が本格化！東武×伊藤忠参画で現場はどう動く？中小建設業が注目…</li></ul></div>
+  <div class="enrich-note">📎 <a href="https://news.google.com/search?q=%E5%8D%83%E4%BD%8F%E5%A4%A7%E5%B7%9D%E7%AB%AF%E5%9C%B0%E5%8C%BA%E5%86%8D%E9%96%8B%E7%99%BA&amp;hl=ja&amp;gl=JP&amp;ceid=JP:ja" target="_blank" rel="noopener">Google Newsで関連報道を検索</a></div>
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kensetsunews.com/archives/1201246" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">建設通信</span><span class="tag">再開発</span><span class="tag">関東</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">組合設立</span></div>
+  </div>
+</div>
+<div class="card" data-area="日本橋" data-date="2026-03-18">
+  <div class="card-top">
+    <span class="chip">日本橋</span>
+    <span class="date">2026-03-18</span>
+  </div>
+  <div class="card-title"><a href="https://www.kensetsunews.com/archives/1201242" target="_blank" rel="noopener">日本橋一丁目1・2番地区組合/既存建物解体に着手/施工はみら…</a></div>
+  <div class="card-source">建設通信新聞 関東甲信越</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京・日本橋一丁目１・２番地区再開発、既存建物解体に着手 [建設通信新聞Digi…</li><li>日本橋川を中心とした5つの再開発区域とその周辺一帯エリア『日本橋リバーウォーク』…</li></ul></div>
+  <div class="enrich-note">📎 <a href="https://news.google.com/search?q=%E6%97%A5%E6%9C%AC%E6%A9%8B%E4%B8%80%E4%B8%81%E7%9B%AE1%E3%83%BB2%E7%95%AA%E5%9C%B0%E5%8C%BA%E7%B5%84%E5%90%88&amp;hl=ja&amp;gl=JP&amp;ceid=JP:ja" target="_blank" rel="noopener">Google Newsで関連報道を検索</a></div>
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kensetsunews.com/archives/1201242" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">建設通信</span><span class="tag">再開発</span><span class="tag">関東</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">組合設立</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-18">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-18</span>
+  </div>
+  <div class="card-title"><a href="https://www.kensetsunews.com/sokuho/1201569" target="_blank" rel="noopener">再開発、建築コスト高騰で明暗　東京・大阪は追い風、計画白紙の都市も</a></div>
+  <div class="card-source">建設通信新聞 新着ニュース</div>
+  <div class="card-content"></div>
+  <div class="enrich-note">📎 <a href="https://news.google.com/search?q=%E5%86%8D%E9%96%8B%E7%99%BA%E3%80%81%E5%BB%BA%E7%AF%89%E3%82%B3%E3%82%B9%E3%83%88%E9%AB%98%E9%A8%B0%E3%81%A7%E6%98%8E%E6%9A%97%E3%80%80%E6%9D%B1%E4%BA%AC%E3%83%BB%E5%A4%A7%E9%98%AA%E3%81%AF%E8%BF%BD%E3%81%84%E9%A2%A8%E3%80%81%E8%A8%88%E7%94%BB%E7%99%BD%E7%B4%99%E3%81%AE%E9%83%BD%E5%B8%82%E3%82%82&amp;hl=ja&amp;gl=JP&amp;ceid=JP:ja" target="_blank" rel="noopener">Google Newsで関連報道を検索</a></div>
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kensetsunews.com/sokuho/1201569" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">建設通信</span><span class="tag">再開発</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">組合設立</span></div>
+  </div>
+</div>
+<div class="card" data-area="全国" data-date="2026-03-16">
+  <div class="card-top">
+    <span class="chip">全国</span>
+    <span class="date">2026-03-16</span>
+  </div>
+  <div class="card-title"><a href="https://www.sumitomo-rd.co.jp/uploads/20251202_release_tamagawajuutakumannshonn_tatekaejigyou.pdf" target="_blank" rel="noopener">2025.12.02 住まい 多摩川住宅ホ号棟マンション建替事業 「シティテラス多摩川」 全 900 戸竣工 ・ 引渡しのお知らせ （PDF 1.8 MB）</a></div>
+  <div class="card-source">住友不動産 ニュースリリース</div>
+  <div class="card-content"></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.sumitomo-rd.co.jp/uploads/20251202_release_tamagawajuutakumannshonn_tatekaejigyou.pdf" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">住友不動産</span><span class="tag">再開発</span><span class="tag">新宿</span><span class="tag">浜松町</span></div>
+  </div>
+</div>
+<div class="card" data-area="西新宿" data-date="2026-03-16">
+  <div class="card-top">
+    <span class="chip">西新宿</span>
+    <span class="date">2026-03-16</span>
+  </div>
+  <div class="card-title"><a href="https://www.toshiseibi.metro.tokyo.lg.jp/information/topics/r7/11/2025111401" target="_blank" rel="noopener">令和７年度東京都建築工事現場の危害防止講習会の開催ついて</a></div>
+  <div class="card-source">東京都都市整備局 トップ</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都では、建築工事現場における事故・危害を未然に防止するため、工事監理者、工事…</li><li>・日時 令和８年２月４日（水曜日）　13時10分から17時00分まで ・会場 東…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.toshiseibi.metro.tokyo.lg.jp/information/topics/r7/11/2025111401" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">都市整備</span><span class="tag">再開発</span><span class="tag">都市計画</span></div>
+  </div>
+</div>
+<div class="card" data-area="福岡市" data-date="2026-03-15">
+  <div class="card-top">
+    <span class="chip">福岡市</span>
+    <span class="date">2026-03-15</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9882.html" target="_blank" rel="noopener">福岡市・地下鉄七隈線の車両増設と延伸の検討を開始。さらなる利便性の向上で沿線の住宅ニーズにもインパクト New</a></div>
+  <div class="card-source">健美家 九州再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>2023年に天神南駅～博多駅間で延伸開業 七隈線は福岡市西区の橋本駅から博多区の…</li><li>福岡市西南部と都心部を結ぶ路線として計画され、2005年2月に橋本駅～天神南駅間…</li><li>橋本や野芥、梅林などの住宅地を抜け、六本松、薬院を経由して都心部へつながる</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9882.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">福岡市</span><span class="tag">天神</span><span class="tag">博多</span><span class="tag">天神ビッグバン</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="水戸市" data-date="2026-03-13">
+  <div class="card-top">
+    <span class="chip">水戸市</span>
+    <span class="date">2026-03-13</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/shutoken/9918.html" target="_blank" rel="noopener">【茨城県つくば市】イオンの新業態「そよら」県下初オープン！研究学園駅付近はさらに商業施設集積で利便性向上へ New</a></div>
+  <div class="card-source">健美家 首都圏再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>つくばエクスプレス（以下TX）は、秋葉原駅から茨城県のつくば市を結ぶ、まだ新しい…</li><li>便利で注目度の高いつくばエクスプレス沿線 秋葉原駅はJR山手線の6大ターミナル駅…</li><li>TX自体の特徴としては、全線高架またはトンネル・橋梁などで完全立体交差が実現され…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/shutoken/9918.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">首都圏</span><span class="tag">神奈川</span><span class="tag">埼玉</span><span class="tag">千葉</span></div>
+  </div>
+</div>
+<div class="card" data-area="有明" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">有明</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031205" target="_blank" rel="noopener">「東京アクアシンフォニー」の運用を開始</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>都は、臨海副都心（台場・青海・有明エリア）のプレゼンス向上と更なる賑わい創出のた…</li><li>運用開始日は、20時00分と21時00分のみ上演 運用開始日は、作業等のためにお…</li><li>設備のメンテナンス等により、上演スケジュールが変更になる場合があります</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031205" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span><span class="tag">再開発</span></div>
+  </div>
+</div>
+<div class="card" data-area="赤坂" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">赤坂</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.mori-trust.co.jp/news/2026/20260105/" target="_blank" rel="noopener">2026年　年頭所感 森トラスト株式会社　代表取締役社長　伊達美和子</a></div>
+  <div class="card-source">森トラスト プレスリリース</div>
+  <div class="card-content"><ul class="card-bullets"><li>新年あけましておめでとうございます</li><li>2025年は、オフィス賃貸市場・観光業界がさらなる飛躍を遂げた一年でした</li><li>当社は、中長期ビジョン「Advance2030」に基づき、不動産事業・ホテル＆リ…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.mori-trust.co.jp/news/2026/20260105/" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">森トラスト</span><span class="tag">再開発</span><span class="tag">虎ノ門</span><span class="tag">赤坂</span></div>
+  </div>
+</div>
+<div class="card" data-area="赤坂" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">赤坂</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.mori-trust.co.jp/news/2026/20260226/" target="_blank" rel="noopener">東京ワールドゲート赤坂 ショップ＆レストラン オープン 1万人超のワーカーの日常とビジネスを支える商業エリアを形成</a></div>
+  <div class="card-source">森トラスト プレスリリース</div>
+  <div class="card-content"><ul class="card-bullets"><li>森トラスト株式会社は、大規模複合開発プロジェクト「東京ワールドゲート赤坂」におい…</li><li>今回、4つの新業態を含む14店舗が加わることで、全18店舗の構成となります</li><li>■実用性と上質さを備えた店舗ラインナップで、館内1万人超のオフィスワーカーの日常…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.mori-trust.co.jp/news/2026/20260226/" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">森トラスト</span><span class="tag">再開発</span><span class="tag">虎ノ門</span><span class="tag">赤坂</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031109" target="_blank" rel="noopener">企業の森第42号協定締結 花粉の少ない森づくりへのご賛同</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>都民の2人に1人が花粉症に悩まされる中、東京都と（公財）東京都農林水産振興財団は…</li><li>その一環として、東京都の花粉発生源対策の趣旨に賛同していただいた企業・団体様から…</li><li>このたび、第42号となる協定を、NTTアーバンソリューションズ株式会社様と締結し…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031109" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span><span class="tag">再開発</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.hulic.co.jp/news/syoei/" target="_blank" rel="noopener">ニュース（旧昭栄株式会社）</a></div>
+  <div class="card-source">ヒューリック ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>会社情報 ヒューリックの強み HULIC TOWN (ヒューリックってどんな会社…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.hulic.co.jp/news/syoei/" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">ヒューリック</span><span class="tag">ディベロッパー</span><span class="tag">プレスリリース</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.hulic.co.jp/news/hulic/" target="_blank" rel="noopener">ニュース（旧ヒューリック株式会社）</a></div>
+  <div class="card-source">ヒューリック ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>会社情報 ヒューリックの強み HULIC TOWN (ヒューリックってどんな会社…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.hulic.co.jp/news/hulic/" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">ヒューリック</span><span class="tag">ディベロッパー</span><span class="tag">プレスリリース</span></div>
+  </div>
+</div>
+<div class="card" data-area="虎ノ門" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">虎ノ門</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.sumitomo-rd.co.jp/uploads/20251225_release_toranogate_toranomonemaki_open.pdf" target="_blank" rel="noopener">2025.12.25 再開発 「TORANOGATE」の新築工事用仮囲いを活用した「虎ノ門絵巻」を公開 （PDF 1.5 MB）</a></div>
+  <div class="card-source">住友不動産 ニュースリリース</div>
+  <div class="card-content"></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.sumitomo-rd.co.jp/uploads/20251225_release_toranogate_toranomonemaki_open.pdf" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">住友不動産</span><span class="tag">ディベロッパー</span><span class="tag">プレスリリース</span></div>
+  </div>
+</div>
+<div class="card" data-area="新宿区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">新宿区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.tokyo-nakano.lg.jp/machizukuri/machizukuri/oshirase/index.html" target="_blank" rel="noopener">まちづくりに関するお知らせ</a></div>
+  <div class="card-source">中野区 まちづくり</div>
+  <div class="card-content"><ul class="card-bullets"><li>ページID： 189943006 上高田地区防災まちづくり 避難道路に関する説明…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.tokyo-nakano.lg.jp/machizukuri/machizukuri/oshirase/index.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">中野区</span><span class="tag">まちづくり</span><span class="tag">再開発</span></div>
+  </div>
+</div>
+<div class="card" data-area="品川区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">品川区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20240227150703.html" target="_blank" rel="noopener">11_ 宅地造成及び特定盛土等規制法（盛土規制法）に基づく宅地造成等工事許可など</a></div>
+  <div class="card-source">品川区 都市整備</div>
+  <div class="card-content"><ul class="card-bullets"><li>規制区域内で盛土等を行う場合は、あらかじめ許可が必要です</li><li>宅地造成等の際に行われる盛土・切土だけでなく、単なる土捨て行為や土石の一時的な堆…</li><li>規制対象となる盛土等の規模 （1）盛土で高さが1メートル超の崖（※1）を生ずるも…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20240227150703.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">品川区</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="品川区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">品川区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20231128094516.html" target="_blank" rel="noopener">9999_ 大井・西大井地区防災まちづくりについて</a></div>
+  <div class="card-source">品川区 都市整備</div>
+  <div class="card-content"><ul class="card-bullets"><li>大井・西大井地区（大井5・7丁目、西大井2・3・4丁目）は、木造および防火木造の…</li><li>そのため区では、平成27年度より不燃化特区支援事業を実施し建築物の不燃化促進を図…</li><li>また、より一層の防災まちづくりを推進していくため、現在、地区の防災まちづくりのル…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20231128094516.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">品川区</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="京都市" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">京都市</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/hpg000019087.html" target="_blank" rel="noopener">1221_ 地域地区・地区計画等</a></div>
+  <div class="card-source">品川区 都市整備</div>
+  <div class="card-content"><ul class="card-bullets"><li>■最終更新 令和8年1月23日：大崎駅東口第4地区地区計画追加・防火地域及び準防…</li><li>臨海副都心台場地区(pdf、1.24MB) ・届出書(WORD : 33KB) …</li><li>当該の特定街区名称をクリックすると図書が閲覧できます</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/hpg000019087.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">品川区</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="新宿区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">新宿区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20251216143714.html" target="_blank" rel="noopener">9999_ 「東京における都市計画道路の整備方針（案）」の公表について</a></div>
+  <div class="card-source">品川区 都市整備</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都、特別区および26市2町は、都市計画道路の整備を計画的かつ効率的に進めるた…</li><li>現行の「東京における都市計画道路の整備方針（第四次事業化計画）」は令和7年度まで…</li><li>このたび、「東京における都市計画道路の整備方針（案）」を取りまとめました</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.shinagawa.tokyo.jp/PC/kankyo/kankyo-toshiseibi/20251216143714.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">品川区</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="品川区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">品川区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.shinagawa.tokyo.jp/PC/shisetsu/shisetsu-kuyakusyo/shisetsu-kuyakusyo-chiiki/shisetsu-kuyakusyo-chiiki-chiiki/hpg000022716.html" target="_blank" rel="noopener">地域センター・区民集会所</a></div>
+  <div class="card-source">品川区 都市整備</div>
+  <div class="card-content"><ul class="card-bullets"><li>区内に13あり、地域のコミュニティ活動の核として、地域活動に関する業務のほか、各…</li><li>また、地域センターには区民集会所があります</li><li>地域やグループの集まりにご利用ください</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.shinagawa.tokyo.jp/PC/shisetsu/shisetsu-kuyakusyo/shisetsu-kuyakusyo-chiiki/shisetsu-kuyakusyo-chiiki-chiiki/hpg000022716.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">品川区</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="江東区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">江東区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.koto.lg.jp/machizukuri/toshi/oshirase/index.html" target="_blank" rel="noopener">都市計画に関するお知らせ</a></div>
+  <div class="card-source">江東区 まちづくり</div>
+  <div class="card-content"></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.koto.lg.jp/machizukuri/toshi/oshirase/index.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">江東区</span><span class="tag">まちづくり</span></div>
+  </div>
+</div>
+<div class="card" data-area="江東区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">江東区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026030902" target="_blank" rel="noopener">全日本オリエンテーリング選手権（スプリント競技部門）開催</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>都立海の森公園（東京都江東区海の森三丁目地内）で、「第19回全日本オリエンテーリ…</li><li>第19回全日本オリエンテーリング選手権大会（スプリント競技部門） （ 別紙（PD…</li><li>都内の公園や街路樹から出る枝葉を利用した土づくりを行うとともに、森づくりに必要と…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026030902" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span></div>
+  </div>
+</div>
+<div class="card" data-area="中央区" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">中央区</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031002" target="_blank" rel="noopener">令和7年度東京宝島チャレンジプロジェクト等成果報告会</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都は、賑わいと活力に溢れた島しょ地域の実現に向けて、地域資源、特産品、歴史・…</li><li>このたび、東京宝島チャレンジプロジェクトの支援を受け、複数の島しょにまたがる新た…</li><li>令和8年3月18日（水曜日）9時00分から13時00分まで 東京都中央区八重洲2…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031002" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031001" target="_blank" rel="noopener">キャップ＆トレード制度 令和6年度削減実績</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>このたび、キャップ＆トレード制度の対象事業所の第三計画期間（2020年度～202…</li><li>令和6年度（2024年度）の対象事業所の排出量は合計1,142万トンで、夏の猛暑…</li><li>第三計画期間の5年間での削減量は約2,643万トンとなり、新型コロナウイルス感染…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031001" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031107" target="_blank" rel="noopener">令和7年度TOKYO戦略的イノベーション促進支援</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都及び（公財）東京都中小企業振興公社では、大都市・東京が抱える課題の解決に役…</li><li>この度、支援対象となるプロジェクト15件を決定しました</li><li>今後、各プロジェクトに対して、最大3年間の助成支援を行い、次代の都内産業の礎とな…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031107" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span></div>
+  </div>
+</div>
+<div class="card" data-area="丸の内" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">丸の内</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031106" target="_blank" rel="noopener">3月21〜22日東京国際フォーラムで空飛ぶクルマ体験展示開催</a></div>
+  <div class="card-source">東京都 報道発表一覧</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都では、人やモノの移動革命をもたらし都民の生活の質（QOL）を高める次世代の…</li><li>現在、2030年の市街地での展開を目指す「空飛ぶクルマ実装プロジェクト」を立ち上…</li><li>この度、東京国際フォーラムにおいて、空飛ぶクルマをより身近に感じていただけるよう…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.metro.tokyo.lg.jp/information/press/2026/03/2026031106" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">報道発表</span></div>
+  </div>
+</div>
+<div class="card" data-area="東京都" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">東京都</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.toshiseibi.metro.tokyo.lg.jp/important_20260218" target="_blank" rel="noopener">市街地建築部の一部電話番号の廃止について</a></div>
+  <div class="card-source">東京都都市整備局 トップ</div>
+  <div class="card-content"><ul class="card-bullets"><li>また、オフィスのレイアウト変更に伴う工事により、 ・2026(令和8)年２月20…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.toshiseibi.metro.tokyo.lg.jp/important_20260218" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">東京都</span><span class="tag">都市整備</span></div>
+  </div>
+</div>
+<div class="card" data-area="熱海" data-date="2026-03-12">
+  <div class="card-top">
+    <span class="chip">熱海</span>
+    <span class="date">2026-03-12</span>
+  </div>
+  <div class="card-title"><a href="https://www.sumitomo-rd.co.jp/uploads/20260203_release_vf_village_atami.pdf" target="_blank" rel="noopener">2026.02.03 グループ会社 住友不動産のホテルシリーズ リゾートホテル「ヴィラージュ」が熱海に誕生 ２０２６年夏 開業予定、公式サイト本日公開 （PDF 588.4 KB）</a></div>
+  <div class="card-source">住友不動産 ニュースリリース</div>
+  <div class="card-content"></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.sumitomo-rd.co.jp/uploads/20260203_release_vf_village_atami.pdf" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">住友不動産</span><span class="tag">ディベロッパー</span><span class="tag">プレスリリース</span></div>
+  </div>
+</div>
+<div class="card" data-area="広島市" data-date="2026-03-09">
+  <div class="card-top">
+    <span class="chip">広島市</span>
+    <span class="date">2026-03-09</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/hokkaido/9877.html" target="_blank" rel="noopener">再開発が進む北海道北広島市。新駅や大学、ホテルに加えて36階建てのタワーマンションも整備</a></div>
+  <div class="card-source">健美家 北海道再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>球場と新駅と起点にさまざまな再開発事業 北広島市は、北海道札幌市と新千歳空港のほ…</li><li>快速電車で双方へ約20分以内と好アクセスな、自然豊かな都市だ</li><li>同市といえば、2023年に開業したプロ野球・日本ハムファイターズのホーム球場「E…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/hokkaido/9877.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">札幌市</span><span class="tag">北海道新幹線</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="奈良県" data-date="2026-03-06">
+  <div class="card-top">
+    <span class="chip">奈良県</span>
+    <span class="date">2026-03-06</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/kansai/9875.html" target="_blank" rel="noopener">奈良県橿原市・近鉄大和八木駅周辺で再開発を実施。橿原文化会館跡地に収益施設などを整備する構想</a></div>
+  <div class="card-source">健美家 関西再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>大阪線と橿原線が交差する交通の要衝付近で再開発 大和八木駅は奈良県橿原市にある、…</li><li>大阪市、京都市、名古屋市、奈良市、伊勢志摩などから列車が集まる巨大ターミナル駅、…</li><li>駅の北口には駅前広場が広がり、地域住民の暮らしを支える近鉄百貨店もあり、ロータリ…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/kansai/9875.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">神戸</span><span class="tag">京都</span><span class="tag">三宮</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">関西</span></div>
+  </div>
+</div>
+<div class="card" data-area="葛飾区" data-date="2026-03-05">
+  <div class="card-top">
+    <span class="chip">葛飾区</span>
+    <span class="date">2026-03-05</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9898.html" target="_blank" rel="noopener">東京都葛飾区の新宿交通公園がタカラトミー・トミカプラレール連携で刷新へ</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>新宿交通公園の概要とリニューアルの内容 東京・葛飾区にある新宿交通公園（にいじゅ…</li><li>園内には信号機や標識、横断歩道などが設けられている</li><li>当該公園の特徴は、園内を走るミニSL（有料）、および実物のバス・消防車の展示など…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9898.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="新潟市" data-date="2026-03-03">
+  <div class="card-top">
+    <span class="chip">新潟市</span>
+    <span class="date">2026-03-03</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/shinhoku/9903.html" target="_blank" rel="noopener">「日本遺産」に登録の「究極の雪国・新潟県十日町の雪との共生文化」。観光資源化が加速</a></div>
+  <div class="card-source">健美家 北信越・甲信越再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>日本有数の豪雪地帯で、古来より雪と共生する文化を構築してきた究極の雪国・十日町</li><li>「十日町雪まつり」はその象徴ともいえよう</li><li>毎年この時期に開催され全国、海外から約30万人が訪れる</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/shinhoku/9903.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">金沢</span><span class="tag">北陸新幹線</span><span class="tag">富山</span><span class="tag">新潟</span><span class="tag">長野</span><span class="tag">甲信越</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="新橋" data-date="2026-03-02">
+  <div class="card-top">
+    <span class="chip">新橋</span>
+    <span class="date">2026-03-02</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9883.html" target="_blank" rel="noopener">東京都港区・新橋駅の基盤整備が本格始動。交通結節機能の強化、歩行・滞留空間の拡充など方針案が明らかに</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>新橋駅は東京都港区にある、JR東日本、東京メトロ、都営地下鉄、ゆりかもめが乗り入…</li><li>2024年度の1日平均乗車数は約23.1万人と、JR東日本の駅では大宮駅に次いで…</li><li>駅前のSL広場や新橋駅ビルなど周辺に有名スポットが広がり、ビジネス街であることか…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9883.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="浦和" data-date="2026-03-01">
+  <div class="card-top">
+    <span class="chip">浦和</span>
+    <span class="date">2026-03-01</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/shutoken/9895.html" target="_blank" rel="noopener">【埼玉県さいたま市】武蔵浦和駅は新改札口設置でさらに進化！交通・生活利便性が高いジャンクション駅を取材</a></div>
+  <div class="card-source">健美家 首都圏再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>埼玉県さいたま市南区にある武蔵浦和駅は、交通の要衝として朝晩はもちろん、終日混雑…</li><li>通勤アクセスと生活利便性、どちらも期待できる武蔵浦和駅 JR埼京線とJR武蔵野線…</li><li>武蔵浦和からは埼京線快速電車を使うと赤羽駅まで約10分であり、池袋駅まで18分、…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/shutoken/9895.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">首都圏</span><span class="tag">神奈川</span><span class="tag">埼玉</span><span class="tag">千葉</span></div>
+  </div>
+</div>
+<div class="card" data-area="鹿児島市" data-date="2026-02-28">
+  <div class="card-top">
+    <span class="chip">鹿児島市</span>
+    <span class="date">2026-02-28</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/kyusyu/9867.html" target="_blank" rel="noopener">JR九州・鹿児島本線千早駅～箱崎駅間に新駅「JR貝塚駅」が誕生。2027年に開業予定</a></div>
+  <div class="card-source">健美家 九州再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>鹿児島本線は、福岡県北九州市門司区の門司港駅から小倉駅・博多駅・熊本駅などを経由…</li><li>もともとは門司港駅から鹿児島駅までを途切れることなく結んでいたが、2004年に九…</li><li>北九州・福岡都市圏では快速・普通列車が数多く走り、特に北九州市内では主要な市街地…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/kyusyu/9867.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">福岡市</span><span class="tag">天神</span><span class="tag">博多</span><span class="tag">天神ビッグバン</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="飯田橋" data-date="2026-02-26">
+  <div class="card-top">
+    <span class="chip">飯田橋</span>
+    <span class="date">2026-02-26</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9871.html" target="_blank" rel="noopener">東京・飯田橋駅前で2つの再開発計画が進行中。既存市街地との相乗効果を期待できるか</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京・飯田橋の駅前で（仮称）下宮比町地区（しもみやびちょうちく）の再開発と、富士…</li><li>（仮称）下宮比町地区の再開発は、飯田橋駅の北西側で進んでおり、延床面積約20.8…</li><li>計画はA～C棟の複数棟構成とされており、以下の用途がそれぞれ想定されている</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9871.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="京都市" data-date="2026-02-25">
+  <div class="card-top">
+    <span class="chip">京都市</span>
+    <span class="date">2026-02-25</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/kansai/9866.html" target="_blank" rel="noopener">京都駅八条東口周辺で進む再開発。今秋に外資系ホテル、2028年には複合施設が開業予定</a></div>
+  <div class="card-source">健美家 関西再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>京都市の玄関口であり観光拠点となるターミナル駅 京都駅はJR西日本やJR東海、近…</li><li>東海道新幹線の全列車が停車し、JR西日本は一部寝台列車を除くすべての列車が停車し…</li><li>近鉄には大阪難波や奈良・橿原神宮・伊勢志摩方面など、各地を結ぶ特急列車が発着する</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/kansai/9866.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">神戸</span><span class="tag">京都</span><span class="tag">三宮</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">関西</span></div>
+  </div>
+</div>
+<div class="card" data-area="羽田" data-date="2026-02-25">
+  <div class="card-top">
+    <span class="chip">羽田</span>
+    <span class="date">2026-02-25</span>
+  </div>
+  <div class="card-title"><a href="https://www.city.kawasaki.jp/500/page/0000183896.html" target="_blank" rel="noopener">川羽歩撮　川崎×大田×羽田フォト＆ウォークラリー2026.3　初開催！</a></div>
+  <div class="card-source">川崎市 まちづくり</div>
+  <div class="card-content"><ul class="card-bullets"><li>開催にあたっては、大田区、羽田空港、航空事業者など周辺の多様な主体と連携して実施…</li><li>今後も継続して開催する予定です</li><li>フォトコンテスト イベントエリア周辺で撮影した写真のフォトコンテストです</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.city.kawasaki.jp/500/page/0000183896.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">川崎市</span><span class="tag">武蔵小杉</span><span class="tag">川崎駅</span><span class="tag">再開発</span><span class="tag">鉄道沿線まちづくり</span></div>
+  </div>
+</div>
+<div class="card" data-area="小平市" data-date="2026-02-24">
+  <div class="card-top">
+    <span class="chip">小平市</span>
+    <span class="date">2026-02-24</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9885.html" target="_blank" rel="noopener">【東京都小平市】再開発は本当に進むのか？西武新宿線における交通の要衝 小平駅北口を取材</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京都小平市にある小平駅は、西武新宿線のなかでも高田馬場駅や所沢駅に次いで、交通…</li><li>小平駅の利便性　都心へのアクセスが良い一方で駅周辺環境は？ 小平駅平日朝7時台の…</li><li>平日日中は毎時9本の設定で、内訳は各停が3本で急行電車が10分間隔の6本となって…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9885.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+<div class="card" data-area="市川市" data-date="2026-02-21">
+  <div class="card-top">
+    <span class="chip">市川市</span>
+    <span class="date">2026-02-21</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/shutoken/9857.html" target="_blank" rel="noopener">千葉県市川市・京葉ガス市川工場跡地で進む街区整備。2026年春には大型商業施設がオープン</a></div>
+  <div class="card-source">健美家 首都圏再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>東京・千葉双方へアクセスしやすい人気のまち 市川市は千葉県北西部に位置し、江戸川…</li><li>都心から20㎞圏内にあることから、東京都心部へ通勤・通学する住民が多い</li><li>人口は50万人弱で千葉県内では千葉市、船橋市に次いで3番目に多い</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/shutoken/9857.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span><span class="tag">首都圏</span><span class="tag">神奈川</span><span class="tag">埼玉</span><span class="tag">千葉</span></div>
+  </div>
+</div>
+<div class="card" data-area="自由が丘" data-date="2026-02-18">
+  <div class="card-top">
+    <span class="chip">自由が丘</span>
+    <span class="date">2026-02-18</span>
+  </div>
+  <div class="card-title"><a href="https://www.kenbiya.com/ar/ns/region/tokyo/9862.html" target="_blank" rel="noopener">2026年秋、東急線「自由が丘」駅前に15階建ての新ランドマークが誕生！「明治屋」とスターバックス「SHARE LOUNGE」も出店</a></div>
+  <div class="card-source">健美家 東京再開発ニュース</div>
+  <div class="card-content"><ul class="card-bullets"><li>「モンブラン」や「一誠堂」など地元で人気の老舗店舗も出店 東京都・目黒区に位置す…</li><li>東横線沿線のなかでは「代官山」、「中目黒」駅と並んでお洒落な街として注目を集めて…</li><li>その一方で、駅正面口のロータリー周辺には比較的古い建物も多く、1953年に開業し…</li></ul></div>
+  
+  <div class="card-footer">
+    <a class="btn-source" href="https://www.kenbiya.com/ar/ns/region/tokyo/9862.html" target="_blank" rel="noopener">元記事を読む →</a>
+    <div class="tags"><span class="tag">再開発</span><span class="tag">東京</span><span class="tag">市街地再開発</span><span class="tag">着工</span><span class="tag">竣工</span></div>
+  </div>
+</div>
+  </div>
+</div>
+<footer>urban-dev-tracker — 2026年03月18日 14:03</footer>
+<script>
+// ── パスワードゲート ──
+(async function() {
+  var H = '49483bf42d195f96d82b7a875a0db5a7c2d321ea0486713f878a1883db67480e';
+  var el = document.getElementById('pw-overlay');
+  if (!el) return;
+  if (!H) { el.remove(); return; }
+  var stored = localStorage.getItem('udt_' + H.slice(0,8));
+  if (stored === H) { el.remove(); return; }
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { document.getElementById('pw-input').focus(); }, 100);
+})();
+async function pwCheck() {
+  var H = '49483bf42d195f96d82b7a875a0db5a7c2d321ea0486713f878a1883db67480e';
+  var pw = document.getElementById('pw-input').value;
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  var hex = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+  if (hex === H) {
+    localStorage.setItem('udt_' + H.slice(0,8), H);
+    document.getElementById('pw-overlay').remove();
+    document.body.style.overflow = '';
+  } else {
+    document.getElementById('pw-error').textContent = 'パスワードが違います';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+// ── フィルター ──
+var _days = 0;
+var _today = false;
+var _area = '';
+function applyFilter() {
+  var now = new Date();
+  var todayStr = now.toISOString().slice(0,10);
+  var visible = 0;
+  document.querySelectorAll('.card').forEach(function(c) {
+    var d = c.dataset.date || '';
+    var area = c.dataset.area || '';
+    var showDate = true;
+    if (_today) {
+      showDate = (d === todayStr);
+    } else if (_days > 0) {
+      var cutoff = new Date(now - _days * 86400000).toISOString().slice(0,10);
+      showDate = (d >= cutoff);
+    }
+    var showArea = (!_area || area === _area);
+    if (showDate && showArea) { c.classList.remove('hidden'); visible++; }
+    else { c.classList.add('hidden'); }
+  });
+  var el = document.getElementById('filter-count');
+  if (el) el.textContent = visible + '件表示中';
+}
+function setDays(d) {
+  _days = d; _today = false;
+  document.querySelectorAll('.fbtn-days').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('[data-days="'+d+'"]').forEach(function(b) { b.classList.add('active'); });
+  document.getElementById('btn-today').classList.remove('active');
+  applyFilter();
+}
+function setToday() {
+  _today = true; _days = 0;
+  document.querySelectorAll('.fbtn-days').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('btn-today').classList.add('active');
+  applyFilter();
+}
+function setArea(a) {
+  _area = (_area === a) ? '' : a;
+  document.querySelectorAll('.area-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.area === _area);
+  });
+  applyFilter();
+}
+applyFilter();
+</script>
+</body>
+</html>
