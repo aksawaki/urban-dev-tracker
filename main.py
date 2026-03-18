@@ -578,7 +578,8 @@ def main():
 
     # deploy
     p_deploy = subparsers.add_parser("deploy", help="GitHub Pages にリッチビューを公開（パスワード付き）")
-    p_deploy.add_argument("--days", type=int, default=30, help="直近N日の記事（デフォルト: 30）")
+    p_deploy.add_argument("--days", type=int, default=0, help="直近N日の記事（0=sinceを使用）")
+    p_deploy.add_argument("--since", type=str, default="2025-11-01", help="この日以降の記事をサイトに反映（デフォルト: 2025-11-01）")
 
     args = parser.parse_args()
 
@@ -614,11 +615,16 @@ def main():
         config = load_config()
         pw = config.get("sharing", {}).get("password", "")
         pw_hash = hashlib.sha256(pw.encode()).hexdigest() if pw else ""
-        days = getattr(args, "days", 30)
-        recent = get_recent(days=days)
+        days = getattr(args, "days", 0)
+        since = getattr(args, "since", "2025-11-01")
+        if days:
+            recent = get_recent(days=days)
+        else:
+            recent = get_recent(since=since)
         if not recent:
             print("記事がありません。先に: python3 main.py crawl")
         else:
+            print(f"サイト反映: {since} 以降 {len(recent)} 件")
             url = deploy_rich_html(recent, password_hash=pw_hash)
             if url:
                 print(f"\n公開URL: {url}")

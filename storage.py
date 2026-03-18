@@ -140,10 +140,14 @@ def save_raw(articles: list[Article], label: str = ""):
     logger.info(f"生データ保存: {fname}")
 
 
-def get_recent(days: int = 7, priority: str = None) -> list[dict]:
-    """直近 N 日のレコードを返す。priority でフィルタ可。"""
+def get_recent(days: int = 7, priority: str = None, since: str = "") -> list[dict]:
+    """直近 N 日のレコードを返す。priority でフィルタ可。
+    since に 'YYYY-MM-DD' を渡すとその日以降の記事を返す（days より優先）。"""
     db = load_db()
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    if since:
+        cutoff = datetime.fromisoformat(since).replace(tzinfo=timezone.utc)
+    else:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
     results = [
         a for a in db.values()
         if _parse_dt(a.get("fetched_at", "")) >= cutoff
