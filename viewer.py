@@ -898,7 +898,28 @@ def _card_html(a: dict) -> str:
         else:
             # DB内クロスリファレンス由来: フィルターなし
             filtered = raw_lines
-        bullets = [l[:40] + ("…" if len(l) > 40 else "") for l in filtered[:3]]
+
+        def _alphanum(s: str) -> str:
+            return re.sub(r'[^\w]', '', s, flags=re.UNICODE)
+
+        _title_alnum = _alphanum(_title_norm)  # /・-等も除去してalphanumで比較
+        deduped: list[str] = []
+        for line in filtered:
+            # タイトルと内容が類似する行は除外（kensetsunews記事自身がRSSに出る場合）
+            line_norm = _alphanum(line)
+            if _title_alnum and (
+                line_norm[:20] in _title_alnum or _title_alnum[:20] in line_norm
+            ):
+                continue
+            # 既存bulletと先頭15文字が一致する場合は重複とみなし除外
+            prefix = _alphanum(line)[:15]
+            if any(_alphanum(d)[:15] == prefix for d in deduped):
+                continue
+            deduped.append(line)
+            if len(deduped) >= 3:
+                break
+
+        bullets = [l[:40] + ("…" if len(l) > 40 else "") for l in deduped]
     elif content:
         pass
     else:
