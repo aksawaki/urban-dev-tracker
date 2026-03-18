@@ -576,6 +576,10 @@ def main():
     p_view.add_argument("--rich", action="store_true", help="カード形式のリッチビューで表示")
     p_view.add_argument("--days", type=int, default=30, help="直近N日の記事を表示（--rich 時）")
 
+    # deploy
+    p_deploy = subparsers.add_parser("deploy", help="GitHub Pages にリッチビューを公開（パスワード付き）")
+    p_deploy.add_argument("--days", type=int, default=30, help="直近N日の記事（デフォルト: 30）")
+
     args = parser.parse_args()
 
     if args.command == "fetch":
@@ -603,6 +607,23 @@ def main():
         cmd_timeline(args)
     elif args.command == "view":
         cmd_view(args)
+    elif args.command == "deploy":
+        import hashlib
+        from storage import get_recent
+        from viewer import deploy_rich_html
+        config = load_config()
+        pw = config.get("sharing", {}).get("password", "")
+        pw_hash = hashlib.sha256(pw.encode()).hexdigest() if pw else ""
+        days = getattr(args, "days", 30)
+        recent = get_recent(days=days)
+        if not recent:
+            print("記事がありません。先に: python3 main.py crawl")
+        else:
+            url = deploy_rich_html(recent, password_hash=pw_hash)
+            if url:
+                print(f"\n公開URL: {url}")
+            else:
+                print("デプロイ完了（URLの推定に失敗しました）")
     else:
         parser.print_help()
 

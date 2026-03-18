@@ -783,9 +783,50 @@ RICH_TEMPLATE = """<!DOCTYPE html>
     .cards {{ grid-template-columns: 1fr; }}
     .filter-bar, .area-nav {{ top: unset; position: static; }}
   }}
+  /* ── パスワードゲート ── */
+  #pw-overlay {{
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(15,32,68,0.97);
+    display: flex; align-items: center; justify-content: center;
+  }}
+  .pw-box {{
+    background: #fff; border-radius: 14px;
+    padding: 44px 40px 36px; max-width: 380px; width: 90%;
+    text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }}
+  .pw-logo {{ font-size: 44px; margin-bottom: 10px; }}
+  .pw-box h2 {{ font-size: 20px; font-weight: 700; color: #1a3a5c; margin-bottom: 4px; }}
+  .pw-box p {{ font-size: 13px; color: #888; margin-bottom: 28px; }}
+  .pw-input {{
+    width: 100%; padding: 11px 14px; box-sizing: border-box;
+    border: 1.5px solid #c8d4e8; border-radius: 8px;
+    font-size: 15px; outline: none; margin-bottom: 12px;
+    transition: border-color .15s, box-shadow .15s;
+  }}
+  .pw-input:focus {{ border-color: #2d6a9f; box-shadow: 0 0 0 3px rgba(45,106,159,0.15); }}
+  .pw-btn {{
+    width: 100%; padding: 11px; background: #1a3a5c; color: white;
+    border: none; border-radius: 8px; font-size: 15px;
+    font-weight: 700; cursor: pointer; transition: background .2s;
+  }}
+  .pw-btn:hover {{ background: #2d6a9f; }}
+  .pw-error {{ color: #e74c3c; font-size: 13px; margin-top: 10px; min-height: 18px; }}
 </style>
 </head>
 <body>
+<!-- パスワードゲート -->
+<div id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">🏙️</div>
+    <h2>都市開発情報</h2>
+    <p>メンバー専用ページです。<br>パスワードを入力してください。</p>
+    <input id="pw-input" class="pw-input" type="password"
+           placeholder="パスワード" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')pwCheck()">
+    <button class="pw-btn" onclick="pwCheck()">ログイン</button>
+    <div id="pw-error" class="pw-error"></div>
+  </div>
+</div>
 <div class="header">
   <span style="font-size:24px">🏙️</span>
   <h1>都市開発情報</h1>
@@ -811,6 +852,33 @@ RICH_TEMPLATE = """<!DOCTYPE html>
 </div>
 <footer>urban-dev-tracker — {generated}</footer>
 <script>
+// ── パスワードゲート ──
+(async function() {{
+  var H = '{password_hash}';
+  var el = document.getElementById('pw-overlay');
+  if (!el) return;
+  if (!H) {{ el.remove(); return; }}
+  var stored = localStorage.getItem('udt_' + H.slice(0,8));
+  if (stored === H) {{ el.remove(); return; }}
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() {{ document.getElementById('pw-input').focus(); }}, 100);
+}})();
+async function pwCheck() {{
+  var H = '{password_hash}';
+  var pw = document.getElementById('pw-input').value;
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  var hex = Array.from(new Uint8Array(buf)).map(function(b) {{ return b.toString(16).padStart(2,'0'); }}).join('');
+  if (hex === H) {{
+    localStorage.setItem('udt_' + H.slice(0,8), H);
+    document.getElementById('pw-overlay').remove();
+    document.body.style.overflow = '';
+  }} else {{
+    document.getElementById('pw-error').textContent = 'パスワードが違います';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }}
+}}
+// ── フィルター ──
 var _days = 0;
 var _today = false;
 var _area = '';
@@ -963,7 +1031,7 @@ def _card_html(a: dict) -> str:
 </div>"""
 
 
-def generate_rich_html(articles: list[dict]) -> str:
+def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
     """記事リストからカード形式のリッチHTMLを生成する"""
     import html as _html
     from datetime import datetime
@@ -1070,6 +1138,7 @@ def generate_rich_html(articles: list[dict]) -> str:
         total=len(articles),
         area_btns=area_btns,
         body=body,
+        password_hash=password_hash,
     )
 
 
@@ -2048,15 +2117,55 @@ def export_area_timeline(articles: list[dict], out_path: Path = None) -> Path:
     return out_path
 
 
-def export_rich_html(articles: list[dict], out_path: Path = None) -> Path:
+def export_rich_html(articles: list[dict], out_path: Path = None, password_hash: str = "") -> Path:
     """カード形式HTMLをファイルに保存して返す"""
     if out_path is None:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         out_path = BASE_DIR / "reports" / f"rich_report_{ts}.html"
-    html = generate_rich_html(articles)
+    html = generate_rich_html(articles, password_hash=password_hash)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     return out_path
+
+
+def deploy_rich_html(articles: list[dict], password_hash: str = "") -> str:
+    """docs/rich.html を生成して GitHub Pages にプッシュする。公開URLを返す。"""
+    import subprocess as _sp
+    docs_path = BASE_DIR / "docs" / "rich.html"
+    html = generate_rich_html(articles, password_hash=password_hash)
+    with open(docs_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"docs/rich.html を生成しました ({len(articles)} 件)")
+
+    # git add → commit → push
+    ts = datetime.now().strftime("%Y/%m/%d %H:%M")
+    cmds = [
+        ["git", "-C", str(BASE_DIR), "add", "docs/rich.html"],
+        ["git", "-C", str(BASE_DIR), "commit", "-m", f"deploy: rich.html 更新 {ts}"],
+        ["git", "-C", str(BASE_DIR), "push"],
+    ]
+    for cmd in cmds:
+        r = _sp.run(cmd, capture_output=True, text=True)
+        if r.returncode != 0:
+            # "nothing to commit" は無視
+            if "nothing to commit" in r.stdout + r.stderr:
+                print("変更なし（スキップ）")
+                break
+            print(f"git エラー: {r.stderr.strip()}")
+            return ""
+        print(r.stdout.strip() or " ".join(cmd[2:]))
+
+    # GitHub Pages URL を推定
+    try:
+        r = _sp.run(["git", "-C", str(BASE_DIR), "remote", "get-url", "origin"],
+                    capture_output=True, text=True)
+        remote = r.stdout.strip()  # e.g. https://github.com/user/repo.git
+        m = re.search(r'github\.com/([^/]+)/([^/.]+)', remote)
+        if m:
+            return f"https://{m.group(1)}.github.io/{m.group(2)}/rich.html"
+    except Exception:
+        pass
+    return ""
 
 
 def export_html(md_path: Path = None, out_path: Path = None) -> Path:
