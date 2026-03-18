@@ -105,10 +105,20 @@ def _chatwork_enabled(config: dict) -> bool:
 
 
 def _do_notify(config: dict, articles: list[dict]):
+    from datetime import date as _date
     from notifier import ChatWorkNotifier
     notifier = ChatWorkNotifier.from_config(config)
     if not notifier:
         print("ChatWork未設定。config.yaml の chatwork セクション or 環境変数を確認してください")
+        return
+    # 今日付けの記事のみ送信
+    today = _date.today().isoformat()
+    articles = [
+        a for a in articles
+        if (a.get("published_at") or a.get("fetched_at") or "")[:10] == today
+    ]
+    if not articles:
+        print(f"本日({today})の送信対象記事がありません")
         return
     daily = config.get("chatwork", {}).get("daily_digest", True)
     if daily:
@@ -116,7 +126,7 @@ def _do_notify(config: dict, articles: list[dict]):
     else:
         ok = notifier.send(articles)
     if ok:
-        print("ChatWork 送信完了")
+        print(f"ChatWork 送信完了（本日分 {len(articles)} 件）")
     else:
         print("ChatWork 送信失敗。ログを確認してください")
 
