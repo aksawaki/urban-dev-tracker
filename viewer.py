@@ -774,7 +774,7 @@ def _card_html(a: dict) -> str:
     url = a.get("url", "#")
     source = a.get("source_name", "")
     tags = a.get("tags", [])
-    published = (a.get("published_at") or a.get("fetched_at") or "")[:10]
+    published = _parse_pub_date(a.get("published_at") or "") or (a.get("fetched_at") or "")[:10]
     content = (a.get("content") or a.get("summary") or "").strip()
 
     # 内容を読みやすい長さに
@@ -1176,16 +1176,16 @@ def _plan_card_html(a: dict) -> str:
     phase_label, phase_color, phase_emoji = _PHASE_META[phase]
     period = _extract_period(content)
 
-    title = a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip()
+    title = _clean_title(a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip())
     url = _html.escape(a.get("url", "#"))
     source = _html.escape(a.get("source_name", ""))
     area = _html.escape(_effective_area(a))
     priority = a.get("priority", "normal")
 
-    # 情報取得日
+    # 情報取得日（YYYY-MM-DD に正規化して data-date に使用）
     fetched = (a.get("fetched_at") or "")[:10]
-    # 公開日（あれば）
-    published = (a.get("published_at") or "")[:10]
+    # 公開日（YYYY-MM-DD に正規化。日本語形式は変換）
+    published = _parse_pub_date(a.get("published_at") or "") or ""
     acq_date = published or fetched
 
     # 竣工・完了年月を data 属性用に抽出（"2026年3月" → year=2026, month=3）
@@ -1507,6 +1507,13 @@ _DATE_CUTOFF = "2025-11-01"
 _KENBIYA_MIN_ARTICLE_NUM = 9600
 
 _PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日')
+# kensetsunews 等のタイトル末尾に付く「最終更新 | YYYY/MM/DD HH:MM 【速報】」を除去
+_TITLE_SUFFIX_RE = re.compile(r'\s*最終更新\s*[|｜]\s*\d{4}/\d{2}/\d{2}.*$')
+
+
+def _clean_title(title: str) -> str:
+    """タイトル末尾の更新日時サフィックスを除去する。"""
+    return _TITLE_SUFFIX_RE.sub('', title).strip()
 
 
 def _get_kenbiya_article_number(url: str) -> int | None:
@@ -1726,14 +1733,9 @@ def generate_area_timeline_html(articles: list[dict]) -> str:
     from notifier import is_development_relevant as _is_dev_relevant
 
     def _is_content_meaningful(a: dict) -> bool:
-        detail_raw = (a.get("content") or a.get("summary") or "").strip()
-        # スタブ除外（コンテンツがタイトルのみ・極端に短い）
+        # 開発関連性チェック（速報・短いコンテンツでも開発関連なら通す）
         # ※ JS必須ページ・UIボイラープレートは _is_dev_relevant 内の
-        #   _content_is_real() で除外されるのでここでは特別扱いしない
-        bullets = _to_bullets(detail_raw)
-        if len(bullets) <= 1 and len(detail_raw) < 80:
-            return False
-        # notifier の共通フィルタで開発関連性・ノイズ・コンテンツ品質チェック
+        #   _content_is_real() で除外される
         return _is_dev_relevant(a)
 
     active = [a for a in active if _is_content_meaningful(a)]
