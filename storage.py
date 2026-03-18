@@ -29,6 +29,8 @@ def _parse_pub_date_str(s: str) -> str | None:
     """公開日文字列を 'YYYY-MM-DD' に正規化。解析不能なら None。"""
     if not s:
         return None
+    # 全角数字をASCII数字に変換
+    s = s.translate(str.maketrans('０１２３４５６７８９', '0123456789'))
     m = _PUB_DATE_RE.match(s)
     if m:
         return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
