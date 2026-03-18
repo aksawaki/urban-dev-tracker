@@ -574,28 +574,78 @@ class ChatWorkNotifier:
             end = m.group(0)[:30].strip()
         return start, end
 
+    # タイトル末尾の更新日時サフィックス除去用
+    _TITLE_SUFFIX_RE_CW = re.compile(
+        r'\s*最終更新\s*[|｜]\s*\d{4}/\d{2}/\d{2}.*$|'
+        r'\s*【速報】.*$',
+        re.DOTALL,
+    )
+    # enrich_content の建設関連フィルタ（viewer._ENRICH_RELEVANT_RE と同一）
+    _ENRICH_RELEVANT_RE_CW = re.compile(
+        r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|'
+        r'不動産|業務代行|入札|落札|タワー|区画整理|土地区画|公共工事'
+    )
+
+    @classmethod
+    def _clean_title_cw(cls, title: str) -> str:
+        return cls._TITLE_SUFFIX_RE_CW.sub('', title).strip()
+
     @staticmethod
-    def _bullets_cw(a: dict, max_bullets: int = 3) -> list[str]:
-        """コンテンツから箇条書きリストを生成（最大 max_bullets 件）"""
+    def _bullets_cw(a: dict, max_bullets: int = 2) -> list[str]:
+        """コンテンツ or enrich から箇条書きリストを生成（最大 max_bullets 件）"""
+        title_norm = re.sub(r'[^\w]', '', ChatWorkNotifier._clean_title_cw(
+            (a.get("title") or "").replace("【更新検知】", "").strip()
+        ), flags=re.UNICODE)
+
+        # content から生成（タイトル重複除外）
         raw = (a.get("content") or a.get("summary") or "").strip()
-        if not raw:
+        content_bullets = []
+        if raw:
+            raw = re.sub(r"[　 \t]+", " ", raw).strip()
+            parts = []
+            for para in re.split(r"\n+", raw)[:4]:
+                parts.extend(re.split(r"(?<=。)", para))
+            for p in parts:
+                p = p.strip().rstrip("。").strip()
+                if len(p) < 15:
+                    continue
+                if re.search(r'[Jj]ava[Ss]cript', p):
+                    continue
+                p_norm = re.sub(r'[^\w]', '', p, flags=re.UNICODE)
+                if p_norm in title_norm or title_norm in p_norm:
+                    continue
+                if p not in content_bullets:
+                    content_bullets.append(p)
+                if len(content_bullets) >= max_bullets:
+                    break
+
+        if content_bullets:
+            return content_bullets
+
+        # enrich_content から生成（Google News RSS 由来）
+        enrich = (a.get("enrich_content") or "").strip()
+        if not enrich:
             return []
-        raw = re.sub(r"[　 \t]+", " ", raw).strip()
-        parts = []
-        for para in re.split(r"\n+", raw)[:4]:
-            parts.extend(re.split(r"(?<=。)", para))
-        bullets = []
-        for p in parts:
-            p = p.strip().rstrip("。").strip()
-            if len(p) < 15:
+        is_gnews = enrich.startswith("【関連報道】")
+        raw_lines = [l.strip().lstrip("・") for l in enrich.splitlines()
+                     if l.strip() and l.strip() != "【関連報道】"]
+        filtered = ([l for l in raw_lines if ChatWorkNotifier._ENRICH_RELEVANT_RE_CW.search(l)]
+                    if is_gnews else raw_lines)
+
+        deduped: list[str] = []
+        seen_prefixes: list[str] = []
+        for line in filtered:
+            ln = re.sub(r'[^\w]', '', line, flags=re.UNICODE)
+            if title_norm and (ln[:20] in title_norm or title_norm[:20] in ln):
                 continue
-            if re.search(r'[Jj]ava[Ss]cript', p):
+            prefix = ln[:15]
+            if prefix in seen_prefixes:
                 continue
-            if p not in bullets:
-                bullets.append(p)
-            if len(bullets) >= max_bullets:
+            deduped.append(line)
+            seen_prefixes.append(prefix)
+            if len(deduped) >= max_bullets:
                 break
-        return bullets
+        return deduped
 
     def _build_message(self, articles: list[dict], report_date: str, suffix: str = "") -> str:
         date_str = report_date or datetime.now().strftime("%Y年%m月%d日")
@@ -606,12 +656,18 @@ class ChatWorkNotifier:
             f"[info][title]🏙 都市開発情報　{date_str}　{len(articles)}件{suffix}[/title]",
         ]
 
+        try:
+            from viewer import _effective_area as _eff_area
+        except Exception:
+            _eff_area = None
+
         for a in articles:
-            title   = a.get("title", "").replace("【更新検知】", "").strip()
+            title   = self._clean_title_cw(a.get("title", "").replace("【更新検知】", "").strip())
             content = a.get("content") or a.get("summary") or ""
-            area    = detect_area(title, content, fallback=a.get("area", ""))
+            area    = (_eff_area(a) if _eff_area else None) or detect_area(title, content, fallback=a.get("area", ""))
             url     = a.get("url", "")
-            phase   = self._detect_phase_cw(content)
+            gnews   = a.get("enrich_source", "")
+            phase   = self._detect_phase_cw(content + " " + title)
             start, end = self._extract_period_cw(content)
             bullets = self._bullets_cw(a)
 
@@ -631,9 +687,12 @@ class ChatWorkNotifier:
             if bullets:
                 lines.append("")
                 for b in bullets:
-                    lines.append(f"・{b}")
+                    b_short = b[:50] + ("…" if len(b) > 50 else "")
+                    lines.append(f"・{b_short}")
             lines.append("")
             lines.append(f"🔗 {url}")
+            if gnews:
+                lines.append(f"🔍 Google News関連 → {gnews}")
 
         lines.append("")
         lines.append(SEP)
