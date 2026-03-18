@@ -370,6 +370,10 @@ _BOILERPLATE_RE = re.compile(
     r'^(?:トップページ|ホーム|お知らせ|ニュース(?:リリース)?|プレスリリース|メニュー|'
     r'サイトマップ|お問い合わせ|アクセス|プライバシーポリシー|サイトポリシー|'
     r'リロードする|ログイン|遅延証明書|Copyright|All Rights Reserved|'
+    r'PDF(?:ファイル)?をご覧|Adobe\s*Reader|Acrobat|'
+    r'NEWS RELEASE|ニュースリリース\s*\d{4}年|'
+    r'お持ちでない方|下記よりダウンロード|'
+    r'シェアする|このページ(?:を|の)|記事をシェア|SNSでシェア|'
     # JavaScript 使用案内（city hall/JS-heavy サイトに多い）
     r'(?:この|当)(?:サイト|ホームページ)では?[Jj]ava[Ss]cript|'
     r'[Jj]ava[Ss]cript(?:の使用)?を有効|'
@@ -697,12 +701,18 @@ RICH_TEMPLATE = """<!DOCTYPE html>
   .card-title a:hover {{ color: #2d6a9f; text-decoration: underline; }}
   .card-source {{ font-size: 12px; color: #777; }}
   .card-content {{
+    flex-grow: 1;
+  }}
+  .card-bullets {{
+    margin: 4px 0 0 0;
+    padding-left: 16px;
     font-size: 13px;
     color: #444;
-    line-height: 1.65;
-    border-left: 3px solid #e2e8f0;
-    padding-left: 10px;
-    flex-grow: 1;
+    line-height: 1.7;
+    list-style: disc;
+  }}
+  .card-bullets li {{
+    margin-bottom: 2px;
   }}
   .enrich-note {{
     font-size: 11px;
@@ -786,23 +796,46 @@ def _card_html(a: dict) -> str:
     enrich_content = (a.get("enrich_content") or "").strip()
     enrich_source = (a.get("enrich_source") or "").strip()
 
-    # コンテンツがなければ補足情報で補完
-    if not content and enrich_content:
-        content = enrich_content
-
-    # 内容を読みやすい長さに
-    if len(content) > 350:
-        content = content[:350] + "…"
-
     import html as _html
+
+    # コンテンツを箇条書きに変換
+    _title_norm = re.sub(r"\s", "", _clean_title(title))  # タイトルとの重複チェック用
+    if content:
+        raw_bullets = _to_bullets(content)
+        # タイトルと実質同一のものを除外し、1行70字以内に収める
+        bullets = []
+        for b in raw_bullets:
+            b_norm = re.sub(r"\s", "", b)
+            if b_norm in _title_norm or _title_norm in b_norm:
+                continue
+            bullets.append(b[:70] + ("…" if len(b) > 70 else ""))
+        bullets = bullets[:5]
+        if not bullets and enrich_content:
+            # 本文がタイトルと同一だった場合は補足情報へフォールバック
+            content = ""
+    if not content and enrich_content:
+        # 補足情報（【関連報道】形式）を行単位で箇条書きに
+        lines = [l.strip().lstrip("・") for l in enrich_content.splitlines()
+                 if l.strip() and l.strip() != "【関連報道】"]
+        bullets = [l[:70] + ("…" if len(l) > 70 else "") for l in lines[:5]]
+    elif content:
+        pass  # bullets は上で設定済み
+    else:
+        bullets = []
+
+    if bullets:
+        items = "".join(f"<li>{_html.escape(b)}</li>" for b in bullets)
+        content_html = f'<ul class="card-bullets">{items}</ul>'
+    else:
+        content_html = ""
+
     title_safe = _html.escape(title)
-    content_safe = _html.escape(content)
     source_safe = _html.escape(source)
     area_safe = _html.escape(area)
 
     tags_html = "".join(f'<span class="tag">{_html.escape(t)}</span>' for t in tags)
 
-    # 補足情報ラベル（元記事がkensetsunews かつ 補足ソースあり）
+    # 補足情報ラベル
     enrich_note = ""
     if enrich_content and enrich_source:
         enrich_safe = _html.escape(enrich_source)
@@ -823,7 +856,7 @@ def _card_html(a: dict) -> str:
   </div>
   <div class="card-title"><a href="{url}" target="_blank" rel="noopener">{title_safe}</a></div>
   <div class="card-source">{source_safe}</div>
-  <div class="card-content">{content_safe}</div>
+  <div class="card-content">{content_html}</div>
   {enrich_note}
   <div class="card-footer">
     <a class="btn-source" href="{url}" target="_blank" rel="noopener">元記事を読む →</a>
