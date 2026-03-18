@@ -74,6 +74,16 @@ def cmd_fetch(args):
 
     purge_old(retention)
 
+    # 建設通信新聞等の会員制記事を無料ソースで補完
+    if new_count > 0:
+        try:
+            from enricher import enrich_all
+            e_count, e_fail = enrich_all(days=1)
+            if e_count > 0:
+                logger.info(f"補足情報取得: {e_count} 件")
+        except Exception as exc:
+            logger.warning(f"補足情報取得をスキップ: {exc}")
+
     recent = get_recent(days=7)
     if recent:
         report_path = generate_report(recent)
@@ -542,6 +552,10 @@ def main():
     p_add.add_argument("--tags", type=str, help="タグ（カンマ区切り）")
     p_add.add_argument("--selector", type=str, help="CSSセレクタ（デフォルト: main, article）")
 
+    # enrich
+    p_enrich = subparsers.add_parser("enrich", help="会員制記事を無料ソースで補完")
+    p_enrich.add_argument("--days", type=int, default=1, help="直近N日の対象記事（デフォルト: 1）")
+
     # list-areas
     subparsers.add_parser("list-areas", help="登録済みの監視ページ一覧を表示")
 
@@ -576,6 +590,11 @@ def main():
         cmd_stats(args)
     elif args.command == "add-area":
         cmd_add_area(args)
+    elif args.command == "enrich":
+        from enricher import enrich_all
+        days = getattr(args, "days", 1)
+        enriched, failed = enrich_all(days=days)
+        print(f"補足完了: {enriched} 件 / 失敗: {failed} 件")
     elif args.command == "list-areas":
         cmd_list_areas(args)
     elif args.command == "crawl":

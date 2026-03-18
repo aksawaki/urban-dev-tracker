@@ -167,6 +167,8 @@ def _to_dict(article: Article) -> dict:
         "content": getattr(article, "content", ""),
         "content_hash": article.content_hash,
         "priority": article.priority,
+        "enrich_content": "",
+        "enrich_source": "",
     }
 
 

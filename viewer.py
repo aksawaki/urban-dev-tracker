@@ -704,6 +704,13 @@ RICH_TEMPLATE = """<!DOCTYPE html>
     padding-left: 10px;
     flex-grow: 1;
   }}
+  .enrich-note {{
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+  }}
+  .enrich-note a {{ color: #888; text-decoration: none; }}
+  .enrich-note a:hover {{ text-decoration: underline; }}
   .card-footer {{
     display: flex;
     align-items: center;
@@ -776,6 +783,12 @@ def _card_html(a: dict) -> str:
     tags = a.get("tags", [])
     published = _parse_pub_date(a.get("published_at") or "") or (a.get("fetched_at") or "")[:10]
     content = (a.get("content") or a.get("summary") or "").strip()
+    enrich_content = (a.get("enrich_content") or "").strip()
+    enrich_source = (a.get("enrich_source") or "").strip()
+
+    # コンテンツがなければ補足情報で補完
+    if not content and enrich_content:
+        content = enrich_content
 
     # 内容を読みやすい長さに
     if len(content) > 350:
@@ -789,6 +802,19 @@ def _card_html(a: dict) -> str:
 
     tags_html = "".join(f'<span class="tag">{_html.escape(t)}</span>' for t in tags)
 
+    # 補足情報ラベル（元記事がkensetsunews かつ 補足ソースあり）
+    enrich_note = ""
+    if enrich_content and enrich_source:
+        enrich_safe = _html.escape(enrich_source)
+        if "news.google.com" in enrich_source:
+            link_label = "Google Newsで関連報道を検索"
+        else:
+            link_label = _html.escape(enrich_source[:50])
+        enrich_note = (
+            f'<div class="enrich-note">📎 補足: '
+            f'<a href="{enrich_safe}" target="_blank" rel="noopener">{link_label}</a></div>'
+        )
+
     return f"""<div class="card card-{priority}">
   <div class="card-top">
     <span class="badge badge-{priority}">{badge_label}</span>
@@ -798,6 +824,7 @@ def _card_html(a: dict) -> str:
   <div class="card-title"><a href="{url}" target="_blank" rel="noopener">{title_safe}</a></div>
   <div class="card-source">{source_safe}</div>
   <div class="card-content">{content_safe}</div>
+  {enrich_note}
   <div class="card-footer">
     <a class="btn-source" href="{url}" target="_blank" rel="noopener">元記事を読む →</a>
     <div class="tags">{tags_html}</div>
