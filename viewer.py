@@ -228,7 +228,7 @@ _DISTRICT_NAMES: list[str] = [
     # ──── 文京区エリア ────
     "後楽園", "本郷", "水道橋",
     # ──── 荒川・足立・葛飾エリア ────
-    "北千住",
+    "北千住", "千住",
     # ──── 神奈川：人口増加エリア ────
     "横浜", "川崎", "みなとみらい", "関内", "横須賀中央",
     "武蔵小杉", "元住吉", "新川崎", "川崎駅",
@@ -862,7 +862,7 @@ applyFilter();
 
 
 def _card_html(a: dict) -> str:
-    area = a.get("area", "")
+    area = _effective_area(a)
     title = _clean_title(a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip())
     url = a.get("url", "#")
     source = a.get("source_name", "")
@@ -1013,6 +1013,33 @@ def generate_rich_html(articles: list[dict]) -> str:
 
     articles = [a for a in articles if _is_relevant(a)]
 
+    # タイトルが実質同一の記事を除去（同一ニュースの複数フィード掲載対策）
+    import unicodedata as _ud
+
+    def _tnorm(t: str) -> str:
+        """NFKC正規化 + 英数字・漢字等のみ残す"""
+        return re.sub(r'[^\w]', '', _ud.normalize('NFKC', t or ''), flags=re.UNICODE)
+
+    def _is_title_dup(n1: str, n2: str, win: int = 9) -> bool:
+        """どちらかが win 文字以上の共通部分文字列を持てば重複"""
+        s, lo = (n1, n2) if len(n1) <= len(n2) else (n2, n1)
+        if len(s) < win:
+            return False
+        for i in range(len(s) - win + 1):
+            if s[i:i + win] in lo:
+                return True
+        return False
+
+    deduped_articles: list[dict] = []
+    seen_norms: list[str] = []
+    for a in articles:
+        norm = _tnorm(a.get('title', ''))
+        if any(_is_title_dup(norm, n) for n in seen_norms):
+            continue
+        deduped_articles.append(a)
+        seen_norms.append(norm)
+    articles = deduped_articles
+
     # 日付の新しい順に並べる
     sorted_articles = sorted(
         articles,
@@ -1025,9 +1052,12 @@ def generate_rich_html(articles: list[dict]) -> str:
         area_btns = ""
     else:
         body = "\n".join(_card_html(a) for a in sorted_articles)
-        # ユニークエリアをボタン化（記事数降順）
+        # ユニークエリアをボタン化（記事数降順、全国/その他は除外）
         from collections import Counter
-        area_counts = Counter(a.get("area", "") for a in sorted_articles if a.get("area"))
+        area_counts = Counter(
+            _effective_area(a) for a in sorted_articles
+            if _effective_area(a) not in ("全国", "その他", "")
+        )
         area_btns = "".join(
             f'<button class="fbtn area-btn" data-area="{_html.escape(ar)}" onclick="setArea(\'{_html.escape(ar)}\')">'
             f'{_html.escape(ar)}</button>'
