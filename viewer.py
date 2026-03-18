@@ -374,6 +374,10 @@ _BOILERPLATE_RE = re.compile(
     r'NEWS RELEASE|ニュースリリース\s*\d{4}年|'
     r'お持ちでない方|下記よりダウンロード|'
     r'シェアする|このページ(?:を|の)|記事をシェア|SNSでシェア|'
+    r'括弧内(?:の数字|の数値)|'          # 表の注釈（都立高校等）
+    r'[）\)]\s*と(?:同居|在住|連絡)|'    # 文章の断片（閉じ括弧始まり）
+    r'実施校一覧|追検査入学|入学手続|'   # 学校募集ボイラープレート
+    r'[（\(]PDF[：:]\s*\d+(?:KB|MB)[）\)]|'  # PDFファイルサイズ表記
     # JavaScript 使用案内（city hall/JS-heavy サイトに多い）
     r'(?:この|当)(?:サイト|ホームページ)では?[Jj]ava[Ss]cript|'
     r'[Jj]ava[Ss]cript(?:の使用)?を有効|'
@@ -393,6 +397,11 @@ def _to_bullets(content: str) -> list[str]:
     for p in parts:
         p = p.strip().strip('\u3000').rstrip('。').strip()
         if len(p) < 12:
+            continue
+        # 断片（閉じ括弧・※・注 で始まる行はゴミ）
+        if p[0] in ('）', ')', '※', '＊'):
+            continue
+        if p.startswith('注\u3000') or p.startswith('注 '):
             continue
         if _BOILERPLATE_RE.match(p):
             continue
@@ -599,7 +608,7 @@ RICH_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>都市開発計画 詳細レポート</title>
+<title>都市開発情報</title>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{
@@ -611,183 +620,238 @@ RICH_TEMPLATE = """<!DOCTYPE html>
   .header {{
     background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
     color: white;
-    padding: 22px 30px;
+    padding: 16px 24px;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 200;
     box-shadow: 0 3px 12px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }}
-  .header h1 {{ font-size: 20px; font-weight: 700; letter-spacing: 0.03em; }}
-  .header .meta {{ font-size: 12px; opacity: 0.75; margin-left: auto; text-align: right; line-height: 1.5; }}
-  .stats {{
-    background: white;
-    border-bottom: 1px solid #dde3ec;
-    padding: 12px 30px;
+  .header h1 {{ font-size: 18px; font-weight: 700; }}
+  .header .meta {{ font-size: 11px; opacity: 0.75; margin-left: auto; }}
+  /* ── フィルターバー ── */
+  .filter-bar {{
+    background: #fff;
+    border-bottom: 1px solid #d0daea;
+    padding: 8px 24px;
     display: flex;
-    gap: 24px;
-    font-size: 13px;
-    color: #555;
-  }}
-  .stats span {{ font-weight: 700; color: #1a3a5c; }}
-  .container {{ max-width: 1100px; margin: 0 auto; padding: 28px 20px; }}
-  .section-title {{
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    padding: 8px 18px;
-    border-radius: 6px;
-    margin: 32px 0 16px;
-    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    position: sticky;
+    top: 53px;
+    z-index: 190;
+    font-size: 12px;
   }}
-  .section-high   {{ background: #c0392b; }}
-  .section-medium {{ background: #e67e22; }}
-  .section-normal {{ background: #2980b9; }}
-  .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }}
+  .fb-label {{ color: #666; font-weight: 600; white-space: nowrap; }}
+  .fb-sep {{ color: #ccc; padding: 0 4px; }}
+  .fbtn {{
+    background: #f4f7fc;
+    border: 1px solid #c8d4e8;
+    border-radius: 14px;
+    padding: 3px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #445;
+    white-space: nowrap;
+    transition: .15s;
+  }}
+  .fbtn:hover {{ background: #e2eaf6; }}
+  .fbtn.active {{ background: #1e3a6e; color: #fff; border-color: #1e3a6e; }}
+  .filter-count {{ margin-left: auto; font-size: 11px; color: #888; }}
+  /* ── エリアナビ ── */
+  .area-nav {{
+    background: #f0f4fb;
+    border-bottom: 1px solid #d0daea;
+    padding: 6px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: sticky;
+    top: 102px;
+    z-index: 180;
+  }}
+  .area-btn {{
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #c8d4e8;
+    border-radius: 12px;
+    padding: 2px 10px;
+    cursor: pointer;
+    color: #334;
+    white-space: nowrap;
+    transition: .15s;
+  }}
+  .area-btn:hover {{ background: #e2eaf6; }}
+  .area-btn.active {{ background: #1e3a6e; color: #fff; border-color: #1e3a6e; }}
+  /* ── カードグリッド ── */
+  .container {{ max-width: 1200px; margin: 0 auto; padding: 20px 20px 40px; }}
+  .cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }}
   .card {{
     background: white;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    padding: 18px 20px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 14px 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    border-left: 4px solid #3182ce;
     transition: box-shadow 0.2s;
-    border-top: 4px solid #ccc;
   }}
-  .card:hover {{ box-shadow: 0 6px 20px rgba(0,0,0,0.13); }}
-  .card-high   {{ border-top-color: #e53e3e; }}
-  .card-medium {{ border-top-color: #dd6b20; }}
-  .card-normal {{ border-top-color: #3182ce; }}
+  .card:hover {{ box-shadow: 0 5px 18px rgba(0,0,0,0.12); }}
   .card-top {{
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }}
-  .badge {{
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    color: white;
-    letter-spacing: 0.04em;
-  }}
-  .badge-high   {{ background: #e53e3e; }}
-  .badge-medium {{ background: #dd6b20; }}
-  .badge-normal {{ background: #3182ce; }}
   .chip {{
     font-size: 11px;
     background: #eef2f7;
     color: #1a3a5c;
-    padding: 2px 10px;
-    border-radius: 20px;
+    padding: 2px 8px;
+    border-radius: 12px;
     font-weight: 600;
   }}
-  .date {{ font-size: 11px; color: #888; margin-left: auto; }}
+  .date {{ font-size: 11px; color: #999; margin-left: auto; }}
   .card-title {{
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.45;
   }}
-  .card-title a {{
-    color: #1a3a5c;
-    text-decoration: none;
-  }}
+  .card-title a {{ color: #1a3a5c; text-decoration: none; }}
   .card-title a:hover {{ color: #2d6a9f; text-decoration: underline; }}
-  .card-source {{ font-size: 12px; color: #777; }}
-  .card-content {{
-    flex-grow: 1;
-  }}
+  .card-source {{ font-size: 11px; color: #888; }}
+  .card-content {{ flex-grow: 1; }}
   .card-bullets {{
-    margin: 4px 0 0 0;
-    padding-left: 16px;
-    font-size: 13px;
+    margin: 2px 0 0 0;
+    padding-left: 14px;
+    font-size: 12px;
     color: #444;
-    line-height: 1.7;
+    line-height: 1.65;
     list-style: disc;
   }}
-  .card-bullets li {{
-    margin-bottom: 2px;
-  }}
-  .enrich-note {{
-    font-size: 11px;
-    color: #888;
-    margin-top: 4px;
-  }}
-  .enrich-note a {{ color: #888; text-decoration: none; }}
+  .card-bullets li {{ margin-bottom: 1px; }}
+  .enrich-note {{ font-size: 11px; color: #aaa; margin-top: 2px; }}
+  .enrich-note a {{ color: #aaa; text-decoration: none; }}
   .enrich-note a:hover {{ text-decoration: underline; }}
   .card-footer {{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
+    margin-top: 2px;
   }}
   .btn-source {{
     display: inline-block;
-    font-size: 12px;
+    font-size: 11px;
     background: #1a3a5c;
     color: white;
-    padding: 5px 14px;
-    border-radius: 20px;
+    padding: 4px 12px;
+    border-radius: 16px;
     text-decoration: none;
     font-weight: 600;
     transition: background 0.2s;
   }}
   .btn-source:hover {{ background: #2d6a9f; }}
-  .tags {{ display: flex; gap: 4px; flex-wrap: wrap; }}
+  .tags {{ display: flex; gap: 3px; flex-wrap: wrap; }}
   .tag {{
     font-size: 10px;
     background: #f0f4ff;
     color: #2d6a9f;
-    padding: 1px 8px;
-    border-radius: 10px;
+    padding: 1px 7px;
+    border-radius: 8px;
   }}
+  .card.hidden {{ display: none; }}
   .empty {{ color: #999; font-size: 14px; padding: 40px; text-align: center; }}
-  footer {{
-    text-align: center;
-    padding: 24px;
-    font-size: 12px;
-    color: #aaa;
-    margin-top: 40px;
-  }}
+  footer {{ text-align: center; padding: 20px; font-size: 11px; color: #bbb; }}
   @media (max-width: 600px) {{
-    .header {{ padding: 14px 16px; }}
+    .header {{ padding: 12px 14px; }}
     .cards {{ grid-template-columns: 1fr; }}
-    .stats {{ flex-wrap: wrap; gap: 12px; }}
+    .filter-bar, .area-nav {{ top: unset; position: static; }}
   }}
 </style>
 </head>
 <body>
 <div class="header">
-  <span style="font-size:28px">🏙️</span>
-  <h1>都市開発計画 詳細レポート</h1>
-  <div class="meta">生成: {generated}<br>{total}件の開発情報</div>
+  <span style="font-size:24px">🏙️</span>
+  <h1>都市開発情報</h1>
+  <div class="meta">生成: {generated} &nbsp;|&nbsp; {total}件</div>
 </div>
-<div class="stats">
-  総件数: <span>{total}</span> &nbsp;|&nbsp;
-  重要: <span style="color:#e53e3e">{cnt_high}</span> &nbsp;
-  注目: <span style="color:#dd6b20">{cnt_medium}</span> &nbsp;
-  通常: <span style="color:#3182ce">{cnt_normal}</span>
-  &nbsp;|&nbsp; エリア: <span>{cnt_areas}</span>種
+<!-- 日付フィルター -->
+<div class="filter-bar" id="filter-bar">
+  <span class="fb-label">📅</span>
+  <button class="fbtn" id="btn-today" onclick="setToday()">本日分</button>
+  <button class="fbtn fbtn-days active" data-days="0" onclick="setDays(0)">全期間</button>
+  <button class="fbtn fbtn-days" data-days="7" onclick="setDays(7)">1週間</button>
+  <button class="fbtn fbtn-days" data-days="30" onclick="setDays(30)">1ヶ月</button>
+  <button class="fbtn fbtn-days" data-days="90" onclick="setDays(90)">3ヶ月</button>
+  <span class="fb-sep">|</span>
+  <span class="fb-label">📍</span>
+  {area_btns}
+  <span class="filter-count" id="filter-count"></span>
 </div>
 <div class="container">
+  <div class="cards" id="cards-grid">
 {body}
+  </div>
 </div>
-<footer>urban-dev-tracker が自動生成 — {generated}</footer>
+<footer>urban-dev-tracker — {generated}</footer>
+<script>
+var _days = 0;
+var _today = false;
+var _area = '';
+function applyFilter() {{
+  var now = new Date();
+  var todayStr = now.toISOString().slice(0,10);
+  var visible = 0;
+  document.querySelectorAll('.card').forEach(function(c) {{
+    var d = c.dataset.date || '';
+    var area = c.dataset.area || '';
+    var showDate = true;
+    if (_today) {{
+      showDate = (d === todayStr);
+    }} else if (_days > 0) {{
+      var cutoff = new Date(now - _days * 86400000).toISOString().slice(0,10);
+      showDate = (d >= cutoff);
+    }}
+    var showArea = (!_area || area === _area);
+    if (showDate && showArea) {{ c.classList.remove('hidden'); visible++; }}
+    else {{ c.classList.add('hidden'); }}
+  }});
+  var el = document.getElementById('filter-count');
+  if (el) el.textContent = visible + '件表示中';
+}}
+function setDays(d) {{
+  _days = d; _today = false;
+  document.querySelectorAll('.fbtn-days').forEach(function(b) {{ b.classList.remove('active'); }});
+  document.querySelectorAll('[data-days="'+d+'"]').forEach(function(b) {{ b.classList.add('active'); }});
+  document.getElementById('btn-today').classList.remove('active');
+  applyFilter();
+}}
+function setToday() {{
+  _today = true; _days = 0;
+  document.querySelectorAll('.fbtn-days').forEach(function(b) {{ b.classList.remove('active'); }});
+  document.getElementById('btn-today').classList.add('active');
+  applyFilter();
+}}
+function setArea(a) {{
+  _area = (_area === a) ? '' : a;
+  document.querySelectorAll('.area-btn').forEach(function(b) {{
+    b.classList.toggle('active', b.dataset.area === _area);
+  }});
+  applyFilter();
+}}
+applyFilter();
+</script>
 </body>
 </html>"""
 
 
 def _card_html(a: dict) -> str:
-    priority = a.get("priority", "normal")
-    badge_label = {"high": "重要", "medium": "注目", "normal": "通常"}.get(priority, "通常")
     area = a.get("area", "")
-    title = a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip()
+    title = _clean_title(a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip())
     url = a.get("url", "#")
     source = a.get("source_name", "")
     tags = a.get("tags", [])
@@ -798,28 +862,39 @@ def _card_html(a: dict) -> str:
 
     import html as _html
 
-    # コンテンツを箇条書きに変換
-    _title_norm = re.sub(r"\s", "", _clean_title(title))  # タイトルとの重複チェック用
+    # コンテンツを箇条書きに変換（最大3件・40字）
+    _title_norm = re.sub(r"\s", "", _clean_title(title))
     if content:
         raw_bullets = _to_bullets(content)
-        # タイトルと実質同一のものを除外し、1行70字以内に収める
         bullets = []
         for b in raw_bullets:
             b_norm = re.sub(r"\s", "", b)
             if b_norm in _title_norm or _title_norm in b_norm:
                 continue
-            bullets.append(b[:70] + ("…" if len(b) > 70 else ""))
-        bullets = bullets[:5]
+            bullets.append(b[:40] + ("…" if len(b) > 40 else ""))
+            if len(bullets) >= 3:
+                break
         if not bullets and enrich_content:
-            # 本文がタイトルと同一だった場合は補足情報へフォールバック
             content = ""
+    _ENRICH_RELEVANT_RE = re.compile(
+        r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|'
+        r'不動産|業務代行|入札|落札|タワー|'
+        r'区画整理|土地区画|公共工事|橋梁|港湾|'
+        r'人事異動|機構改革|代表取締役|専務|常務'   # 企業人事（殺人事件と区別）
+    )
     if not content and enrich_content:
-        # 補足情報（【関連報道】形式）を行単位で箇条書きに
-        lines = [l.strip().lstrip("・") for l in enrich_content.splitlines()
-                 if l.strip() and l.strip() != "【関連報道】"]
-        bullets = [l[:70] + ("…" if len(l) > 70 else "") for l in lines[:5]]
+        is_gnews = enrich_content.startswith("【関連報道】")
+        raw_lines = [l.strip().lstrip("・") for l in enrich_content.splitlines()
+                     if l.strip() and l.strip() != "【関連報道】"]
+        if is_gnews:
+            # Google News RSS 由来: 建設関連のみ採用（無関係ニュースを除外）
+            filtered = [l for l in raw_lines if _ENRICH_RELEVANT_RE.search(l)]
+        else:
+            # DB内クロスリファレンス由来: フィルターなし
+            filtered = raw_lines
+        bullets = [l[:40] + ("…" if len(l) > 40 else "") for l in filtered[:3]]
     elif content:
-        pass  # bullets は上で設定済み
+        pass
     else:
         bullets = []
 
@@ -832,25 +907,21 @@ def _card_html(a: dict) -> str:
     title_safe = _html.escape(title)
     source_safe = _html.escape(source)
     area_safe = _html.escape(area)
+    area_data = _html.escape(area)
 
     tags_html = "".join(f'<span class="tag">{_html.escape(t)}</span>' for t in tags)
 
-    # 補足情報ラベル
     enrich_note = ""
     if enrich_content and enrich_source:
         enrich_safe = _html.escape(enrich_source)
-        if "news.google.com" in enrich_source:
-            link_label = "Google Newsで関連報道を検索"
-        else:
-            link_label = _html.escape(enrich_source[:50])
+        link_label = "Google Newsで関連報道を検索" if "news.google.com" in enrich_source else _html.escape(enrich_source[:40])
         enrich_note = (
-            f'<div class="enrich-note">📎 補足: '
+            f'<div class="enrich-note">📎 '
             f'<a href="{enrich_safe}" target="_blank" rel="noopener">{link_label}</a></div>'
         )
 
-    return f"""<div class="card card-{priority}">
+    return f"""<div class="card" data-area="{area_data}" data-date="{published}">
   <div class="card-top">
-    <span class="badge badge-{priority}">{badge_label}</span>
     <span class="chip">{area_safe}</span>
     <span class="date">{published}</span>
   </div>
@@ -867,48 +938,35 @@ def _card_html(a: dict) -> str:
 
 def generate_rich_html(articles: list[dict]) -> str:
     """記事リストからカード形式のリッチHTMLを生成する"""
+    import html as _html
     from datetime import datetime
 
-    high = [a for a in articles if a.get("priority") == "high"]
-    medium = [a for a in articles if a.get("priority") == "medium"]
-    normal = [a for a in articles if a.get("priority") == "normal"]
+    # 日付の新しい順に並べる
+    sorted_articles = sorted(
+        articles,
+        key=lambda a: (a.get("published_at") or a.get("fetched_at") or ""),
+        reverse=True,
+    )
 
-    areas = {a.get("area", "") for a in articles}
-
-    sections = []
-
-    if high:
-        cards = "\n".join(_card_html(a) for a in high)
-        sections.append(
-            f'<div class="section-title section-high">🔴 重要情報（{len(high)}件）</div>'
-            f'<div class="cards">{cards}</div>'
-        )
-    if medium:
-        cards = "\n".join(_card_html(a) for a in medium)
-        sections.append(
-            f'<div class="section-title section-medium">🟡 注目情報（{len(medium)}件）</div>'
-            f'<div class="cards">{cards}</div>'
-        )
-    if normal:
-        cards = "\n".join(_card_html(a) for a in normal)
-        sections.append(
-            f'<div class="section-title section-normal">🔵 通常情報（{len(normal)}件）</div>'
-            f'<div class="cards">{cards}</div>'
-        )
-
-    if not sections:
+    if not sorted_articles:
         body = '<p class="empty">表示できる記事がありません。先に <code>python3 main.py crawl</code> を実行してください。</p>'
+        area_btns = ""
     else:
-        body = "\n".join(sections)
+        body = "\n".join(_card_html(a) for a in sorted_articles)
+        # ユニークエリアをボタン化（記事数降順）
+        from collections import Counter
+        area_counts = Counter(a.get("area", "") for a in sorted_articles if a.get("area"))
+        area_btns = "".join(
+            f'<button class="fbtn area-btn" data-area="{_html.escape(ar)}" onclick="setArea(\'{_html.escape(ar)}\')">'
+            f'{_html.escape(ar)}</button>'
+            for ar, _ in area_counts.most_common()
+        )
 
     generated = datetime.now().strftime("%Y年%m月%d日 %H:%M")
     return RICH_TEMPLATE.format(
         generated=generated,
         total=len(articles),
-        cnt_high=len(high),
-        cnt_medium=len(medium),
-        cnt_normal=len(normal),
-        cnt_areas=len(areas),
+        area_btns=area_btns,
         body=body,
     )
 

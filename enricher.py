@@ -49,13 +49,22 @@ def _clean_title(title: str) -> str:
     return parts[0] if parts else t
 
 
+_CONSTR_RE = re.compile(
+    r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|事業'
+)
+
+
 def extract_keywords(title: str) -> str:
     """タイトルから検索クエリ文字列を生成する。"""
     cleaned = _clean_title(title)
     main = re.split(r"[、,]", cleaned)[0].strip()
     if len(main) < 8:
         main = cleaned
-    return main[:60]
+    query = main[:55]
+    # 建設関連キーワードが含まれない場合は「建設」を補足して精度向上
+    if not _CONSTR_RE.search(query):
+        query += " 建設"
+    return query
 
 
 def _search_db(article: dict, db: dict) -> str | None:
@@ -160,11 +169,16 @@ def enrich_article(article: dict, db: dict, session: requests.Session) -> dict |
 
     # --- 戦略2: Google News RSS でメタデータ取得 ---
     news_items = _search_google_news_rss(query, session)
-    # kensetsunews と同一記事を除いた他ソースの記事情報
+    # 建設関連キーワードを含む他ソースの記事のみ採用
+    _RELEVANT_RE = re.compile(
+        r'建設|工事|着工|竣工|施工|開発|整備|改修|建替|新築|建築|ゼネコン|再開発|'
+        r'マンション.*(?:着工|建設|竣工|計画)|不動産|人事|機構改革|業務代行|入札|落札'
+    )
     other_media = [
         n for n in news_items
         if "kensetsunews" not in n.get("source", "").lower()
         and n.get("source")
+        and _RELEVANT_RE.search(n.get("title", ""))
     ]
 
     if other_media:
