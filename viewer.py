@@ -941,6 +941,27 @@ def generate_rich_html(articles: list[dict]) -> str:
     import html as _html
     from datetime import datetime
 
+    # 関連性フィルタ: 都市開発無関係を除外
+    from notifier import is_development_relevant as _is_dev_relevant, _BAD_TITLE_KEYWORDS, _BAD_TITLE_RE
+    _CONSTR_SOURCE_RE = re.compile(r'^kensetsunews')
+
+    def _is_relevant(a: dict) -> bool:
+        # kensetsunews は建設業界専門誌なので DEV_KEYWORDS/コンテンツ品質チェックを緩和
+        # 悪タイトルキーワード・パターンのみで除外判定
+        if _CONSTR_SOURCE_RE.match(a.get("source_id") or ""):
+            title = (a.get("title") or "").strip()
+            if len(title) < 12:
+                return False
+            for kw in _BAD_TITLE_KEYWORDS:
+                if kw in title:
+                    return False
+            if _BAD_TITLE_RE.search(title):
+                return False
+            return True
+        return _is_dev_relevant(a)
+
+    articles = [a for a in articles if _is_relevant(a)]
+
     # 日付の新しい順に並べる
     sorted_articles = sorted(
         articles,
