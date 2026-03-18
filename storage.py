@@ -8,6 +8,7 @@ storage.py - データ永続化
 import json
 import logging
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -17,6 +18,47 @@ logger = logging.getLogger(__name__)
 
 DB_FILE = "data/processed/articles.json"
 RAW_DIR = "data/raw"
+
+# kenbiya 記事番号のしきい値（これ未満 ≈ 2025年10月以前の古い記事）
+_KENBIYA_MIN_ARTICLE_NUM = 9600
+
+_PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日')
+
+
+def _parse_pub_date_str(s: str) -> str | None:
+    """公開日文字列を 'YYYY-MM-DD' に正規化。解析不能なら None。"""
+    if not s:
+        return None
+    m = _PUB_DATE_RE.match(s)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    if re.match(r'\d{4}-\d{2}-\d{2}', s):
+        return s[:10]
+    return None
+
+
+def _is_too_old(article: Article) -> bool:
+    """クロール時点で「本日より前の公開日」の記事かどうかを判定する。
+
+    - published_at が判明していて本日より前 → True（除外）
+    - kenbiya URL で記事番号 < _KENBIYA_MIN_ARTICLE_NUM → True（除外）
+    - published_at が不明かつ非kenbiya → False（除外しない）
+    """
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # 公開日が判明している場合: 本日より前なら除外
+    pub = _parse_pub_date_str(article.published_at or "")
+    if pub is not None and pub < today:
+        return True
+
+    # kenbiya 記事番号チェック（published_at が None でも古い記事を除外）
+    url = article.url or ""
+    if 'kenbiya.com' in url:
+        m = re.search(r'/(\d+)(?:\.html|/?$)', url)
+        if m and int(m.group(1)) < _KENBIYA_MIN_ARTICLE_NUM:
+            return True
+
+    return False
 
 
 def _ensure_dirs():
@@ -56,6 +98,13 @@ def upsert_articles(articles: list[Article]) -> tuple[int, int]:
             else:
                 skip_count += 1
             continue
+
+        # 新規記事: 本日より前の公開日ならDBに保存しない
+        if _is_too_old(article):
+            logger.debug(f"スキップ（古い公開日）: {article.url}")
+            skip_count += 1
+            continue
+
         db[article.id] = _to_dict(article)
         new_count += 1
 

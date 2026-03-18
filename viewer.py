@@ -1503,7 +1503,18 @@ _OUT_OF_SCOPE_AREAS = frozenset()
 # この日付より前に取得・公開された記事は表示・投稿しない（情報鮮度カットオフ）
 _DATE_CUTOFF = "2025-11-01"
 
+# kenbiya 記事番号のしきい値（これ未満 ≈ 2025年10月以前の古い記事）
+_KENBIYA_MIN_ARTICLE_NUM = 9600
+
 _PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日')
+
+
+def _get_kenbiya_article_number(url: str) -> int | None:
+    """kenbiya.com の記事URLから記事番号を取得。非kenbiya URLはNoneを返す。"""
+    if not url or 'kenbiya.com' not in url:
+        return None
+    m = re.search(r'/(\d+)(?:\.html|/?$)', url)
+    return int(m.group(1)) if m else None
 
 
 def _parse_pub_date(s: str) -> str | None:
@@ -1527,6 +1538,10 @@ def _is_display_worthy(a: dict) -> bool:
     # 記事公開日カットオフ（日付が判明している場合のみ適用）
     pub = _parse_pub_date(a.get("published_at") or "")
     if pub and pub < _DATE_CUTOFF:
+        return False
+    # kenbiya 記事番号チェック: 古い記事番号は除外（published_at:None でも排除可能）
+    kb_num = _get_kenbiya_article_number(a.get("url", ""))
+    if kb_num is not None and kb_num < _KENBIYA_MIN_ARTICLE_NUM:
         return False
 
     title = (a.get("title") or "").strip()
