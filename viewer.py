@@ -1111,7 +1111,11 @@ def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
     # 日付の新しい順に並べる
     sorted_articles = sorted(
         articles,
-        key=lambda a: (a.get("published_at") or a.get("fetched_at") or ""),
+        key=lambda a: (
+            _parse_pub_date(a.get("published_at") or "")
+            or (a.get("fetched_at") or "")[:10]
+            or ""
+        ),
         reverse=True,
     )
 
@@ -1795,7 +1799,7 @@ _DATE_CUTOFF = "2025-11-01"
 # kenbiya 記事番号のしきい値（これ未満 ≈ 2025年10月以前の古い記事）
 _KENBIYA_MIN_ARTICLE_NUM = 9600
 
-_PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日')
+_PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日?')
 # kensetsunews 等のタイトル末尾に付く「最終更新 | YYYY/MM/DD HH:MM 【速報】」を除去
 _TITLE_SUFFIX_RE = re.compile(r'\s*最終更新\s*[|｜]\s*\d{4}/\d{2}/\d{2}.*$')
 
