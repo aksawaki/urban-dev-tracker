@@ -487,7 +487,7 @@ class ArticleCrawler:
         return ""
 
     def _extract_date(self, soup: BeautifulSoup) -> Optional[str]:
-        # <time> タグ
+        # <time> タグ（datetime 属性を優先）
         time_el = soup.select_one("time")
         if time_el:
             dt = time_el.get("datetime") or time_el.get_text(strip=True)
@@ -499,8 +499,16 @@ class ArticleCrawler:
                 m = _DATE_RE.search(el.get_text())
                 if m:
                     return m.group(1)
-        # 本文内パターン
-        m = _DATE_RE.search(soup.get_text())
+        # メインコンテンツ内のみ検索（ページ全体だとサイドバー等の無関係な日付を拾う）
+        for sel in ["article", ".article-body", ".article-content", ".news-body",
+                    ".news-content", ".entry-content", ".post-content", "main", "#main"]:
+            el = soup.select_one(sel)
+            if el:
+                m = _DATE_RE.search(el.get_text())
+                if m:
+                    return m.group(1)
+        # 最終フォールバック: ページ先頭3000字のみ（サイドバー混入を抑制）
+        m = _DATE_RE.search(soup.get_text()[:3000])
         return m.group(1) if m else None
 
     def _extract_content(self, soup: BeautifulSoup) -> str:
