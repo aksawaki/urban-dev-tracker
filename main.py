@@ -107,16 +107,17 @@ def _chatwork_enabled(config: dict) -> bool:
 def _do_notify(config: dict, articles: list[dict]):
     from datetime import date as _date
     from notifier import ChatWorkNotifier
+    from viewer import _parse_pub_date
     notifier = ChatWorkNotifier.from_config(config)
     if not notifier:
         print("ChatWork未設定。config.yaml の chatwork セクション or 環境変数を確認してください")
         return
-    # 今日付けの記事のみ送信
+    # 今日付けの記事のみ送信（日本語形式の published_at も正規化して比較）
     today = _date.today().isoformat()
-    articles = [
-        a for a in articles
-        if (a.get("published_at") or a.get("fetched_at") or "")[:10] == today
-    ]
+    def _article_date(a: dict) -> str:
+        pub = _parse_pub_date(a.get("published_at") or "") or ""
+        return pub or (a.get("fetched_at") or "")[:10]
+    articles = [a for a in articles if _article_date(a) == today]
     if not articles:
         print(f"本日({today})の送信対象記事がありません")
         return
