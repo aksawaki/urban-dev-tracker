@@ -1,8 +1,11 @@
 # 機密情報・認証情報
 config.yaml
 
-# データファイル（大容量・個人情報含む可能性）
-data/
+# データファイル（raw・スナップショットは除外、articles.jsonはGitHub Actions用に管理）
+data/raw/
+data/snapshots/
+data/processed/articles.json.bak
+data/processed/articles.json.bak2
 
 # ログ・一時ファイル
 *.log

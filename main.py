@@ -106,26 +106,40 @@ def _chatwork_enabled(config: dict) -> bool:
 
 def _do_notify(config: dict, articles: list[dict]):
     from datetime import date as _date
-    from notifier import ChatWorkNotifier
-    from viewer import _parse_pub_date
+    import re
+    from notifier import ChatWorkNotifier, is_development_relevant, _BAD_TITLE_KEYWORDS, _BAD_TITLE_RE
+    from viewer import _parse_pub_date, _pub_date_from_title
     notifier = ChatWorkNotifier.from_config(config)
     if not notifier:
         print("ChatWork未設定。config.yaml の chatwork セクション or 環境変数を確認してください")
         return
-    # 今日付けの記事のみ送信（日本語形式の published_at も正規化して比較）
+    # 今日付けの記事のみ（kensetsunews はタイトルから日付を補完）
     today = _date.today().isoformat()
+    _CONSTR_RE = re.compile(r'^kensetsunews')
+
     def _article_date(a: dict) -> str:
         pub = _parse_pub_date(a.get("published_at") or "") or ""
-        return pub or (a.get("fetched_at") or "")[:10]
-    articles = [a for a in articles if _article_date(a) == today]
+        return pub or _pub_date_from_title(a.get("title") or "") or (a.get("fetched_at") or "")[:10]
+
+    def _is_relevant(a: dict) -> bool:
+        title = (a.get("title") or "").strip()
+        if _CONSTR_RE.match(a.get("source_id") or ""):
+            if len(title) < 12:
+                return False
+            for kw in _BAD_TITLE_KEYWORDS:
+                if kw in title:
+                    return False
+            return not _BAD_TITLE_RE.search(title)
+        return is_development_relevant(a)
+
+    articles = [a for a in articles if _article_date(a) == today and _is_relevant(a)]
     if not articles:
         print(f"本日({today})の送信対象記事がありません")
         return
-    daily = config.get("chatwork", {}).get("daily_digest", True)
-    if daily:
-        ok = notifier.send_daily_digest(articles)
-    else:
-        ok = notifier.send(articles)
+    # 優先度順にソート
+    _PRANK = {"high": 0, "medium": 1, "normal": 2}
+    articles.sort(key=lambda a: _PRANK.get(a.get("priority", "normal"), 2))
+    ok = notifier.send(articles)
     if ok:
         print(f"ChatWork 送信完了（本日分 {len(articles)} 件）")
     else:
@@ -152,7 +166,7 @@ def cmd_notify(args):
         print("接続テスト: " + ("✅ 成功" if ok else "❌ 失敗"))
         return
 
-    days = getattr(args, "days", 1)
+    days = getattr(args, "days", 2)  # 2日分取得して_do_notify内で当日分に絞る
     priority = getattr(args, "priority", None)
     articles = get_recent(days=days, priority=priority or None)
 
@@ -409,10 +423,9 @@ def cmd_add_area(args):
 # ─── crawl ────────────────────────────────────────────────────────────────────
 
 def cmd_crawl(args):
-    """個別記事を収集してエリア別タイムラインを表示する"""
+    """個別記事を収集する"""
     from scraper import crawl_all
-    from storage import upsert_articles, save_raw, get_recent
-    from viewer import open_area_timeline, export_area_timeline
+    from storage import upsert_articles, save_raw
 
     config = load_config()
     max_per_source = getattr(args, "max", 8)
@@ -427,17 +440,6 @@ def cmd_crawl(args):
         save_raw(articles, label="crawl")
         new_count, skip_count = upsert_articles(articles)
         print(f"新規: {new_count} 件 / 重複スキップ: {skip_count} 件")
-
-    # DB から直近90日のデータを取得してタイムライン表示
-    recent = get_recent(days=90)
-
-    export = getattr(args, "export", False)
-    if export:
-        out = export_area_timeline(recent)
-        print(f"HTMLを保存しました: {out}")
-        subprocess.run(["open", str(out)])
-    else:
-        open_area_timeline(recent)
 
 
 def cmd_timeline(args):

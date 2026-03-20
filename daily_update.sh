@@ -4,7 +4,7 @@
 # 動作:
 #   1. クロール（前日9時以降の新規記事を収集）
 #   2. GitHub Pages にデプロイ（2025-11-01 以降全件）
-#   3. ChatWork に本日分を通知
+#   ※ ChatWork通知はサイト確認後に手動で: python3 main.py notify
 #
 # 自動実行: cron "0 9 * * * /Users/sawakiayaka/urban-dev-tracker/daily_update.sh"
 # 手動実行: bash /Users/sawakiayaka/urban-dev-tracker/daily_update.sh
@@ -34,14 +34,6 @@ if "$PYTHON" main.py deploy >> "$LOG" 2>&1; then
     echo "$(date '+%H:%M:%S') [2/3] デプロイ完了" >> "$LOG"
 else
     echo "$(date '+%H:%M:%S') [2/3] デプロイエラー（続行）" >> "$LOG"
-fi
-
-# 3. ChatWork 通知（本日分のみ）
-echo "$(date '+%H:%M:%S') [3/3] ChatWork 通知開始" >> "$LOG"
-if "$PYTHON" main.py notify >> "$LOG" 2>&1; then
-    echo "$(date '+%H:%M:%S') [3/3] ChatWork 通知完了" >> "$LOG"
-else
-    echo "$(date '+%H:%M:%S') [3/3] ChatWork 通知エラー" >> "$LOG"
 fi
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') 日次更新終了" >> "$LOG"

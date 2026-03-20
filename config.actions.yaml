@@ -1,0 +1,549 @@
+# 都市開発計画 情報収集設定
+# エリアや情報源を自由に追加・削除してください
+
+settings:
+  check_interval_hours: 6       # 収集間隔（時間）
+  data_retention_days: 365      # データ保持日数
+  output_dir: data
+  report_dir: reports
+  user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# 共有設定（GitHub Pages 公開ページのパスワード）
+sharing:
+  password: "salowin-tenpo"
+
+# ChatWork 通知設定
+chatwork:
+  token: ""
+  room_id: ""
+  min_priority: "normal"   # normal = 全件送信
+  daily_digest: true
+  digest_hour: 8
+
+# 情報源の定義
+sources:
+  feeds: []
+
+  pages:
+    # ══════════════════════════════════════════════════════════
+    # ① 建設業界専門メディア（最も具体的なプロジェクト情報）
+    # ══════════════════════════════════════════════════════════
+
+    - id: kensetsunews_sokuho
+      name: "建設通信新聞 新着ニュース"
+      url: "https://www.kensetsunews.com/sokuho"
+      area: "全国"
+      tags: [建設通信, 再開発, 市街地再開発, 着工, 竣工, 組合設立]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    - id: kensetsunews_p2
+      name: "建設通信新聞 新着ニュース p2"
+      url: "https://www.kensetsunews.com/sokuho/page/2"
+      area: "全国"
+      tags: [建設通信, 再開発, 市街地再開発]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    - id: kensetsunews_p3
+      name: "建設通信新聞 新着ニュース p3"
+      url: "https://www.kensetsunews.com/sokuho/page/3"
+      area: "全国"
+      tags: [建設通信, 再開発, 市街地再開発]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # ══════════════════════════════════════════════════════════
+    # ② 東京都・行政（プロジェクト認可・都市計画決定情報）
+    # ══════════════════════════════════════════════════════════
+
+    - id: toshiseibi_top
+      name: "東京都都市整備局 トップ"
+      url: "https://www.toshiseibi.metro.tokyo.lg.jp/"
+      area: "東京都"
+      tags: [東京都, 都市整備, 再開発, 都市計画]
+      css_selector: ".news-list, .topics, .new-list, ul.list"
+
+    - id: toshiseibi_saikaihatsu
+      name: "東京都 市街地再開発事業一覧"
+      url: "https://www.toshiseibi.metro.tokyo.lg.jp/machizukuri/shigaichi_seibi/sai-kai/saikaihatsu"
+      area: "東京都"
+      tags: [東京都, 市街地再開発, 組合施行, 権利変換]
+      css_selector: "main, article, .content-area, ul"
+
+    - id: tokyo_metro_press
+      name: "東京都 報道発表一覧"
+      url: "https://www.metro.tokyo.lg.jp/tosei/hodohappyo/press/index.html"
+      area: "東京都"
+      tags: [東京都, 報道発表, 再開発]
+      css_selector: "main, .news-list, article"
+
+    # ══════════════════════════════════════════════════════════
+    # ③ 大手ディベロッパー（プロジェクト特化ページ）
+    # ══════════════════════════════════════════════════════════
+
+    - id: mori_building_projects
+      name: "森ビル 開発プロジェクト"
+      url: "https://www.mori.co.jp/projects/"
+      area: "港区"
+      tags: [森ビル, 虎ノ門, 麻布台, 六本木, 再開発, ヒルズ]
+      css_selector: "main, .projects-list, .project-list, article, body"
+
+    - id: mori_trust_press
+      name: "森トラスト プレスリリース"
+      url: "https://www.mori-trust.co.jp/pressrelease/"
+      area: "東京都"
+      tags: [森トラスト, 再開発, 虎ノ門, 赤坂]
+      css_selector: "main, .press-list, article"
+
+    - id: mitsubishi_estate_news
+      name: "三菱地所 ニュース"
+      url: "https://www.mec.co.jp/news/"
+      area: "全国"
+      tags: [三菱地所, 大手町, 丸の内, 再開発]
+      css_selector: "main, .news-list, article"
+
+    - id: mitsui_fudosan_news
+      name: "三井不動産 ニュースリリース"
+      url: "https://www.mitsuifudosan.co.jp/corporate/news/"
+      area: "全国"
+      tags: [三井不動産, 日本橋, 再開発, 複合施設]
+      css_selector: "main, .news-list, article"
+
+    - id: hulic_news
+      name: "ヒューリック ニュース"
+      url: "https://www.hulic.co.jp/news/"
+      area: "東京都"
+      tags: [ヒューリック, 再開発, 浅草橋, 新宿]
+      css_selector: "main, .news-list, article"
+
+    - id: nomura_re_news
+      name: "野村不動産 ニュース"
+      url: "https://www.nomura-re.co.jp/news/"
+      area: "全国"
+      tags: [野村不動産, 再開発, 複合施設]
+      css_selector: "main, .news-list, article"
+
+    - id: sumitomo_rd_news
+      name: "住友不動産 ニュースリリース"
+      url: "https://www.sumitomo-rd.co.jp/news/"
+      area: "全国"
+      tags: [住友不動産, 再開発, 新宿, 浜松町]
+      css_selector: "main, .news-list, article"
+
+    # ══════════════════════════════════════════════════════════
+    # ④ 鉄道会社（駅前・沿線開発）
+    # ══════════════════════════════════════════════════════════
+
+    - id: keikyu_news_2025
+      name: "京急電鉄 ニュース(2025)"
+      url: "https://www.keikyu.co.jp/company/news/2025/"
+      area: "品川区"
+      tags: [京急, 品川, 高輪, 再開発, 着工, 竣工]
+      css_selector: "main, .news-list, .release-list, article, body"
+
+    - id: keikyu_news_2026
+      name: "京急電鉄 ニュース(2026)"
+      url: "https://www.keikyu.co.jp/company/news/2026/"
+      area: "品川区"
+      tags: [京急, 品川, 高輪, 再開発]
+      css_selector: "main, .news-list, .release-list, article, body"
+
+    - id: tokyu_corp_news
+      name: "東急 ニュースリリース"
+      url: "https://www.tokyu.co.jp/company/news/"
+      area: "渋谷区"
+      tags: [東急, 渋谷, 二子玉川, 再開発]
+      css_selector: "main, .news-list, article"
+
+    - id: odakyu_news
+      name: "小田急電鉄 ニュースリリース"
+      url: "https://www.odakyu.jp/news/"
+      area: "新宿区"
+      tags: [小田急, 新宿, 下北沢, 再開発]
+      css_selector: "main, .news-list, article"
+
+    - id: tobu_news
+      name: "東武鉄道 ニュースリリース"
+      url: "https://www.tobu.co.jp/news/list/"
+      area: "豊島区"
+      tags: [東武, 池袋, 浅草, 再開発]
+      css_selector: "main, .news-list, article, ul"
+
+    - id: seibu_news
+      name: "西武鉄道 ニュースリリース"
+      url: "https://www.seiburailway.jp/news/"
+      area: "豊島区"
+      tags: [西武, 池袋, 再開発]
+      css_selector: "main, .news-list, article"
+
+    # ══════════════════════════════════════════════════════════
+    # ⑤ 専門ニュースメディア（無料・スペック記載あり）
+    # ══════════════════════════════════════════════════════════
+
+    # 健美家：首都圏・東京の再開発ニュース（具体的規模・事業者・タイムライン記載、無料）
+    - id: kenbiya_shutoken
+      name: "健美家 首都圏再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/shutoken/"
+      area: "全国"
+      tags: [再開発, 市街地再開発, 着工, 竣工, 首都圏, 神奈川, 埼玉, 千葉]
+      css_selector: "main, ul, .article-list, .news-list, article, li"
+
+    - id: kenbiya_shutoken_p2
+      name: "健美家 首都圏再開発ニュース p2"
+      url: "https://www.kenbiya.com/ar/ns/region/shutoken/page/2/"
+      area: "全国"
+      tags: [再開発, 首都圏]
+      css_selector: "main, ul, .article-list, article, li"
+
+    - id: kenbiya_tokyo
+      name: "健美家 東京再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/tokyo/"
+      area: "東京都"
+      tags: [再開発, 東京, 市街地再開発, 着工, 竣工]
+      css_selector: "main, ul, .article-list, .news-list, article, li"
+
+    # 建設通信新聞 関東甲信越カテゴリ（sokuhoより粒度高い）
+    - id: kensetsunews_kanto
+      name: "建設通信新聞 関東甲信越"
+      url: "https://www.kensetsunews.com/cat/news_area_kk"
+      area: "全国"
+      tags: [建設通信, 再開発, 関東, 着工, 竣工, 組合設立]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # ══════════════════════════════════════════════════════════
+    # ⑥ 人口増加エリア（TX沿線・幕張・横浜・大宮・川崎）
+    # ══════════════════════════════════════════════════════════
+
+    # 【流山市】全国トップクラスの人口増加率。TX沿線おおたかの森・南流山・柏の葉
+    - id: nagareyama_ekimae
+      name: "流山市 駅周辺整備"
+      url: "https://www.city.nagareyama.chiba.jp/life/1002263/1002338/index.html"
+      area: "流山市"
+      tags: [流山市, おおたかの森, 南流山, TX, 再開発, 駅前整備]
+      css_selector: "main, .content, ul, article, .list"
+
+    - id: nagareyama_machizukuri
+      name: "流山市 まちづくり"
+      url: "https://www.city.nagareyama.chiba.jp/life/1002263/index.html"
+      area: "流山市"
+      tags: [流山市, まちづくり, TX, 再開発, 区画整理]
+      css_selector: "main, .content, ul, article"
+
+    # 【千葉市幕張】ヒューリックアリーナ（2万席・5万㎡・2030年）＋公園再開発
+    - id: chiba_city_redevelopment
+      name: "千葉市 市街地再開発事業"
+      url: "https://www.city.chiba.jp/toshi/toshi/shigaichi/saikaihatu.html"
+      area: "千葉市"
+      tags: [千葉市, 幕張, 再開発, 市街地再開発]
+      css_selector: "main, .content, table, article"
+
+    - id: chiba_makuhari_park
+      name: "千葉市 幕張海浜公園活性化事業"
+      url: "https://www.city.chiba.jp/toshi/koenryokuchi/ryokusei/keikaku/makuharikaihinkoen-revitalization.html"
+      area: "幕張"
+      tags: [幕張, 千葉市, アリーナ, 公園, 再開発, ヒューリック]
+      css_selector: "main, .content, article, ul"
+
+    # 【横浜市】みなとみらい・関内・横須賀中央の大規模再開発
+    - id: yokohama_redevelopment
+      name: "横浜市 市街地再開発事業"
+      url: "https://www.city.yokohama.lg.jp/kurashi/machizukuri-kankyo/toshiseibi/shuho/saikaihatsu/"
+      area: "横浜市"
+      tags: [横浜市, みなとみらい, 関内, 横須賀, 再開発]
+      css_selector: "main, .content, ul, article"
+
+    - id: yokohama_urban_dev
+      name: "横浜市 都市整備局 開発情報"
+      url: "https://www.city.yokohama.lg.jp/kurashi/machizukuri-kankyo/toshiseibi/"
+      area: "横浜市"
+      tags: [横浜市, 都市整備, 再開発, みなとみらい]
+      css_selector: "main, .content, .news-list, ul"
+
+    # 【さいたま市大宮】大宮グランドセントラルターミナル構想・新幹線拠点化
+    - id: saitama_city_omiya
+      name: "さいたま市 まちづくり・都市整備"
+      url: "https://www.city.saitama.lg.jp/005/003/index.html"
+      area: "大宮"
+      tags: [さいたま市, 大宮, 再開発, 駅前, 大宮グランドセントラル, 都市計画]
+      css_selector: "main, .content, ul, article, .list"
+
+    # 【川崎市武蔵小杉】タワマン集積・川崎都心部再開発
+    - id: kawasaki_redevelopment
+      name: "川崎市 まちづくり"
+      url: "https://www.city.kawasaki.jp/kurashi/category/26-0-0-0-0-0-0-0-0-0.html"
+      area: "川崎市"
+      tags: [川崎市, 武蔵小杉, 川崎駅, 再開発, 鉄道沿線まちづくり]
+      css_selector: "main, .content, ul, article"
+
+    # ━━注: 柏市・つくば市はkenbiya_shutokenが首都圏として一括カバー済み━━
+
+    # ══════════════════════════════════════════════════════════
+    # ⑦ 再開発集中エリアの区役所（千代田・中央・港・渋谷のみ）
+    # ══════════════════════════════════════════════════════════
+
+    - id: chiyoda_machizukuri
+      name: "千代田区 まちづくり"
+      url: "https://www.city.chiyoda.lg.jp/machizukuri/index.html"
+      area: "千代田区"
+      tags: [千代田区, 大手町, 丸の内, 九段, 再開発]
+      css_selector: "main, .content"
+
+    - id: chuo_machizukuri
+      name: "中央区 まちづくり・環境"
+      url: "https://www.city.chuo.lg.jp/machizukuri/index.html"
+      area: "中央区"
+      tags: [中央区, 築地, 日本橋, 銀座, 再開発]
+      css_selector: "main, article"
+
+    - id: minato_machizukuri
+      name: "港区 環境・まちづくり"
+      url: "https://www.city.minato.tokyo.jp/kankyo-machi/index.html"
+      area: "港区"
+      tags: [港区, 虎ノ門, 赤坂, 六本木, 再開発]
+      css_selector: "main, .content, article"
+
+    - id: shibuya_news
+      name: "渋谷区 ニュース"
+      url: "https://www.city.shibuya.tokyo.jp/contents/news/"
+      area: "渋谷区"
+      tags: [渋谷区, 渋谷, 再開発]
+      css_selector: "main, .news-list, article"
+
+    - id: shinjuku_machizukuri
+      name: "新宿区 まちづくり・都市計画"
+      url: "https://www.city.shinjuku.lg.jp/kusei/index13.html"
+      area: "新宿区"
+      tags: [新宿区, 西新宿, 歌舞伎町, 再開発]
+      css_selector: "main, .content, .list"
+
+    - id: koto_machizukuri
+      name: "江東区 まちづくり"
+      url: "https://www.city.koto.lg.jp/machizukuri/index.html"
+      area: "江東区"
+      tags: [江東区, 豊洲, 有明, 再開発]
+      css_selector: "main, .content"
+
+    - id: sumida_toshikeikaku
+      name: "墨田区 都市計画・土地利用"
+      url: "https://www.city.sumida.lg.jp/matizukuri/tosi_keikaku/index.html"
+      area: "墨田区"
+      tags: [墨田区, 錦糸町, 押上, 再開発]
+      css_selector: "main, article"
+
+    - id: toshima_machizukuri
+      name: "豊島区 まちづくり"
+      url: "https://www.city.toshima.lg.jp/machizukuri/index.html"
+      area: "豊島区"
+      tags: [豊島区, 池袋, 再開発]
+      css_selector: "main, .content"
+
+    - id: nakano_machizukuri
+      name: "中野区 まちづくり"
+      url: "https://www.city.tokyo-nakano.lg.jp/machizukuri/index.html"
+      area: "中野区"
+      tags: [中野区, 中野, 再開発, サンプラザ]
+      css_selector: "main, article"
+
+    # ━━注: 品川区・立川市はkenbiya_tokyo/kensetsunews_kantoがカバー済み━━
+
+    # ══════════════════════════════════════════════════════════
+    # ⑧ 関東外 人口増加・開発活発都市（行政ソース）
+    # ══════════════════════════════════════════════════════════
+    # ━━注: 福岡市・札幌市・神戸市・広島市は403/404のためkenbiya/建設通信でカバー━━
+
+    # 【大阪市】うめきた2期（グラングリーン）・夢洲・なにわ筋線沿線（200確認済み）
+    - id: osaka_urban_dev
+      name: "大阪市 都市整備局"
+      url: "https://www.city.osaka.lg.jp/toshiseibi/index.html"
+      area: "大阪市"
+      tags: [大阪市, うめきた, 梅田, 再開発, 市街地再開発]
+      css_selector: "main, .content, ul, .news-list, article"
+
+    # 【名古屋市】リニア見据えた名駅前・栄再開発（200確認済み）
+    - id: nagoya_urban_dev
+      name: "名古屋市 住宅都市局 都市計画ニュース"
+      url: "https://www.city.nagoya.jp/shisei/category/53-4-3-0-0-0-0-0-0-0.html"
+      area: "名古屋市"
+      tags: [名古屋市, 名駅, リニア, 栄, 再開発, 市街地再開発]
+      css_selector: "main, .content, ul, .news-list, article"
+
+    # 【仙台市】東北最大拠点・仙台駅周辺・青葉通り再整備（200確認済み）
+    - id: sendai_urban_dev
+      name: "仙台市 事業者向け都市開発情報"
+      url: "https://www.city.sendai.jp/jigyosha/"
+      area: "仙台市"
+      tags: [仙台市, 仙台駅, 青葉通り, 再開発, 市街地再開発]
+      css_selector: "main, .content, ul, article"
+
+    # ══════════════════════════════════════════════════════════
+    # ⑨ 専門メディア 全国・地域版補強
+    # ══════════════════════════════════════════════════════════
+
+    # 健美家 大阪（大阪市・うめきた・なにわ筋線）
+    - id: kenbiya_osaka
+      name: "健美家 大阪再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/osaka/"
+      area: "大阪市"
+      tags: [再開発, 大阪, 梅田, うめきた, なにわ筋線, 着工, 竣工]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 健美家 関西（神戸・京都・奈良・滋賀の再開発ニュース）
+    - id: kenbiya_kansai
+      name: "健美家 関西再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/kansai/"
+      area: "神戸市"
+      tags: [再開発, 神戸, 京都, 三宮, 着工, 竣工, 関西]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 健美家 九州・沖縄（福岡・天神ビッグバンの再開発ニュース）
+    - id: kenbiya_kyushu
+      name: "健美家 九州再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/kyusyu/"
+      area: "福岡市"
+      tags: [再開発, 福岡市, 天神, 博多, 天神ビッグバン, 着工, 竣工]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 健美家 東海（名古屋・中部圏の再開発ニュース）
+    - id: kenbiya_tokai
+      name: "健美家 東海再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/toukai/"
+      area: "名古屋市"
+      tags: [再開発, 名古屋, 名駅, リニア, 着工, 竣工, 中部]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 健美家 北海道（札幌・北海道の再開発ニュース）
+    - id: kenbiya_hokkaido
+      name: "健美家 北海道再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/hokkaido/"
+      area: "札幌市"
+      tags: [再開発, 札幌市, 北海道新幹線, 着工, 竣工]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 健美家 東北（仙台の再開発ニュース）
+    - id: kenbiya_touhoku
+      name: "健美家 東北再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/touhoku/"
+      area: "仙台市"
+      tags: [再開発, 仙台市, 東北, 着工, 竣工]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 建設通信新聞 関西
+    - id: kensetsunews_kansai
+      name: "建設通信新聞 関西"
+      url: "https://www.kensetsunews.com/cat/news_area_k"
+      area: "大阪市"
+      tags: [建設通信, 再開発, 関西, 大阪, 着工, 竣工, 組合設立]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # 建設通信新聞 中国・四国・九州
+    - id: kensetsunews_csk
+      name: "建設通信新聞 中国四国九州"
+      url: "https://www.kensetsunews.com/cat/news_area_csk"
+      area: "福岡市"
+      tags: [建設通信, 再開発, 九州, 福岡, 広島, 着工, 竣工]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # 建設通信新聞 中部・北陸
+    - id: kensetsunews_chubu
+      name: "建設通信新聞 中部北陸"
+      url: "https://www.kensetsunews.com/cat/news_area_ch"
+      area: "名古屋市"
+      tags: [建設通信, 再開発, 中部, 名古屋, 北陸, 着工, 竣工]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # 建設通信新聞 北海道・東北
+    - id: kensetsunews_ht
+      name: "建設通信新聞 北海道東北"
+      url: "https://www.kensetsunews.com/cat/news_area_ht"
+      area: "札幌市"
+      tags: [建設通信, 再開発, 北海道, 東北, 札幌, 仙台, 着工, 竣工]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+    # ══════════════════════════════════════════════════════════
+    # ⑩ 鉄道会社・ディベロッパー補強（動作確認済み）
+    # ══════════════════════════════════════════════════════════
+
+    # 西日本鉄道（天神・博多周辺開発）
+    - id: nishitetsu_news
+      name: "西日本鉄道 ニュースリリース"
+      url: "https://www.nishitetsu.jp/release/"
+      area: "福岡市"
+      tags: [西鉄, 天神, 博多, 福岡市, 再開発, 沿線開発]
+      css_selector: "main, .news-list, article, ul"
+
+    # 東急不動産（渋谷・二子玉川・全国案件）
+    - id: tokyu_land_news
+      name: "東急不動産 ニュースリリース"
+      url: "https://www.tokyu-land.co.jp/news/"
+      area: "全国"
+      tags: [東急不動産, 渋谷, 二子玉川, 再開発, 複合施設]
+      css_selector: "main, .news-list, article"
+
+    # ══════════════════════════════════════════════════════════
+    # ⑪ 全国補強：北陸・甲信越（kenbiya_shinhoku が正式URL）
+    # ※ 健美家の地域区分: shutoken/tokyo/osaka/kansai/kyusyu(沖縄含む)/
+    #   toukai(静岡含む)/hokkaido/touhoku/shinhoku(金沢・北陸・甲信越)
+    #   中国・四国は kensetsunews_csk でカバー済み
+    # ══════════════════════════════════════════════════════════
+
+    # 健美家 北信越・甲信越（金沢・富山・新潟・長野・山梨）← 実在確認済み
+    - id: kenbiya_shinhoku
+      name: "健美家 北信越・甲信越再開発ニュース"
+      url: "https://www.kenbiya.com/ar/ns/region/shinhoku/"
+      area: "金沢市"
+      tags: [再開発, 金沢, 北陸新幹線, 富山, 新潟, 長野, 甲信越, 着工, 竣工]
+      css_selector: "main, ul, .article-list, article, li"
+
+    # 建設通信新聞 北海道・東北 p2（p1 = kensetsunews_ht）
+    - id: kensetsunews_ht2
+      name: "建設通信新聞 北海道東北 p2"
+      url: "https://www.kensetsunews.com/cat/news_area_ht/page/2"
+      area: "札幌市"
+      tags: [建設通信, 再開発, 北海道, 東北, 札幌, 仙台, 着工, 竣工]
+      css_selector: "main, article, h2, h3, .entry-title"
+
+# キーワードフィルタ
+keywords:
+  high_priority:
+    - 再開発
+    - 市街地再開発
+    - 都市再生
+    - 大規模開発
+    - 特定街区
+    - 開発許可
+    - 地区計画決定
+    - 権利変換
+    - 容積率緩和
+    - 組合設立認可
+    - 事業計画認可
+    - 施工認可
+    - 準備組合
+    - 再開発組合
+    - 着工
+    - 竣工
+    - 開業
+    - 開発決定
+    - 超高層
+    - タワー
+    - 複合開発
+    - 再開発ビル
+    - 延べ面積
+    - 敷地面積
+    - 地上\d+階
+  medium_priority:
+    - 都市計画変更
+    - 都市計画決定
+    - 用途地域
+    - 事業認可
+    - まちづくり協議
+    - 駅周辺整備
+    - 高度利用地区
+    - 特例容積率
+    - 新規プロジェクト
+    - 開発計画
+    - 事業化
+    - 用地取得
+    - 共同開発
+    - 定期借地
+    - オフィスビル
+    - ホテル開業
+
+custom_areas: []

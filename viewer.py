@@ -621,6 +621,7 @@ RICH_TEMPLATE = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>都市開発情報</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{
@@ -767,6 +768,19 @@ RICH_TEMPLATE = """<!DOCTYPE html>
     transition: background 0.2s;
   }}
   .btn-source:hover {{ background: #2d6a9f; }}
+  .btn-gnews {{
+    display: inline-block;
+    font-size: 11px;
+    background: #1a6e3c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+    margin-left: 6px;
+  }}
+  .btn-gnews:hover {{ background: #28a35a; }}
   .tags {{ display: flex; gap: 3px; flex-wrap: wrap; }}
   .tag {{
     font-size: 10px;
@@ -933,9 +947,14 @@ def _card_html(a: dict) -> str:
     area = _effective_area(a)
     title = _clean_title(a.get("title", "（タイトルなし）").replace("【更新検知】", "").strip())
     url = a.get("url", "#")
+    source_id = a.get("source_id", "")
     source = a.get("source_name", "")
     tags = a.get("tags", [])
-    published = _parse_pub_date(a.get("published_at") or "") or (a.get("fetched_at") or "")[:10]
+    published = (
+        _parse_pub_date(a.get("published_at") or "")
+        or _pub_date_from_title(a.get("title") or "")
+        or (a.get("fetched_at") or "")[:10]
+    )
     content = (a.get("content") or a.get("summary") or "").strip()
     enrich_content = (a.get("enrich_content") or "").strip()
     enrich_source = (a.get("enrich_source") or "").strip()
@@ -1015,6 +1034,14 @@ def _card_html(a: dict) -> str:
             f'<a href="{enrich_safe}" target="_blank" rel="noopener">{link_label}</a></div>'
         )
 
+    # kensetsunews は有料記事なのでGoogle Newsの関連検索リンクを追加
+    gnews_btn = ""
+    if source_id.startswith("kensetsunews"):
+        import urllib.parse as _up
+        gnews_q = _up.quote(title)
+        gnews_url = f"https://news.google.com/search?q={gnews_q}&hl=ja&gl=JP&ceid=JP%3Aja"
+        gnews_btn = f'<a class="btn-gnews" href="{gnews_url}" target="_blank" rel="noopener">Google News で関連記事 →</a>'
+
     return f"""<div class="card" data-area="{area_data}" data-date="{published}">
   <div class="card-top">
     <span class="chip">{area_safe}</span>
@@ -1026,6 +1053,7 @@ def _card_html(a: dict) -> str:
   {enrich_note}
   <div class="card-footer">
     <a class="btn-source" href="{url}" target="_blank" rel="noopener">元記事を読む →</a>
+    {gnews_btn}
     <div class="tags">{tags_html}</div>
   </div>
 </div>"""
@@ -1052,31 +1080,8 @@ def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
                     return False
             if _BAD_TITLE_RE.search(title):
                 return False
-            # 実際に表示できるbulletがあるか試算（タイトルのみカードは除外）
-            content = (a.get("content") or a.get("summary") or "").strip()
-            enrich = (a.get("enrich_content") or "").strip()
-            # content bullets（タイトルと重複除外）
-            title_norm = re.sub(r"\s", "", _clean_title(title))
-            raw_bullets = _to_bullets(content)
-            content_bullets = [
-                b for b in raw_bullets
-                if re.sub(r"\s", "", b) not in title_norm
-                and title_norm not in re.sub(r"\s", "", b)
-            ]
-            if content_bullets:
-                return True
-            # enrich bullets（建設関連フィルタ後）
-            if enrich:
-                is_gnews = enrich.startswith("【関連報道】")
-                raw_lines = [l.strip().lstrip("・") for l in enrich.splitlines()
-                             if l.strip() and l.strip() != "【関連報道】"]
-                enrich_bullets = (
-                    [l for l in raw_lines if _ENRICH_RELEVANT_RE.search(l)]
-                    if is_gnews else raw_lines
-                )
-                if enrich_bullets:
-                    return True
-            return False
+            # kensetsunews は悪タイトル以外はすべて表示（bullet不要）
+            return True
         return _is_dev_relevant(a)
 
     articles = [a for a in articles if _is_relevant(a)]
@@ -1109,15 +1114,15 @@ def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
     articles = deduped_articles
 
     # 日付の新しい順に並べる
-    sorted_articles = sorted(
-        articles,
-        key=lambda a: (
+    def _sort_date(a):
+        return (
             _parse_pub_date(a.get("published_at") or "")
+            or _pub_date_from_title(a.get("title") or "")
             or (a.get("fetched_at") or "")[:10]
             or ""
-        ),
-        reverse=True,
-    )
+        )
+
+    sorted_articles = sorted(articles, key=_sort_date, reverse=True)
 
     if not sorted_articles:
         body = '<p class="empty">表示できる記事がありません。先に <code>python3 main.py crawl</code> を実行してください。</p>'
@@ -1477,8 +1482,12 @@ def _plan_card_html(a: dict) -> str:
 
     # 情報取得日（YYYY-MM-DD に正規化して data-date に使用）
     fetched = (a.get("fetched_at") or "")[:10]
-    # 公開日（YYYY-MM-DD に正規化。日本語形式は変換）
-    published = _parse_pub_date(a.get("published_at") or "") or ""
+    # 公開日（YYYY-MM-DD に正規化。日本語形式は変換。kensetsunewsはタイトルから抽出）
+    published = (
+        _parse_pub_date(a.get("published_at") or "")
+        or _pub_date_from_title(a.get("title") or "")
+        or ""
+    )
     acq_date = published or fetched
 
     # 竣工・完了年月を data 属性用に抽出（"2026年3月" → year=2026, month=3）
@@ -1802,11 +1811,18 @@ _KENBIYA_MIN_ARTICLE_NUM = 9600
 _PUB_DATE_RE = re.compile(r'(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日?')
 # kensetsunews 等のタイトル末尾に付く「最終更新 | YYYY/MM/DD HH:MM 【速報】」を除去
 _TITLE_SUFFIX_RE = re.compile(r'\s*最終更新\s*[|｜]\s*\d{4}/\d{2}/\d{2}.*$')
+_TITLE_DATE_RE = re.compile(r'最終更新\s*[|｜]\s*(\d{4})/(\d{2})/(\d{2})')
 
 
 def _clean_title(title: str) -> str:
     """タイトル末尾の更新日時サフィックスを除去する。"""
     return _TITLE_SUFFIX_RE.sub('', title).strip()
+
+
+def _pub_date_from_title(title: str) -> str | None:
+    """kensetsunews タイトルの「最終更新 | YYYY/MM/DD」から日付を取得する。"""
+    m = _TITLE_DATE_RE.search(title or "")
+    return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else None
 
 
 def _get_kenbiya_article_number(url: str) -> int | None:

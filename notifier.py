@@ -259,6 +259,14 @@ _BAD_TITLE_KEYWORDS: frozenset[str] = frozenset([
     "ウォークラリー",
     # 観光資源・日本遺産（開発計画でない文化観光記事）
     "観光資源化", "日本遺産",
+    # 体育館・スポーツ施設の解体（都市開発でない）
+    "体育館解体",
+    # 医療・福祉施設の解体（都市開発でない）
+    "医療C東西棟解体", "医療センター解体",
+    # 上下水道インフラ工事（都市開発でない）
+    "送水管", "配水管", "下水道管",
+    # 道路インフラ調査・計画（都市開発でない行政道路事業）
+    "事業化前調査", "骨格幹線",
 ])
 
 # タイトルにこのパターンが含まれていたら除外（正規表現）
@@ -306,6 +314,15 @@ _BAD_TITLE_PATTERNS: list[str] = [
     r"^ニュース（旧.+）$",
     # 「○○駅・エリアを取材」型の紹介記事（開発計画でない）
     r"(駅|エリア|スポット|施設).{0,30}を取材$",
+    # 行政・設計コンサルの計画策定支援プロポ（開発でない調達通知）
+    r"基本計画策定支援",
+    # 体育館・スポーツ施設の解体監理（都市開発でない）
+    r"体育館.{0,5}解体",
+    # 公共施設（医療・福祉）の解体・改修工事（都市開発でない）
+    r"(医療C|医療センター|病院).{0,15}(解体|撤去)",
+    # 地方自治体の庁舎建設工事入札・再公告（都市開発でない公共工事調達）
+    r"(新庁舎|庁舎).{0,5}建設工事",
+    r"(参加申請|参加表明).{0,15}(再公告|公告)",
 ]
 _BAD_TITLE_RE = re.compile("|".join(_BAD_TITLE_PATTERNS))
 
@@ -677,15 +694,25 @@ class ChatWorkNotifier:
         except Exception:
             _eff_area = None
 
+        import urllib.parse as _up
         for a in articles:
             title   = self._clean_title_cw(a.get("title", "").replace("【更新検知】", "").strip())
             content = a.get("content") or a.get("summary") or ""
             area    = (_eff_area(a) if _eff_area else None) or detect_area(title, content, fallback=a.get("area", ""))
             url     = a.get("url", "")
             gnews   = a.get("enrich_source", "")
+            source_id = a.get("source_id", "")
             phase   = self._detect_phase_cw(content + " " + title)
             start, end = self._extract_period_cw(content)
             bullets = self._bullets_cw(a)
+
+            # kensetsunews は有料記事なので Google News 検索リンクを自動生成
+            if not gnews and source_id.startswith("kensetsunews"):
+                gnews = (
+                    "https://news.google.com/search?q="
+                    + _up.quote(title)
+                    + "&hl=ja&gl=JP&ceid=JP%3Aja"
+                )
 
             lines.append("")
             lines.append(SEP)
