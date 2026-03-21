@@ -638,7 +638,10 @@ def main():
             print("記事がありません。先に: python3 main.py crawl")
         else:
             print(f"サイト反映: {since} 以降 {len(recent)} 件")
-            url = deploy_rich_html(recent, password_hash=pw_hash)
+            # GitHub Actions環境ではgit操作をスキップ（ワークフロー側で行う）
+            import os as _os
+            on_actions = bool(_os.environ.get("GITHUB_ACTIONS"))
+            url = deploy_rich_html(recent, password_hash=pw_hash, push=not on_actions)
             if url:
                 print(f"\n公開URL: {url}")
             else:

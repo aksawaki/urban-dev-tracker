@@ -2148,14 +2148,20 @@ def export_rich_html(articles: list[dict], out_path: Path = None, password_hash:
     return out_path
 
 
-def deploy_rich_html(articles: list[dict], password_hash: str = "") -> str:
-    """docs/rich.html を生成して GitHub Pages にプッシュする。公開URLを返す。"""
+def deploy_rich_html(articles: list[dict], password_hash: str = "", push: bool = True) -> str:
+    """docs/rich.html を生成して GitHub Pages にプッシュする。公開URLを返す。
+    push=False のときは HTML 生成のみ行い git 操作はスキップ（GitHub Actions 用）。
+    """
     import subprocess as _sp
     docs_path = BASE_DIR / "docs" / "rich.html"
     html = generate_rich_html(articles, password_hash=password_hash)
     with open(docs_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"docs/rich.html を生成しました ({len(articles)} 件)")
+
+    if not push:
+        # GitHub Actions 側のコミット＆プッシュステップに任せる
+        return ""
 
     # git add → commit → push
     ts = datetime.now().strftime("%Y/%m/%d %H:%M")
