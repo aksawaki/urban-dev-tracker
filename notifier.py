@@ -524,8 +524,47 @@ class ChatWorkNotifier:
     # 1メッセージに含める記事数の上限
     _MAX_ARTICLES_PER_MSG = 10
 
+    # 重複判定のソース優先度（小さいほど優先）
+    _SRC_RANK: dict[str, int] = {
+        "kensetsunews_p2":     0,
+        "kensetsunews_sokuho": 1,
+        "kensetsunews_p3":     2,
+        "kensetsunews_kanto":  3,
+        "kensetsunews_kansai": 3,
+        "kensetsunews_csk":    3,
+        "kensetsunews_ht2":    3,
+    }
+
+    @staticmethod
+    def _title_bigrams(title: str) -> set[str]:
+        t = re.sub(r"\s+", "", title)
+        return {t[i: i + 2] for i in range(len(t) - 1)}
+
+    def _dedup_by_title(self, articles: list[dict], threshold: float = 0.4) -> list[dict]:
+        """タイトルの文字bigram類似度で重複記事を除去。
+        ソース優先度の高い記事（p2 > sokuho > p3 > 地域版）を優先して残す。
+        """
+        sorted_arts = sorted(
+            articles,
+            key=lambda a: self._SRC_RANK.get(a.get("source_id", ""), 5),
+        )
+        kept: list[dict] = []
+        for a in sorted_arts:
+            bg_a = self._title_bigrams(a.get("title", ""))
+            is_dup = any(
+                (lambda bg_k: len(bg_a & bg_k) / max(min(len(bg_a), len(bg_k)), 1) >= threshold)(
+                    self._title_bigrams(k.get("title", ""))
+                )
+                for k in kept
+            )
+            if not is_dup:
+                kept.append(a)
+        return kept
+
     def send(self, articles: list[dict], report_date: str = "") -> bool:
         """対象記事をChatWorkに送信。記事数が多い場合は分割して送る。"""
+        # 同一イベントの重複記事を除去（全国版優先）
+        articles = self._dedup_by_title(articles)
         targets = [
             a for a in articles
             if PRIORITY_RANK.get(a.get("priority", "normal"), 1) >= self.min_rank
