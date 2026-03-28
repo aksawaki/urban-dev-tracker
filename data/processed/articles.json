@@ -9108,30 +9108,5 @@
     "priority": "medium",
     "enrich_content": "",
     "enrich_source": ""
-  },
-  "55bb35ab9adfcd1d69fcf2377864226e": {
-    "id": "55bb35ab9adfcd1d69fcf2377864226e",
-    "source_id": "kensetsunews_kansai",
-    "source_name": "建設通信新聞 関西",
-    "title": "協和フロンティアで5月着工/大阪市中央区に共住/ホウコウ",
-    "url": "https://www.kensetsunews.com/archives/1205210",
-    "area": "大阪市",
-    "tags": [
-      "建設通信",
-      "再開発",
-      "関西",
-      "大阪",
-      "着工",
-      "竣工",
-      "組合設立"
-    ],
-    "published_at": null,
-    "fetched_at": "2026-03-28T01:32:10.123109+00:00",
-    "summary": "協和フロンティアで5月着工/大阪市中央区に共住/ホウコウ",
-    "content": "",
-    "content_hash": "e7776b20d70ba186",
-    "priority": "high",
-    "enrich_content": "",
-    "enrich_source": ""
   }
 }
