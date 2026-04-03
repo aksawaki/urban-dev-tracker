@@ -34,14 +34,13 @@ jobs:
           CHATWORK_ROOM_ID: ${{ secrets.CHATWORK_ROOM_ID }}
       - run: mkdir -p data/processed data/raw data/snapshots
       - run: python3 main.py crawl
-            - name: ChatWork 配信
+        continue-on-error: true
+      - name: ChatWork 配信
         run: python3 main.py notify
         continue-on-error: true
         env:
           CHATWORK_TOKEN: ${{ secrets.CHATWORK_TOKEN }}
           CHATWORK_ROOM_ID: ${{ secrets.CHATWORK_ROOM_ID }}
-
-        continue-on-error: true
       - run: python3 main.py deploy
       - name: コミット＆プッシュ
         run: |
