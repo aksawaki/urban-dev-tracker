@@ -139,6 +139,8 @@ def _do_notify(config: dict, articles: list[dict]):
     # 優先度順にソート
     _PRANK = {"high": 0, "medium": 1, "normal": 2}
     articles.sort(key=lambda a: _PRANK.get(a.get("priority", "normal"), 2))
+    # 重複除去（同一イベントの複数ソース記事をp2優先で1件に絞る）
+    articles = notifier._dedup_by_title(articles)
     ok = notifier.send(articles)
     if ok:
         print(f"ChatWork 送信完了（本日分 {len(articles)} 件）")
