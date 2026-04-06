@@ -105,7 +105,7 @@ def _chatwork_enabled(config: dict) -> bool:
 
 
 def _do_notify(config: dict, articles: list[dict]):
-    from datetime import date as _date
+    from datetime import datetime, timezone, timedelta
     import re
     from notifier import ChatWorkNotifier, is_development_relevant, _BAD_TITLE_KEYWORDS, _BAD_TITLE_RE
     from viewer import _parse_pub_date, _pub_date_from_title
@@ -113,8 +113,9 @@ def _do_notify(config: dict, articles: list[dict]):
     if not notifier:
         print("ChatWork未設定。config.yaml の chatwork セクション or 環境変数を確認してください")
         return
-    # 今日付けの記事のみ（kensetsunews はタイトルから日付を補完）
-    today = _date.today().isoformat()
+    # 今日付けの記事のみ（kensetsunews はタイトルから日付を補完）JST基準
+    JST = timezone(timedelta(hours=9))
+    today = datetime.now(JST).strftime('%Y-%m-%d')
     _CONSTR_RE = re.compile(r'^kensetsunews')
 
     def _article_date(a: dict) -> str:
