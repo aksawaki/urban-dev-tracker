@@ -48,5 +48,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/processed/articles.json docs/rich.html
           git diff --cached --quiet || git commit -m "auto: 日次クロール＆サイト更新 $(date '+%Y/%m/%d')"
-          git pull --rebase origin main
+          git pull --rebase -X theirs origin main
           git push
