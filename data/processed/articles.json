@@ -23435,5 +23435,29 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "219f01323cd18a126e16f3f21a9af3b6": {
+    "id": "219f01323cd18a126e16f3f21a9af3b6",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "ソニーとＴＳＭＣが次世代センサー共同開発、熊本で設備投資も 最終更新 | 2026/05/09 13:44 【速報】 ソニーグループは、半導体受託生産世界最大手の台湾積体電路製造（ＴＳＭＣ）と、次世代イメージセ…",
+    "url": "https://www.kensetsunews.com/sokuho/1223746",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-05-10T03:49:14.420250+00:00",
+    "summary": "ソニーとＴＳＭＣが次世代センサー共同開発、熊本で設備投資も 最終更新 | 2026/05/09 13:44 【速報】 ソニーグループは、半導体受託生産世界最大手の台湾積体電路製造（ＴＳＭＣ）と、次世代イメージセ…",
+    "content": "",
+    "content_hash": "5db49f14be6ed6b9",
+    "priority": "medium",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
