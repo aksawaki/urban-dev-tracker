@@ -30695,5 +30695,53 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "828ef340368a6e1296bb883bdea79ec8": {
+    "id": "828ef340368a6e1296bb883bdea79ec8",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・目黒区の目黒西中新築工事、坪井工業と95億円で億円で随契 最終更新 | 2026/05/28 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1234518",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-05-28T07:45:35.946244+00:00",
+    "summary": "東京・目黒区の目黒西中新築工事、坪井工業と95億円で億円で随契 最終更新 | 2026/05/28 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "0e3af9a63d51c037",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "931e47fe467df32914564a362275aa6a": {
+    "id": "931e47fe467df32914564a362275aa6a",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "神奈川県、ドローンの開発・実証プロジェクトを募集 最終更新 | 2026/05/28 16:25 【速報】 神奈川県は、全国から有望なドローンの開発・実証実験に取り組むプロジェクトを公募し、開発から実…",
+    "url": "https://www.kensetsunews.com/sokuho/1234506",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-05-28T07:45:40.554359+00:00",
+    "summary": "神奈川県、ドローンの開発・実証プロジェクトを募集 最終更新 | 2026/05/28 16:25 【速報】 神奈川県は、全国から有望なドローンの開発・実証実験に取り組むプロジェクトを公募し、開発から実…",
+    "content": "",
+    "content_hash": "7fdea7d1186f4358",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
