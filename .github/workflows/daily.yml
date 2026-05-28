@@ -26,12 +26,15 @@ jobs:
               cfg = yaml.safe_load(f)
           cfg.setdefault('chatwork', {})['token'] = os.environ.get('CHATWORK_TOKEN', '')
           cfg.setdefault('chatwork', {})['room_id'] = os.environ.get('CHATWORK_ROOM_ID', '')
+          # rich.html の AES 暗号化用パスワード（リポジトリ平文管理を回避）
+          cfg.setdefault('sharing', {})['password'] = os.environ.get('SHARING_PASSWORD', '')
           with open('config.yaml', 'w') as f:
               yaml.dump(cfg, f, allow_unicode=True, default_flow_style=False)
           "
         env:
           CHATWORK_TOKEN: ${{ secrets.CHATWORK_TOKEN }}
           CHATWORK_ROOM_ID: ${{ secrets.CHATWORK_ROOM_ID }}
+          SHARING_PASSWORD: ${{ secrets.SHARING_PASSWORD }}
       - run: mkdir -p data/processed data/raw data/snapshots
       - run: python3 main.py crawl
         continue-on-error: true

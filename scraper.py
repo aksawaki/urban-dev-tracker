@@ -89,6 +89,33 @@ _RELEVANCE_KEYWORDS = frozenset([
     "まちづくり", "駅前整備", "駅周辺", "プロジェクト",
 ])
 
+# 除外キーワード／対象エリア名／カンパニー系ソースのカテゴリ
+# (config.yaml から起動時に注入される。空配列ならフィルタ無効)
+_EXCLUSION_KEYWORDS: list[str] = []
+_TARGET_AREA_NAMES: list[str] = []
+_COMPANY_SOURCE_CATEGORIES = frozenset(["developer", "zenecon", "railway"])
+
+
+def _is_excluded(title: str, body: str) -> bool:
+    """除外キーワードがタイトル or 本文に含まれれば True"""
+    if not _EXCLUSION_KEYWORDS:
+        return False
+    text = title + " " + body
+    return any(kw in text for kw in _EXCLUSION_KEYWORDS)
+
+
+def _is_in_target_area(title: str, body: str, source: dict) -> bool:
+    """ディベロッパー/ゼネコン/鉄道系ソースは例外で常に True。
+    それ以外はタイトル or 本文に対象地名が含まれることを要求。
+    _TARGET_AREA_NAMES が空ならフィルタ無効 (常に True)。"""
+    if not _TARGET_AREA_NAMES:
+        return True
+    if source.get("category") in _COMPANY_SOURCE_CATEGORIES:
+        return True
+    text = title + " " + body
+    return any(area in text for area in _TARGET_AREA_NAMES)
+
+
 # タイトルに含まれる場合にのみ確実に通過させる「強い」キーワード
 _STRONG_TITLE_KEYWORDS = frozenset([
     # 再開発系
@@ -184,6 +211,15 @@ class FeedReader:
             clean_summary = BeautifulSoup(summary, "html.parser").get_text(" ", strip=True)[:300]
 
             text_for_priority = f"{title} {clean_summary}"
+
+            # 除外キーワード／エリア判定（個別記事クローラと同じロジック）
+            if _is_excluded(title, clean_summary):
+                logger.debug(f"  スキップ（除外KW）: {title[:50]}")
+                continue
+            if not _is_in_target_area(title, clean_summary, self.source):
+                logger.debug(f"  スキップ（域外）: {title[:50]}")
+                continue
+
             priority = _classify_priority(text_for_priority, self.keywords)
 
             article = Article(
@@ -456,6 +492,16 @@ class ArticleCrawler:
             logger.debug(f"  スキップ（無関係）: {title[:50]}")
             return None
 
+        # 3. 除外キーワード（全国タグ・スポーツ施策・公共計画募集系）
+        if _is_excluded(title, body_text):
+            logger.debug(f"  スキップ（除外KW）: {title[:50]}")
+            return None
+
+        # 4. エリア判定（developer/zenecon/railway は例外で素通し）
+        if not _is_in_target_area(title, body_text, self.source):
+            logger.debug(f"  スキップ（域外）: {title[:50]}")
+            return None
+
         priority = _classify_priority(f"{title} {content}", self.keywords)
 
         return Article(
@@ -547,8 +593,17 @@ def build_session(user_agent: str) -> requests.Session:
     return session
 
 
+def _apply_filter_config(config: dict) -> None:
+    """config.yaml の exclusion_keywords / target_areas を
+    モジュールグローバルに反映する (collect_all/crawl_all 呼び出し時に毎回適用)"""
+    global _EXCLUSION_KEYWORDS, _TARGET_AREA_NAMES
+    _EXCLUSION_KEYWORDS = list(config.get("exclusion_keywords") or [])
+    _TARGET_AREA_NAMES = list(config.get("target_areas") or [])
+
+
 def crawl_all(config: dict, max_articles_per_source: int = 8) -> list[Article]:
     """全ソースから個別記事リンクを辿って本文を収集する"""
+    _apply_filter_config(config)
     keywords = config.get("keywords", {})
     ua = config.get("settings", {}).get("user_agent", "urban-dev-tracker/1.0")
     session = build_session(ua)
@@ -564,6 +619,7 @@ def crawl_all(config: dict, max_articles_per_source: int = 8) -> list[Article]:
 
 def collect_all(config: dict, snapshot_dir: str = "data/snapshots") -> list[Article]:
     """設定ファイルの全ソースから記事を収集して返す"""
+    _apply_filter_config(config)
     keywords = config.get("keywords", {})
     ua = config.get("settings", {}).get("user_agent", "urban-dev-tracker/1.0")
     session = build_session(ua)

@@ -427,6 +427,32 @@ _BAD_TITLE_KEYWORDS: frozenset[str] = frozenset([
     "環境影響評価書",
     # 事務所ビル（小規模単体ビル、都市開発でない）※タイトル末尾切れ対策で「事務所ビ」で前方一致
     "事務所ビ",
+    # 愛称・呼称募集（行政の名称公募、都市開発でない）
+    "愛称募集", "呼称・愛称", "愛称・呼称", "愛称を募集", "呼称を募集",
+    # 橋梁診断・橋梁調査（既存橋の点検業務、都市開発でない）
+    "橋梁診断", "橋梁調査",
+    # 自動検針（水道・電力スマートメーター、都市開発でない）
+    "自動検針",
+    # 科学技術館（公共博物館施設、都市開発でない）
+    "科学技術館",
+    # 業界団体の役員人事（人事ニュース、都市開発でない）
+    "新会長に",
+    # データセンター建設（産業施設、都市開発でない）
+    "データセンター",
+    # 特定技能外国人（労働統計、都市開発でない）
+    "特定技能外国人",
+    # 町営住宅・町営住宅建替（地方公営住宅の小規模整備、都市開発でない）
+    "町営住宅",
+    # 屋内こども遊び場（公共子育て施設、都市開発でない）
+    "こどもの遊び場", "屋内型こどもの",
+    # 高等技術学校（職業訓練校、都市開発でない）
+    "高等技術学校",
+    # ホリデイ・イン（特定ホテルチェーン単体開業、都市開発でない）
+    "ホリデイ・イン",
+    # 行政の業務委託・事業者公募（都市開発でない）
+    "事業者募集", "実施事業者", "研修等実施",
+    # 福祉・介護施策（都市開発でない／介護施設建設は別KWで拾える）
+    "Chōju社会", "介護 研修", "介護研修",
 ])
 
 # タイトルにこのパターンが含まれていたら除外（正規表現）
@@ -731,16 +757,83 @@ class ChatWorkNotifier:
             for i in range(0, len(targets), self._MAX_ARTICLES_PER_MSG)
         ]
         total = len(chunks)
+        # AI 示唆は最後のチャンクにのみ付加（全記事を対象に1回だけ生成）
+        logger.info(f"AI示唆生成開始（対象 {len(targets)} 件）...")
+        ai_insight = self._generate_ai_insight(targets) if targets else ""
+        logger.info(f"AI示唆生成完了 ({len(ai_insight)} 文字)")
         all_ok = True
         for idx, chunk in enumerate(chunks, 1):
             suffix = f"（{idx}/{total}）" if total > 1 else ""
-            msg = self._build_message(chunk, report_date, suffix=suffix)
+            insight_for_chunk = ai_insight if idx == total else ""
+            msg = self._build_message(chunk, report_date, suffix=suffix, ai_insight=insight_for_chunk)
             ok = self._post(msg)
             if not ok:
                 all_ok = False
             if idx < total:
                 time.sleep(1.2)  # API レート制限対策
         return all_ok
+
+    def _generate_ai_insight(self, articles: list[dict]) -> str:
+        """claude CLI で本日記事の予測示唆を生成。失敗時は空文字を返す。"""
+        import subprocess
+        import os
+        import shutil
+
+        # claude CLI のパスを解決（launchd 環境では PATH が制限されるため絶対パス対応）
+        claude_bin = (
+            shutil.which("claude")
+            or os.path.expanduser("~/.local/bin/claude")
+        )
+        if not os.path.exists(claude_bin):
+            logger.warning(f"AI示唆生成スキップ: claude CLI が見つかりません ({claude_bin})")
+            return ""
+
+        try:
+            from viewer import _effective_area as _eff_area
+        except Exception:
+            _eff_area = None
+
+        items = []
+        for a in articles:
+            title = a.get("title", "").replace("【更新検知】", "").strip()
+            content = a.get("content") or a.get("summary") or ""
+            area = (
+                (_eff_area(a) if _eff_area else None)
+                or detect_area(title, content, fallback=a.get("area", ""))
+            )
+            items.append(f"- [{area}] {title}")
+        article_list = "\n".join(items)
+
+        prompt = (
+            "以下は本日の都市開発関連ニュース一覧です。\n"
+            "エリア別に分けて、各エリアで何が起きそうか・今後どうなりそうかの"
+            "予測示唆を都市開発の専門家視点で出してください。\n\n"
+            "【出力フォーマット】\n"
+            "■ <エリア名>\n"
+            "  <2-3行の予測・示唆>\n\n"
+            "全体で10-15行程度。簡潔に。装飾は最小限。前置きや締めの一文は不要、"
+            "本文のみ出力してください。\n\n"
+            "【記事一覧】\n"
+            f"{article_list}"
+        )
+        try:
+            result = subprocess.run(
+                [claude_bin, "-p", prompt],
+                capture_output=True, text=True, timeout=180,
+            )
+            if result.returncode != 0:
+                logger.warning(f"AI示唆生成失敗 (rc={result.returncode}): {result.stderr[:200]}")
+                return ""
+            return result.stdout.strip()
+        except subprocess.TimeoutExpired:
+            logger.warning("AI示唆生成タイムアウト")
+            return ""
+        except FileNotFoundError:
+            logger.warning("AI示唆生成スキップ: claude CLI が見つかりません")
+            return ""
+        except Exception as e:
+            logger.warning(f"AI示唆生成例外: {e}")
+            return ""
 
     def send_daily_digest(self, articles: list[dict]) -> bool:
         """日次ダイジェストを送信（全優先度をまとめて）"""
@@ -930,7 +1023,7 @@ class ChatWorkNotifier:
                 break
         return deduped
 
-    def _build_message(self, articles: list[dict], report_date: str, suffix: str = "") -> str:
+    def _build_message(self, articles: list[dict], report_date: str, suffix: str = "", ai_insight: str = "") -> str:
         date_str = report_date or datetime.now().strftime("%Y年%m月%d日")
 
         SEP = "━━━━━━━━━━━━━━━━━━━━━"
@@ -989,6 +1082,12 @@ class ChatWorkNotifier:
 
         lines.append("")
         lines.append(SEP)
+        if ai_insight:
+            lines.append("")
+            lines.append("🔮 本日の示唆（AI分析）")
+            lines.append(SEP)
+            lines.append(ai_insight)
+            lines.append(SEP)
         lines.append("[/info]")
         return "\n".join(lines)
 

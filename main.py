@@ -104,11 +104,20 @@ def _chatwork_enabled(config: dict) -> bool:
     return ChatWorkNotifier.from_config(config) is not None
 
 
-def _do_notify(config: dict, articles: list[dict]):
+def _do_notify(config: dict, articles: list):
+    from dataclasses import asdict, is_dataclass
     from datetime import datetime, timezone, timedelta
     import re
     from notifier import ChatWorkNotifier, is_development_relevant, _BAD_TITLE_KEYWORDS, _BAD_TITLE_RE
     from viewer import _parse_pub_date, _pub_date_from_title
+
+    # cmd_fetch から来る scraper.Article (dataclass) を dict に正規化
+    # （storage 経由の get_recent() は既に dict）
+    articles = [
+        asdict(a) if is_dataclass(a) and not isinstance(a, type) else a
+        for a in (articles or [])
+    ]
+
     notifier = ChatWorkNotifier.from_config(config)
     if not notifier:
         print("ChatWork未設定。config.yaml の chatwork セクション or 環境変数を確認してください")
@@ -625,12 +634,10 @@ def main():
     elif args.command == "view":
         cmd_view(args)
     elif args.command == "deploy":
-        import hashlib
         from storage import get_recent
         from viewer import deploy_rich_html
         config = load_config()
         pw = config.get("sharing", {}).get("password", "")
-        pw_hash = hashlib.sha256(pw.encode()).hexdigest() if pw else ""
         days = getattr(args, "days", 0)
         since = getattr(args, "since", "2025-11-01")
         if days:
@@ -644,7 +651,8 @@ def main():
             # GitHub Actions環境ではgit操作をスキップ（ワークフロー側で行う）
             import os as _os
             on_actions = bool(_os.environ.get("GITHUB_ACTIONS"))
-            url = deploy_rich_html(recent, password_hash=pw_hash, push=not on_actions)
+            # password を渡すと AES-GCM 暗号化モードでデプロイされる
+            url = deploy_rich_html(recent, password=pw, push=not on_actions)
             if url:
                 print(f"\n公開URL: {url}")
             else:

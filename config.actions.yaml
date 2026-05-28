@@ -9,8 +9,10 @@ settings:
   user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 # 共有設定（GitHub Pages 公開ページのパスワード）
+# 注意: パスワードはここに書かず、GH Actions Secret "SHARING_PASSWORD" 経由で注入する
+#       （workflow が起動時に上書きする。空のままだと暗号化されず公開状態になる）
 sharing:
-  password: "salowin-tenpo"
+  password: ""
 
 # ChatWork 通知設定
 chatwork:
@@ -83,6 +85,7 @@ sources:
       name: "森ビル 開発プロジェクト"
       url: "https://www.mori.co.jp/projects/"
       area: "港区"
+      category: developer
       tags: [森ビル, 虎ノ門, 麻布台, 六本木, 再開発, ヒルズ]
       css_selector: "main, .projects-list, .project-list, article, body"
 
@@ -90,6 +93,7 @@ sources:
       name: "森トラスト プレスリリース"
       url: "https://www.mori-trust.co.jp/pressrelease/"
       area: "東京都"
+      category: developer
       tags: [森トラスト, 再開発, 虎ノ門, 赤坂]
       css_selector: "main, .press-list, article"
 
@@ -97,6 +101,7 @@ sources:
       name: "三菱地所 ニュース"
       url: "https://www.mec.co.jp/news/"
       area: "全国"
+      category: developer
       tags: [三菱地所, 大手町, 丸の内, 再開発]
       css_selector: "main, .news-list, article"
 
@@ -104,6 +109,7 @@ sources:
       name: "三井不動産 ニュースリリース"
       url: "https://www.mitsuifudosan.co.jp/corporate/news/"
       area: "全国"
+      category: developer
       tags: [三井不動産, 日本橋, 再開発, 複合施設]
       css_selector: "main, .news-list, article"
 
@@ -111,6 +117,7 @@ sources:
       name: "ヒューリック ニュース"
       url: "https://www.hulic.co.jp/news/"
       area: "東京都"
+      category: developer
       tags: [ヒューリック, 再開発, 浅草橋, 新宿]
       css_selector: "main, .news-list, article"
 
@@ -118,6 +125,7 @@ sources:
       name: "野村不動産 ニュース"
       url: "https://www.nomura-re.co.jp/news/"
       area: "全国"
+      category: developer
       tags: [野村不動産, 再開発, 複合施設]
       css_selector: "main, .news-list, article"
 
@@ -125,6 +133,7 @@ sources:
       name: "住友不動産 ニュースリリース"
       url: "https://www.sumitomo-rd.co.jp/news/"
       area: "全国"
+      category: developer
       tags: [住友不動産, 再開発, 新宿, 浜松町]
       css_selector: "main, .news-list, article"
 
@@ -136,6 +145,7 @@ sources:
       name: "京急電鉄 ニュース(2025)"
       url: "https://www.keikyu.co.jp/company/news/2025/"
       area: "品川区"
+      category: railway
       tags: [京急, 品川, 高輪, 再開発, 着工, 竣工]
       css_selector: "main, .news-list, .release-list, article, body"
 
@@ -143,6 +153,7 @@ sources:
       name: "京急電鉄 ニュース(2026)"
       url: "https://www.keikyu.co.jp/company/news/2026/"
       area: "品川区"
+      category: railway
       tags: [京急, 品川, 高輪, 再開発]
       css_selector: "main, .news-list, .release-list, article, body"
 
@@ -150,6 +161,7 @@ sources:
       name: "東急 ニュースリリース"
       url: "https://www.tokyu.co.jp/company/news/"
       area: "渋谷区"
+      category: railway
       tags: [東急, 渋谷, 二子玉川, 再開発]
       css_selector: "main, .news-list, article"
 
@@ -157,6 +169,7 @@ sources:
       name: "小田急電鉄 ニュースリリース"
       url: "https://www.odakyu.jp/news/"
       area: "新宿区"
+      category: railway
       tags: [小田急, 新宿, 下北沢, 再開発]
       css_selector: "main, .news-list, article"
 
@@ -164,6 +177,7 @@ sources:
       name: "東武鉄道 ニュースリリース"
       url: "https://www.tobu.co.jp/news/list/"
       area: "豊島区"
+      category: railway
       tags: [東武, 池袋, 浅草, 再開発]
       css_selector: "main, .news-list, article, ul"
 
@@ -171,6 +185,7 @@ sources:
       name: "西武鉄道 ニュースリリース"
       url: "https://www.seiburailway.jp/news/"
       area: "豊島区"
+      category: railway
       tags: [西武, 池袋, 再開発]
       css_selector: "main, .news-list, article"
 
@@ -474,6 +489,7 @@ sources:
       name: "東急不動産 ニュースリリース"
       url: "https://www.tokyu-land.co.jp/news/"
       area: "全国"
+      category: developer
       tags: [東急不動産, 渋谷, 二子玉川, 再開発, 複合施設]
       css_selector: "main, .news-list, article"
 
@@ -545,5 +561,89 @@ keywords:
     - 定期借地
     - オフィスビル
     - ホテル開業
+
+
+# ──────────────────────────────────────────────────────────
+# 除外キーワード（タイトル or 本文に含まれていたら保存しない）
+# ──────────────────────────────────────────────────────────
+exclusion_keywords:
+  - "全国一斉"
+  - "都道府県"
+  - "スポーツ施設整備"
+  - "多目的スポーツ"
+  - "競技場整備"
+  - "体育館整備"
+  - "プロポーザル公告"
+  - "設計プロポ"
+  - "ビジネスグランプリ"
+  - "コンテスト"
+  - "募集開始"
+  - "募集要項"
+  - "アイデア募集"
+  - "事業者募集"
+  - "実施事業者"
+  - "基本計画の策定"
+  - "共生拠点施設"
+  - "Chōju社会"
+  - "研修等実施"
+  - "介護 研修"
+  - "介護研修"
+
+# ──────────────────────────────────────────────────────────
+# 対象エリア（タイトル or 本文に該当地名が含まれる記事のみ採用）
+# ※ source.category = developer / zenecon / railway は例外で素通し
+# ──────────────────────────────────────────────────────────
+target_areas:
+  - "東京"
+  - "神奈川"
+  - "埼玉"
+  - "千葉"
+  - "千代田"
+  - "中央区"
+  - "港区"
+  - "新宿"
+  - "文京"
+  - "台東"
+  - "墨田"
+  - "江東"
+  - "品川"
+  - "目黒"
+  - "大田"
+  - "世田谷"
+  - "渋谷"
+  - "中野"
+  - "杉並"
+  - "豊島"
+  - "北区"
+  - "荒川"
+  - "板橋"
+  - "練馬"
+  - "足立"
+  - "葛飾"
+  - "江戸川"
+  - "立川"
+  - "武蔵野"
+  - "三鷹"
+  - "府中"
+  - "調布"
+  - "町田"
+  - "八王子"
+  - "横浜"
+  - "川崎"
+  - "相模原"
+  - "藤沢"
+  - "鎌倉"
+  - "さいたま"
+  - "川口"
+  - "所沢"
+  - "越谷"
+  - "草加"
+  - "千葉市"
+  - "船橋"
+  - "市川"
+  - "流山"
+  - "柏"
+  - "浦安"
+  - "幕張"
 
 custom_areas: []

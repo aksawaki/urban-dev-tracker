@@ -865,31 +865,128 @@ RICH_TEMPLATE = """<!DOCTYPE html>
   </div>
 </div>
 <footer>urban-dev-tracker — {generated}</footer>
+<!-- AES暗号化ペイロード（password がセットされている場合のみ中身あり） -->
+<script id="enc-data" type="application/json">{enc_blob}</script>
 <script>
-// ── パスワードゲート ──
+// ── パスワードゲート / AES復号 ──
+// モード判定:
+//   暗号化モード: enc-data に JSON あり → AES-GCM 復号成功で解錠
+//   レガシーモード: password_hash のみ → SHA-256比較（カードは既に表示済み）
+//   無設定: そのまま表示
+var __PWHASH = '{password_hash}';
+
+function __getEnc() {{
+  var t = (document.getElementById('enc-data') || {{}}).textContent || '';
+  t = t.trim();
+  if (!t) return null;
+  try {{ return JSON.parse(t); }} catch(e) {{ return null; }}
+}}
+
+function __b64ToBytes(s) {{
+  var raw = atob(s);
+  var bytes = new Uint8Array(raw.length);
+  for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return bytes;
+}}
+
+async function __deriveKey(password, saltBytes, iters) {{
+  var baseKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password),
+    {{name:'PBKDF2'}}, false, ['deriveKey']
+  );
+  return await crypto.subtle.deriveKey(
+    {{name:'PBKDF2', salt:saltBytes, iterations:iters, hash:'SHA-256'}},
+    baseKey, {{name:'AES-GCM', length:256}}, false, ['decrypt']
+  );
+}}
+
+async function __tryDecrypt(password) {{
+  var enc = __getEnc();
+  if (!enc) return null;
+  var salt = __b64ToBytes(enc.salt);
+  var iv   = __b64ToBytes(enc.iv);
+  var ct   = __b64ToBytes(enc.ct);
+  var key  = await __deriveKey(password, salt, enc.iter);
+  var plain = await crypto.subtle.decrypt({{name:'AES-GCM', iv:iv}}, key, ct);
+  return JSON.parse(new TextDecoder().decode(plain));
+}}
+
+function __injectDecrypted(data) {{
+  var grid = document.getElementById('cards-grid');
+  if (grid && data.body) grid.innerHTML = data.body;
+  var bar = document.getElementById('filter-bar');
+  if (bar && data.area_btns) {{
+    // <span class="fb-label">📍</span> の直後・filter-count の手前にエリアボタン群を差し込む
+    var anchor = bar.querySelector('.filter-count');
+    var tmp = document.createElement('span');
+    tmp.innerHTML = data.area_btns;
+    while (tmp.firstChild) bar.insertBefore(tmp.firstChild, anchor);
+  }}
+  if (typeof applyFilter === 'function') applyFilter();
+}}
+
 (async function() {{
-  var H = '{password_hash}';
   var el = document.getElementById('pw-overlay');
-  if (!el) return;
-  if (!H) {{ el.remove(); return; }}
-  var stored = localStorage.getItem('udt_' + H.slice(0,8));
-  if (stored === H) {{ el.remove(); return; }}
-  document.body.style.overflow = 'hidden';
-  setTimeout(function() {{ document.getElementById('pw-input').focus(); }}, 100);
+  var enc = __getEnc();
+
+  // 暗号化モードでもレガシーゲートでもない → そのまま表示
+  if (!enc && !__PWHASH) {{ if (el) el.remove(); return; }}
+
+  if (enc) {{
+    // 暗号化モード: sessionStorage に直近の正解パスワードがあれば自動復号
+    var cached = sessionStorage.getItem('udt_pw');
+    if (cached) {{
+      try {{
+        var data = await __tryDecrypt(cached);
+        __injectDecrypted(data);
+        if (el) el.remove();
+        document.body.style.overflow = '';
+        return;
+      }} catch(e) {{ sessionStorage.removeItem('udt_pw'); }}
+    }}
+  }} else if (__PWHASH) {{
+    // レガシーモード: SHA-256キャッシュ確認
+    var stored = localStorage.getItem('udt_' + __PWHASH.slice(0,8));
+    if (stored === __PWHASH) {{ if (el) el.remove(); return; }}
+  }}
+
+  if (el) {{
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() {{ document.getElementById('pw-input').focus(); }}, 100);
+  }}
 }})();
+
 async function pwCheck() {{
-  var H = '{password_hash}';
   var pw = document.getElementById('pw-input').value;
+  var enc = __getEnc();
+  var errEl = document.getElementById('pw-error');
+  var fail = function() {{
+    errEl.textContent = 'パスワードが違います';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }};
+
+  if (enc) {{
+    // 暗号化モード: 復号が成功すれば正解
+    try {{
+      var data = await __tryDecrypt(pw);
+      sessionStorage.setItem('udt_pw', pw);
+      __injectDecrypted(data);
+      document.getElementById('pw-overlay').remove();
+      document.body.style.overflow = '';
+    }} catch(e) {{ fail(); }}
+    return;
+  }}
+
+  // レガシーモード: SHA-256 ハッシュ比較
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
   var hex = Array.from(new Uint8Array(buf)).map(function(b) {{ return b.toString(16).padStart(2,'0'); }}).join('');
-  if (hex === H) {{
-    localStorage.setItem('udt_' + H.slice(0,8), H);
+  if (hex === __PWHASH) {{
+    localStorage.setItem('udt_' + __PWHASH.slice(0,8), __PWHASH);
     document.getElementById('pw-overlay').remove();
     document.body.style.overflow = '';
   }} else {{
-    document.getElementById('pw-error').textContent = 'パスワードが違います';
-    document.getElementById('pw-input').value = '';
-    document.getElementById('pw-input').focus();
+    fail();
   }}
 }}
 // ── フィルター ──
@@ -1059,7 +1156,31 @@ def _card_html(a: dict) -> str:
 </div>"""
 
 
-def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
+def _encrypt_html_payload(plaintext: str, password: str, iterations: int = 200_000) -> dict:
+    """AES-GCM-256 + PBKDF2-HMAC-SHA256 で plaintext を暗号化し、
+    salt / iv / ct / iter を base64 で含む dict を返す。
+    ブラウザの crypto.subtle と互換のパラメータを使用。"""
+    import os as _os
+    import base64 as _b64
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    salt = _os.urandom(16)
+    iv = _os.urandom(12)
+    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32,
+                     salt=salt, iterations=iterations)
+    key = kdf.derive(password.encode("utf-8"))
+    ct = AESGCM(key).encrypt(iv, plaintext.encode("utf-8"), None)
+    return {
+        "salt": _b64.b64encode(salt).decode(),
+        "iv":   _b64.b64encode(iv).decode(),
+        "ct":   _b64.b64encode(ct).decode(),
+        "iter": iterations,
+    }
+
+
+def generate_rich_html(articles: list[dict], password_hash: str = "", password: str = "") -> str:
     """記事リストからカード形式のリッチHTMLを生成する"""
     import html as _html
     from datetime import datetime
@@ -1142,12 +1263,36 @@ def generate_rich_html(articles: list[dict], password_hash: str = "") -> str:
         )
 
     generated = datetime.now().strftime("%Y年%m月%d日 %H:%M")
+
+    # ── 暗号化モード ──
+    # password が与えられた場合、本文 (body) とエリアボタン (area_btns) を
+    # AES-GCM で暗号化して埋め込む。HTMLソースを見ても暗号文しか露出しない。
+    if password:
+        import json as _json
+        payload_obj = {"body": body, "area_btns": area_btns}
+        enc = _encrypt_html_payload(
+            _json.dumps(payload_obj, ensure_ascii=False),
+            password,
+        )
+        enc_blob_json = _json.dumps(enc, ensure_ascii=False)
+        # 本文プレースホルダは空にする
+        body_out = '<!-- encrypted -->'
+        area_btns_out = '<!-- encrypted -->'
+        # 旧ハッシュは渡さない（暗号化モードでは復号成功=正解判定）
+        password_hash_out = ""
+    else:
+        enc_blob_json = ""
+        body_out = body
+        area_btns_out = area_btns
+        password_hash_out = password_hash
+
     return RICH_TEMPLATE.format(
         generated=generated,
         total=len(articles),
-        area_btns=area_btns,
-        body=body,
-        password_hash=password_hash,
+        area_btns=area_btns_out,
+        body=body_out,
+        password_hash=password_hash_out,
+        enc_blob=enc_blob_json,
     )
 
 
@@ -2137,24 +2282,27 @@ def export_area_timeline(articles: list[dict], out_path: Path = None) -> Path:
     return out_path
 
 
-def export_rich_html(articles: list[dict], out_path: Path = None, password_hash: str = "") -> Path:
+def export_rich_html(articles: list[dict], out_path: Path = None,
+                     password_hash: str = "", password: str = "") -> Path:
     """カード形式HTMLをファイルに保存して返す"""
     if out_path is None:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         out_path = BASE_DIR / "reports" / f"rich_report_{ts}.html"
-    html = generate_rich_html(articles, password_hash=password_hash)
+    html = generate_rich_html(articles, password_hash=password_hash, password=password)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     return out_path
 
 
-def deploy_rich_html(articles: list[dict], password_hash: str = "", push: bool = True) -> str:
+def deploy_rich_html(articles: list[dict], password_hash: str = "",
+                     password: str = "", push: bool = True) -> str:
     """docs/rich.html を生成して GitHub Pages にプッシュする。公開URLを返す。
     push=False のときは HTML 生成のみ行い git 操作はスキップ（GitHub Actions 用）。
+    password を渡すと AES-GCM で本文を暗号化して埋め込む。
     """
     import subprocess as _sp
     docs_path = BASE_DIR / "docs" / "rich.html"
-    html = generate_rich_html(articles, password_hash=password_hash)
+    html = generate_rich_html(articles, password_hash=password_hash, password=password)
     with open(docs_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"docs/rich.html を生成しました ({len(articles)} 件)")
