@@ -30966,5 +30966,140 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "fb066cad7292f335af6afe9bac80843f": {
+    "id": "fb066cad7292f335af6afe9bac80843f",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "NTT都市開発、横浜市のビル2.3万㎡が着工　施工は清水 最終更新 | 2026/06/01 13:38 【速報】 NTT都市開発は、横浜市に計画している2.3万㎡のオフィス複合ビル「（仮称）横…",
+    "url": "https://www.kensetsunews.com/sokuho/1237007",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:48:06.472182+00:00",
+    "summary": "NTT都市開発、横浜市のビル2.3万㎡が着工　施工は清水 最終更新 | 2026/06/01 13:38 【速報】 NTT都市開発は、横浜市に計画している2.3万㎡のオフィス複合ビル「（仮称）横…",
+    "content": "",
+    "content_hash": "a6630af287c3e5e2",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d16d5b96cca696a976462a497426585c": {
+    "id": "d16d5b96cca696a976462a497426585c",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "神奈川・寒川町で8.8万㎡の物流施設が着工、施工は銭高組 最終更新 | 2026/06/01 11:51 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1236473",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:48:07.610153+00:00",
+    "summary": "神奈川・寒川町で8.8万㎡の物流施設が着工、施工は銭高組 最終更新 | 2026/06/01 11:51 【速報】 …",
+    "content": "",
+    "content_hash": "b28c8213560163e0",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "077d16284376b2d0e09156e32c4beddb": {
+    "id": "077d16284376b2d0e09156e32c4beddb",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東武鉄道、東京・池袋西口再開発の施工者内定 最終更新 | 2026/06/01 09:27 【速報】 東武鉄道は、東京都豊島区に計画する池袋駅西口市街地再開発事業で、同社単独施行街…",
+    "url": "https://www.kensetsunews.com/sokuho/1236047",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:48:14.653530+00:00",
+    "summary": "東武鉄道、東京・池袋西口再開発の施工者内定 最終更新 | 2026/06/01 09:27 【速報】 東武鉄道は、東京都豊島区に計画する池袋駅西口市街地再開発事業で、同社単独施行街…",
+    "content": "",
+    "content_hash": "04767ff5d6a097ea",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "4fddb4bca3d064c9988c187b8720cb76": {
+    "id": "4fddb4bca3d064c9988c187b8720cb76",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・江戸川区の新庁舎、6万㎡超に　27年度以降着工 最終更新 | 2026/06/01 09:16 【速報】 東京都江戸川区は、新庁舎建設の実施設計をまとめた。今後の１００年を支える日本一…",
+    "url": "https://www.kensetsunews.com/sokuho/1236041",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:48:18.136429+00:00",
+    "summary": "東京・江戸川区の新庁舎、6万㎡超に　27年度以降着工 最終更新 | 2026/06/01 09:16 【速報】 東京都江戸川区は、新庁舎建設の実施設計をまとめた。今後の１００年を支える日本一…",
+    "content": "",
+    "content_hash": "d7a76766fcc5f024",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "c5effa3cd4f25937db287cf2927fc030": {
+    "id": "c5effa3cd4f25937db287cf2927fc030",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・ネクスト渋谷桜丘再開発、音楽ホールなど延べ24万㎡計画 最終更新 | 2026/06/01 09:17 【速報】 東急不動産らは、東京都渋谷区の桜丘町中地区約２・２ヘクタールで、延べ約２４万３…",
+    "url": "https://www.kensetsunews.com/sokuho/1236042",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:48:19.339485+00:00",
+    "summary": "東京・ネクスト渋谷桜丘再開発、音楽ホールなど延べ24万㎡計画 最終更新 | 2026/06/01 09:17 【速報】 東急不動産らは、東京都渋谷区の桜丘町中地区約２・２ヘクタールで、延べ約２４万３…",
+    "content": "",
+    "content_hash": "9d57af3fa17ba9b7",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "0f593e9d36ad76a5b75491457c73c8b1": {
+    "id": "0f593e9d36ad76a5b75491457c73c8b1",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "契約候補に日建設計/東陽町まちづくり調査/江東区",
+    "url": "https://www.kensetsunews.com/archives/1236110",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-01T04:51:39.540590+00:00",
+    "summary": "契約候補に日建設計/東陽町まちづくり調査/江東区",
+    "content": "",
+    "content_hash": "e5c5b9c4bdb55bee",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
