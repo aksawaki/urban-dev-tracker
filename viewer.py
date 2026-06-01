@@ -302,6 +302,133 @@ def _extract_pref(text: str) -> str:
     return ""
 
 
+# ──────────────────────────────────────────────────────────
+# 地方 (region) ⇄ 都道府県 (prefecture) ⇄ エリア (area) マッピング
+# UI のナビゲーション（地方→都道府県→記事）に使う
+# ──────────────────────────────────────────────────────────
+_PREFECTURE_TO_REGION: dict[str, str] = {
+    "東京": "関東", "神奈川": "関東", "埼玉": "関東", "千葉": "関東",
+    "茨城": "関東", "栃木": "関東", "群馬": "関東",
+    "大阪": "関西", "京都": "関西", "兵庫": "関西", "奈良": "関西",
+    "和歌山": "関西", "滋賀": "関西",
+    "愛知": "中部", "静岡": "中部", "岐阜": "中部", "三重": "中部",
+    "長野": "中部", "山梨": "中部", "新潟": "中部",
+    "福井": "中部", "石川": "中部", "富山": "中部",
+    "北海道": "北海道",
+    "宮城": "東北", "福島": "東北", "山形": "東北",
+    "岩手": "東北", "秋田": "東北", "青森": "東北",
+    "福岡": "九州", "熊本": "九州", "大分": "九州",
+    "鹿児島": "九州", "長崎": "九州", "佐賀": "九州",
+    "宮崎": "九州", "沖縄": "九州",
+    "広島": "中国", "岡山": "中国", "山口": "中国",
+    "島根": "中国", "鳥取": "中国",
+    "香川": "四国", "愛媛": "四国", "徳島": "四国", "高知": "四国",
+}
+
+# area 文字列 → 都道府県 への解決（区名・市名・街区名から逆引き）
+_AREA_TO_PREFECTURE: dict[str, str] = {
+    # 東京23区
+    "千代田": "東京", "千代田区": "東京", "中央区": "東京", "港区": "東京",
+    "新宿": "東京", "新宿区": "東京", "文京": "東京", "文京区": "東京",
+    "台東": "東京", "台東区": "東京", "墨田": "東京", "墨田区": "東京",
+    "江東": "東京", "江東区": "東京", "品川": "東京", "品川区": "東京",
+    "目黒": "東京", "目黒区": "東京", "大田": "東京", "大田区": "東京",
+    "世田谷": "東京", "世田谷区": "東京", "渋谷": "東京", "渋谷区": "東京",
+    "中野": "東京", "中野区": "東京", "杉並": "東京", "杉並区": "東京",
+    "豊島": "東京", "豊島区": "東京", "北区": "東京",
+    "荒川": "東京", "荒川区": "東京", "板橋": "東京", "板橋区": "東京",
+    "練馬": "東京", "練馬区": "東京", "足立": "東京", "足立区": "東京",
+    "葛飾": "東京", "葛飾区": "東京", "江戸川": "東京", "江戸川区": "東京",
+    # 多摩
+    "立川": "東京", "立川市": "東京", "武蔵野": "東京", "武蔵野市": "東京",
+    "三鷹": "東京", "三鷹市": "東京", "府中": "東京", "府中市": "東京",
+    "調布": "東京", "調布市": "東京", "町田": "東京", "町田市": "東京",
+    "八王子": "東京", "八王子市": "東京", "小平市": "東京", "東村山市": "東京",
+    # 東京 街区・通称
+    "丸の内": "東京", "日本橋": "東京", "六本木": "東京", "赤坂": "東京",
+    "麻布": "東京", "虎ノ門": "東京", "麹町": "東京", "霞が関": "東京",
+    "銀座": "東京", "新橋": "東京", "勝どき": "東京", "有明": "東京",
+    "池袋": "東京", "高輪": "東京", "西新宿": "東京", "京橋": "東京",
+    "浅草": "東京", "千住": "東京", "大井町": "東京",
+    "東京都": "東京", "東京": "東京",
+    # 神奈川
+    "横浜": "神奈川", "横浜市": "神奈川", "川崎": "神奈川", "川崎市": "神奈川",
+    "相模原": "神奈川", "相模原市": "神奈川", "藤沢": "神奈川", "鎌倉": "神奈川",
+    "神奈川": "神奈川",
+    # 埼玉
+    "さいたま": "埼玉", "さいたま市": "埼玉", "川口": "埼玉", "所沢": "埼玉",
+    "越谷": "埼玉", "草加": "埼玉", "川越市": "埼玉", "埼玉": "埼玉",
+    # 千葉
+    "千葉市": "千葉", "船橋": "千葉", "市川": "千葉", "流山": "千葉",
+    "柏": "千葉", "浦安": "千葉", "幕張": "千葉", "千葉": "千葉",
+    # 大阪・関西
+    "大阪市": "大阪", "梅田": "大阪", "難波": "大阪", "天王寺": "大阪",
+    "大阪": "大阪",
+    "京都市": "京都", "京都": "京都",
+    "神戸市": "兵庫", "兵庫": "兵庫",
+    "奈良県": "奈良", "奈良": "奈良", "和歌山": "和歌山",
+    "大津市": "滋賀", "滋賀": "滋賀",
+    # 中部
+    "名古屋市": "愛知", "栄": "愛知", "愛知県": "愛知", "愛知": "愛知",
+    "静岡市": "静岡", "静岡": "静岡", "熱海": "静岡",
+    "岐阜市": "岐阜", "岐阜": "岐阜",
+    "三重県": "三重", "三重": "三重",
+    "松本市": "長野", "長野": "長野",
+    "甲府市": "山梨", "山梨": "山梨",
+    "新潟市": "新潟", "新潟": "新潟",
+    "金沢市": "石川", "石川": "石川",
+    "富山市": "富山", "富山": "富山",
+    "福井市": "福井", "福井": "福井",
+    # 北海道・東北
+    "札幌市": "北海道", "北海道": "北海道",
+    "仙台市": "宮城", "宮城": "宮城",
+    "盛岡市": "岩手", "岩手": "岩手",
+    "山形市": "山形", "山形": "山形",
+    "福島市": "福島", "福島": "福島",
+    "青森市": "青森", "青森": "青森",
+    "水戸市": "茨城", "茨城": "茨城",
+    "宇都宮市": "栃木", "栃木": "栃木",
+    "前橋市": "群馬", "群馬": "群馬",
+    # 中国・四国
+    "広島市": "広島", "広島県": "広島", "広島": "広島",
+    "岡山市": "岡山", "岡山": "岡山",
+    "山口市": "山口", "山口": "山口",
+    "松江市": "島根", "島根": "島根",
+    "鳥取市": "鳥取", "鳥取": "鳥取",
+    "高松市": "香川", "香川": "香川",
+    "松山市": "愛媛", "愛媛": "愛媛",
+    "徳島市": "徳島", "徳島": "徳島",
+    "高知市": "高知", "高知": "高知",
+    # 九州・沖縄
+    "福岡市": "福岡", "天神": "福岡", "博多": "福岡", "福岡": "福岡",
+    "熊本市": "熊本", "熊本": "熊本",
+    "大分市": "大分", "大分": "大分",
+    "鹿児島市": "鹿児島", "鹿児島": "鹿児島",
+    "長崎市": "長崎", "長崎": "長崎",
+    "佐賀市": "佐賀", "佐賀": "佐賀",
+    "宮崎市": "宮崎", "宮崎": "宮崎",
+    "那覇市": "沖縄", "沖縄": "沖縄",
+}
+
+
+def _classify_region_pref(area: str) -> tuple[str, str]:
+    """area 文字列から (地方, 都道府県) を返す。
+    判定不能なら ('その他', 'その他')."""
+    if not area:
+        return ("その他", "その他")
+    pref = _AREA_TO_PREFECTURE.get(area, "")
+    if not pref:
+        # 部分一致のフォールバック（例: "横浜駅西口" → "横浜" マッチ）
+        for key, val in _AREA_TO_PREFECTURE.items():
+            if key in area:
+                pref = val
+                break
+    if not pref:
+        return ("その他", "その他")
+    region = _PREFECTURE_TO_REGION.get(pref, "その他")
+    return (region, pref)
+
+
 def _effective_area(a: dict) -> str:
     """記事の有効エリアを返す。
     優先順:
@@ -825,6 +952,65 @@ RICH_TEMPLATE = """<!DOCTYPE html>
   }}
   .pw-btn:hover {{ background: #2d6a9f; }}
   .pw-error {{ color: #e74c3c; font-size: 13px; margin-top: 10px; min-height: 18px; }}
+  /* ── 新レイアウト: ピン留め (本日/昨日) ── */
+  .section-title {{
+    font-size: 13px; font-weight: 700; color: #1a3a5c;
+    margin: 22px 4px 8px; display: flex; align-items: center; gap: 6px;
+    letter-spacing: 0.02em;
+  }}
+  .section-title:first-of-type {{ margin-top: 8px; }}
+  .pinned-tabs {{ display: flex; gap: 6px; margin: 0 4px 12px; flex-wrap: wrap; }}
+  .ptab {{
+    background: #fff; border: 1px solid #c8d4e8; border-radius: 18px;
+    padding: 5px 16px; font-size: 13px; cursor: pointer; color: #1a3a5c;
+    font-weight: 600; transition: .15s;
+  }}
+  .ptab:hover {{ background: #e2eaf6; }}
+  .ptab.active {{ background: #1a3a5c; color: #fff; border-color: #1a3a5c; }}
+  .ptab .pcount {{
+    font-size: 10px; background: rgba(0,0,0,0.12); color: inherit;
+    padding: 1px 7px; border-radius: 10px; margin-left: 5px;
+  }}
+  .ptab.active .pcount {{ background: rgba(255,255,255,0.25); }}
+  .pinned-grid {{
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px; margin-bottom: 8px;
+  }}
+  .pinned-grid.hidden {{ display: none; }}
+  .pinned-empty {{ color: #888; font-size: 12px; padding: 16px; text-align: center; background: #f7f9fc; border-radius: 8px; }}
+  /* ── 地方ボタン行 ── */
+  .region-row {{
+    display: flex; gap: 6px; flex-wrap: wrap; margin: 0 4px 8px;
+  }}
+  .region-btn {{
+    background: #fff; border: 1.5px solid #c8d4e8; border-radius: 16px;
+    padding: 5px 14px; font-size: 12px; cursor: pointer;
+    color: #1a3a5c; font-weight: 600; transition: .15s;
+  }}
+  .region-btn:hover {{ background: #e2eaf6; }}
+  .region-btn.active {{ background: #2d6a9f; color: #fff; border-color: #2d6a9f; }}
+  .region-btn .rcount {{
+    font-size: 10px; background: rgba(0,0,0,0.10); color: inherit;
+    padding: 1px 6px; border-radius: 10px; margin-left: 4px;
+  }}
+  .region-btn.active .rcount {{ background: rgba(255,255,255,0.25); }}
+  /* ── 都道府県サブタブ行 ── */
+  .pref-row {{
+    display: flex; gap: 5px; flex-wrap: wrap; margin: 0 4px 10px;
+    padding: 6px 8px; background: #f4f7fc; border-radius: 8px;
+    border: 1px dashed #c8d4e8;
+  }}
+  .pref-row.hidden {{ display: none; }}
+  .pref-btn {{
+    background: #fff; border: 1px solid #d0daea; border-radius: 12px;
+    padding: 3px 11px; font-size: 11px; cursor: pointer; color: #334;
+    transition: .15s;
+  }}
+  .pref-btn:hover {{ background: #e2eaf6; }}
+  .pref-btn.active {{ background: #1e3a6e; color: #fff; border-color: #1e3a6e; }}
+  .pref-btn .pfcount {{ font-size: 9px; opacity: 0.7; margin-left: 3px; }}
+  /* ── period filter: place sticky right under header ── */
+  .period-bar {{ top: 53px; }}
 </style>
 </head>
 <body>
@@ -846,20 +1032,30 @@ RICH_TEMPLATE = """<!DOCTYPE html>
   <h1>都市開発情報</h1>
   <div class="meta">生成: {generated} &nbsp;|&nbsp; {total}件</div>
 </div>
-<!-- 日付フィルター -->
-<div class="filter-bar" id="filter-bar">
-  <span class="fb-label">📅</span>
-  <button class="fbtn" id="btn-today" onclick="setToday()">本日分</button>
-  <button class="fbtn fbtn-days active" data-days="0" onclick="setDays(0)">全期間</button>
-  <button class="fbtn fbtn-days" data-days="7" onclick="setDays(7)">1週間</button>
-  <button class="fbtn fbtn-days" data-days="30" onclick="setDays(30)">1ヶ月</button>
-  <button class="fbtn fbtn-days" data-days="90" onclick="setDays(90)">3ヶ月</button>
-  <span class="fb-sep">|</span>
-  <span class="fb-label">📍</span>
-  {area_btns}
+<!-- 期間フィルター -->
+<div class="filter-bar period-bar" id="period-bar">
+  <span class="fb-label">📅 期間</span>
+  <button class="fbtn fbtn-days active" data-days="0">全期間</button>
+  <button class="fbtn fbtn-days" data-days="7">1週間</button>
+  <button class="fbtn fbtn-days" data-days="30">1ヶ月</button>
+  <button class="fbtn fbtn-days" data-days="90">3ヶ月</button>
   <span class="filter-count" id="filter-count"></span>
 </div>
 <div class="container">
+  <!-- 📰 本日・昨日の最新情報（常時TOP表示） -->
+  <h2 class="section-title">📰 最新</h2>
+  <div class="pinned-tabs">
+    <button class="ptab active" data-target="today">本日<span class="pcount" id="today-count">0</span></button>
+    <button class="ptab" data-target="yesterday">昨日<span class="pcount" id="yesterday-count">0</span></button>
+  </div>
+  <div class="pinned-grid" id="pinned-today"><div class="pinned-empty">本日の新着はまだありません</div></div>
+  <div class="pinned-grid hidden" id="pinned-yesterday"><div class="pinned-empty">昨日の新着はありませんでした</div></div>
+
+  <!-- 🗾 地方→都道府県 ナビゲーション -->
+  <h2 class="section-title">🗾 エリア別</h2>
+  <div class="region-row" id="region-row"><!-- JS で地方ボタン生成 --></div>
+  <div class="pref-row hidden" id="pref-row"><!-- 地方選択時に都道府県サブタブを生成 --></div>
+
   <div class="cards" id="cards-grid">
 {body}
   </div>
@@ -914,15 +1110,8 @@ async function __tryDecrypt(password) {{
 function __injectDecrypted(data) {{
   var grid = document.getElementById('cards-grid');
   if (grid && data.body) grid.innerHTML = data.body;
-  var bar = document.getElementById('filter-bar');
-  if (bar && data.area_btns) {{
-    // <span class="fb-label">📍</span> の直後・filter-count の手前にエリアボタン群を差し込む
-    var anchor = bar.querySelector('.filter-count');
-    var tmp = document.createElement('span');
-    tmp.innerHTML = data.area_btns;
-    while (tmp.firstChild) bar.insertBefore(tmp.firstChild, anchor);
-  }}
-  if (typeof applyFilter === 'function') applyFilter();
+  // 新レイアウトでは area_btns は使わず、JS が card[data-region] から動的生成
+  if (typeof initLayout === 'function') initLayout();
 }}
 
 (async function() {{
@@ -989,52 +1178,181 @@ async function pwCheck() {{
     fail();
   }}
 }}
-// ── フィルター ──
+// ── 新レイアウト: ピン留め + 地方/都道府県 + 期間フィルタ ──
 var _days = 0;
-var _today = false;
-var _area = '';
-function applyFilter() {{
-  var now = new Date();
-  var todayStr = now.toISOString().slice(0,10);
-  var visible = 0;
-  document.querySelectorAll('.card').forEach(function(c) {{
+var _region = '';
+var _pref = '';
+
+function __dateStr(t) {{
+  var y = t.getFullYear();
+  var m = String(t.getMonth()+1).padStart(2,'0');
+  var d = String(t.getDate()).padStart(2,'0');
+  return y + '-' + m + '-' + d;
+}}
+
+// 地方の表示順（記事0件のものは非表示）
+var __REGION_ORDER = ['関東','関西','中部','東北','北海道','九州','中国','四国','その他'];
+
+function buildPinned() {{
+  var today = new Date();
+  var yesterday = new Date(today.getTime() - 86400000);
+  var todayStr = __dateStr(today);
+  var yesterdayStr = __dateStr(yesterday);
+
+  var allCards = document.querySelectorAll('#cards-grid .card');
+  var todayCards = [], yestCards = [];
+  allCards.forEach(function(c) {{
     var d = c.dataset.date || '';
-    var area = c.dataset.area || '';
-    var showDate = true;
-    if (_today) {{
-      showDate = (d === todayStr);
-    }} else if (_days > 0) {{
-      var cutoff = new Date(now - _days * 86400000).toISOString().slice(0,10);
-      showDate = (d >= cutoff);
-    }}
-    var showArea = (!_area || area === _area);
-    if (showDate && showArea) {{ c.classList.remove('hidden'); visible++; }}
-    else {{ c.classList.add('hidden'); }}
+    if (d === todayStr) todayCards.push(c);
+    else if (d === yesterdayStr) yestCards.push(c);
+  }});
+
+  var tBox = document.getElementById('pinned-today');
+  var yBox = document.getElementById('pinned-yesterday');
+  tBox.innerHTML = ''; yBox.innerHTML = '';
+  if (todayCards.length === 0) {{
+    tBox.innerHTML = '<div class="pinned-empty">本日の新着はまだありません</div>';
+  }} else {{
+    todayCards.forEach(function(c) {{ tBox.appendChild(c.cloneNode(true)); }});
+  }}
+  if (yestCards.length === 0) {{
+    yBox.innerHTML = '<div class="pinned-empty">昨日の新着はありませんでした</div>';
+  }} else {{
+    yestCards.forEach(function(c) {{ yBox.appendChild(c.cloneNode(true)); }});
+  }}
+  document.getElementById('today-count').textContent = todayCards.length;
+  document.getElementById('yesterday-count').textContent = yestCards.length;
+}}
+
+function selectPinnedTab(target) {{
+  document.querySelectorAll('.ptab').forEach(function(b) {{
+    b.classList.toggle('active', b.dataset.target === target);
+  }});
+  document.getElementById('pinned-today').classList.toggle('hidden', target !== 'today');
+  document.getElementById('pinned-yesterday').classList.toggle('hidden', target !== 'yesterday');
+}}
+
+function buildRegionNav() {{
+  // data-region 属性をもとに記事数を集計
+  var regionStats = {{}};
+  document.querySelectorAll('#cards-grid .card').forEach(function(c) {{
+    var r = c.dataset.region || 'その他';
+    var p = c.dataset.prefecture || 'その他';
+    if (!regionStats[r]) regionStats[r] = {{ count: 0, prefs: {{}} }};
+    regionStats[r].count++;
+    regionStats[r].prefs[p] = (regionStats[r].prefs[p] || 0) + 1;
+  }});
+
+  var row = document.getElementById('region-row');
+  row.innerHTML = '';
+  __REGION_ORDER.forEach(function(r) {{
+    if (!regionStats[r]) return;
+    var btn = document.createElement('button');
+    btn.className = 'region-btn';
+    btn.dataset.region = r;
+    btn.innerHTML = r + '<span class="rcount">' + regionStats[r].count + '</span>';
+    btn.onclick = function() {{ selectRegion(r); }};
+    row.appendChild(btn);
+  }});
+  // グローバルに保持（pref-row 構築時に再利用）
+  window.__regionStats = regionStats;
+}}
+
+function buildPrefRow() {{
+  var prefRow = document.getElementById('pref-row');
+  prefRow.innerHTML = '';
+  if (!_region || !window.__regionStats || !window.__regionStats[_region]) {{
+    prefRow.classList.add('hidden');
+    return;
+  }}
+  prefRow.classList.remove('hidden');
+  var prefs = window.__regionStats[_region].prefs;
+  var entries = Object.keys(prefs).map(function(k) {{ return [k, prefs[k]]; }});
+  entries.sort(function(a, b) {{ return b[1] - a[1]; }});
+  // 「全表示」ボタン
+  var allBtn = document.createElement('button');
+  allBtn.className = 'pref-btn' + (_pref === '' ? ' active' : '');
+  allBtn.dataset.prefecture = '';
+  allBtn.innerHTML = _region + 'すべて';
+  allBtn.onclick = function() {{ selectPref(''); }};
+  prefRow.appendChild(allBtn);
+  entries.forEach(function(e) {{
+    var btn = document.createElement('button');
+    btn.className = 'pref-btn' + (_pref === e[0] ? ' active' : '');
+    btn.dataset.prefecture = e[0];
+    btn.innerHTML = e[0] + '<span class="pfcount">' + e[1] + '</span>';
+    btn.onclick = function() {{ selectPref(e[0]); }};
+    prefRow.appendChild(btn);
+  }});
+}}
+
+function selectRegion(r) {{
+  _region = (_region === r) ? '' : r;
+  _pref = '';
+  document.querySelectorAll('.region-btn').forEach(function(b) {{
+    b.classList.toggle('active', b.dataset.region === _region);
+  }});
+  buildPrefRow();
+  applyFilter();
+}}
+
+function selectPref(p) {{
+  _pref = p;
+  document.querySelectorAll('.pref-btn').forEach(function(b) {{
+    b.classList.toggle('active', b.dataset.prefecture === _pref);
+  }});
+  applyFilter();
+}}
+
+function setDays(d) {{
+  _days = d;
+  document.querySelectorAll('#period-bar .fbtn-days').forEach(function(b) {{
+    b.classList.toggle('active', Number(b.dataset.days) === d);
+  }});
+  applyFilter();
+}}
+
+function applyFilter() {{
+  var visible = 0;
+  var cutoff = '';
+  if (_days > 0) {{
+    var cd = new Date(Date.now() - _days * 86400000);
+    cutoff = __dateStr(cd);
+  }}
+  document.querySelectorAll('#cards-grid .card').forEach(function(c) {{
+    var d = c.dataset.date || '';
+    var r = c.dataset.region || 'その他';
+    var p = c.dataset.prefecture || 'その他';
+    var show = true;
+    if (cutoff && d < cutoff) show = false;
+    if (_region && r !== _region) show = false;
+    if (_pref && p !== _pref) show = false;
+    c.classList.toggle('hidden', !show);
+    if (show) visible++;
   }});
   var el = document.getElementById('filter-count');
   if (el) el.textContent = visible + '件表示中';
 }}
-function setDays(d) {{
-  _days = d; _today = false;
-  document.querySelectorAll('.fbtn-days').forEach(function(b) {{ b.classList.remove('active'); }});
-  document.querySelectorAll('[data-days="'+d+'"]').forEach(function(b) {{ b.classList.add('active'); }});
-  document.getElementById('btn-today').classList.remove('active');
+
+function initLayout() {{
+  buildPinned();
+  buildRegionNav();
   applyFilter();
 }}
-function setToday() {{
-  _today = true; _days = 0;
-  document.querySelectorAll('.fbtn-days').forEach(function(b) {{ b.classList.remove('active'); }});
-  document.getElementById('btn-today').classList.add('active');
-  applyFilter();
+
+// イベントハンドラ束ねて登録
+document.querySelectorAll('.ptab').forEach(function(b) {{
+  b.addEventListener('click', function() {{ selectPinnedTab(b.dataset.target); }});
+}});
+document.querySelectorAll('#period-bar .fbtn-days').forEach(function(b) {{
+  b.addEventListener('click', function() {{ setDays(Number(b.dataset.days)); }});
+}});
+
+// 暗号化モードでない場合（cards がすでに DOM 内）は即初期化
+// 暗号化モードでは __injectDecrypted() が呼ぶ
+if (document.querySelectorAll('#cards-grid .card').length > 0) {{
+  initLayout();
 }}
-function setArea(a) {{
-  _area = (_area === a) ? '' : a;
-  document.querySelectorAll('.area-btn').forEach(function(b) {{
-    b.classList.toggle('active', b.dataset.area === _area);
-  }});
-  applyFilter();
-}}
-applyFilter();
 </script>
 </body>
 </html>"""
@@ -1139,7 +1457,12 @@ def _card_html(a: dict) -> str:
         gnews_url = f"https://news.google.com/search?q={gnews_q}&hl=ja&gl=JP&ceid=JP%3Aja"
         gnews_btn = f'<a class="btn-gnews" href="{gnews_url}" target="_blank" rel="noopener">Google News で関連記事 →</a>'
 
-    return f"""<div class="card" data-area="{area_data}" data-date="{published}">
+    # 地方・都道府県を判定（フロントのナビ用）
+    _region, _pref = _classify_region_pref(area)
+    region_data = _html.escape(_region, quote=True)
+    pref_data = _html.escape(_pref, quote=True)
+
+    return f"""<div class="card" data-area="{area_data}" data-region="{region_data}" data-prefecture="{pref_data}" data-date="{published}">
   <div class="card-top">
     <span class="chip">{area_safe}</span>
     <span class="date">{published}</span>
