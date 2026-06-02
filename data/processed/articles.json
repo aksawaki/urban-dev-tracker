@@ -31146,5 +31146,74 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "da17c38d79ee9cc46008b93ed14c58c9": {
+    "id": "da17c38d79ee9cc46008b93ed14c58c9",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "野村不、東京・勝どきにマンション2棟建設 最終更新 | 2026/06/01 16:54 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1237310",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-02T04:27:16.029912+00:00",
+    "summary": "野村不、東京・勝どきにマンション2棟建設 最終更新 | 2026/06/01 16:54 【速報】 …",
+    "content": "",
+    "content_hash": "802fabcd26dc5a50",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "b7d55dc7c93c5cee171caa30507438be": {
+    "id": "b7d55dc7c93c5cee171caa30507438be",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "江戸川区/6月8日まで質疑書/林間学校施設整備基本計画支援C…",
+    "url": "https://www.kensetsunews.com/archives/1237419",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-02T04:30:52.813058+00:00",
+    "summary": "江戸川区/6月8日まで質疑書/林間学校施設整備基本計画支援C…",
+    "content": "",
+    "content_hash": "fbbe0080710a79dc",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "9d6acf1652dd356502d82d2736e83a93": {
+    "id": "9d6acf1652dd356502d82d2736e83a93",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "野村不/27年5月中旬着工/中央区勝どき 14階1.5万㎡共…",
+    "url": "https://www.kensetsunews.com/archives/1237425",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-02T04:31:00.077788+00:00",
+    "summary": "野村不/27年5月中旬着工/中央区勝どき 14階1.5万㎡共…",
+    "content": "",
+    "content_hash": "994fe5578f660ef1",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
