@@ -31215,5 +31215,53 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "ae815252e7444285a39e9a332469bce7": {
+    "id": "ae815252e7444285a39e9a332469bce7",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・杉並区に5600㎡のマンション、9月着工 最終更新 | 2026/06/03 12:15 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1238512",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-03T04:46:18.011235+00:00",
+    "summary": "東京・杉並区に5600㎡のマンション、9月着工 最終更新 | 2026/06/03 12:15 【速報】 …",
+    "content": "",
+    "content_hash": "3e3de1dc9fbfe9ca",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "b9974ebae04a285124e79f4dc718a1a4": {
+    "id": "b9974ebae04a285124e79f4dc718a1a4",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "イズミらに決まる/中央区の八丁堀分庁舎等複合施設大規模改修",
+    "url": "https://www.kensetsunews.com/archives/1238074",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-03T04:52:21.906303+00:00",
+    "summary": "イズミらに決まる/中央区の八丁堀分庁舎等複合施設大規模改修",
+    "content": "",
+    "content_hash": "0bf83659cb92d02a",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
