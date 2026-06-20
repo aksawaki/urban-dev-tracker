@@ -33345,5 +33345,29 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "cc0865d415c2b21dee80b37cf89efcfc": {
+    "id": "cc0865d415c2b21dee80b37cf89efcfc",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・板橋区に8800㎡のイオン新店舗、9月着工 最終更新 | 2026/06/19 16:55 【速報】 イオンリテー…",
+    "url": "https://www.kensetsunews.com/sokuho/1248696",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-20T04:09:40.946580+00:00",
+    "summary": "東京・板橋区に8800㎡のイオン新店舗、9月着工 最終更新 | 2026/06/19 16:55 【速報】 イオンリテー…",
+    "content": "",
+    "content_hash": "3c0f8b9396c2bd49",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
