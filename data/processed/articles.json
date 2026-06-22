@@ -33369,5 +33369,50 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "eb1153724637330b5cd7e794da85d931": {
+    "id": "eb1153724637330b5cd7e794da85d931",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東電HDと大和ハウス、系統用蓄電所の共同開発で業務提携 最終更新 | 2026/06/22 13:09 【速報】 東京電力ホールディングスと大和ハウス工業は22日、系統用蓄電所の共同開発に関する業務提携契約…",
+    "url": "https://www.kensetsunews.com/sokuho/1249265",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-22T04:59:45.078595+00:00",
+    "summary": "東電HDと大和ハウス、系統用蓄電所の共同開発で業務提携 最終更新 | 2026/06/22 13:09 【速報】 東京電力ホールディングスと大和ハウス工業は22日、系統用蓄電所の共同開発に関する業務提携契約…",
+    "content": "",
+    "content_hash": "dafd986a65b28d15",
+    "priority": "medium",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "297cbed55447320a9d81b8a8d2dbdecc": {
+    "id": "297cbed55447320a9d81b8a8d2dbdecc",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・板橋区に8800㎡のイオン新店舗、9月着工 最終更新 | 2026/06/19 16:55 【速報】 イオンリテー…",
+    "url": "https://www.kensetsunews.com/sokuho/1248696",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-22T04:59:54.275723+00:00",
+    "summary": "東京・板橋区に8800㎡のイオン新店舗、9月着工 最終更新 | 2026/06/19 16:55 【速報】 イオンリテー…",
+    "content": "",
+    "content_hash": "3c0f8b9396c2bd49",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
