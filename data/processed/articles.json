@@ -33948,5 +33948,71 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "515138bacd7b6244d6df4533478a40ad": {
+    "id": "515138bacd7b6244d6df4533478a40ad",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・渋谷コーポラスマンション建替計画、設計施工は前田建設 最終更新 | 2026/06/26 16:50 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1252423",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-29T04:24:56.807023+00:00",
+    "summary": "東京・渋谷コーポラスマンション建替計画、設計施工は前田建設 最終更新 | 2026/06/26 16:50 【速報】 …",
+    "content": "",
+    "content_hash": "8207cca80c3cb1b2",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "13ce76fdf91e2c317b6dd1e5ad21804e": {
+    "id": "13ce76fdf91e2c317b6dd1e5ad21804e",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・世田谷清掃工場建替え、697億円で川重・大成JV 最終更新 | 2026/06/29 09:17 カテゴリーなし 東京二十三区清掃一部事務組合は、世田谷清掃工場建て替え工事を総合評価方式制限付き一般競争入札…",
+    "url": "https://www.kensetsunews.com/sokuho/1252422",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-29T04:24:59.116037+00:00",
+    "summary": "東京・世田谷清掃工場建替え、697億円で川重・大成JV 最終更新 | 2026/06/29 09:17 カテゴリーなし 東京二十三区清掃一部事務組合は、世田谷清掃工場建て替え工事を総合評価方式制限付き一般競争入札…",
+    "content": "",
+    "content_hash": "b62f3c9554b1b705",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "2ec967f30aee8ee19075562f350959f0": {
+    "id": "2ec967f30aee8ee19075562f350959f0",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "前田建設が新築施工/渋谷コーポラスマンション建替",
+    "url": "https://www.kensetsunews.com/archives/1252677",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-06-29T04:28:10.577934+00:00",
+    "summary": "前田建設が新築施工/渋谷コーポラスマンション建替",
+    "content": "",
+    "content_hash": "494af9255c77863b",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
