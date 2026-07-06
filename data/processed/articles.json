@@ -34672,5 +34672,92 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "b03d0f1ea3d721cd1d3b194c736e31a4": {
+    "id": "b03d0f1ea3d721cd1d3b194c736e31a4",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・町田市の統合小基本計画・設計、山下設計を特定 最終更新 | 2026/07/03 16:56 【速報】 東京都町田市は、「小山田・小山田南地区統合新設小学校建設基本計画策定等支援業務委託」と「同…",
+    "url": "https://www.kensetsunews.com/sokuho/1255998",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-06T04:02:23.346278+00:00",
+    "summary": "東京・町田市の統合小基本計画・設計、山下設計を特定 最終更新 | 2026/07/03 16:56 【速報】 東京都町田市は、「小山田・小山田南地区統合新設小学校建設基本計画策定等支援業務委託」と「同…",
+    "content": "",
+    "content_hash": "7c6eeecc5d7e95c6",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d7d5d22f6c3be8b7b22a0f9beb7cc0d1": {
+    "id": "d7d5d22f6c3be8b7b22a0f9beb7cc0d1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・足立区の竹ノ塚駅東口再開発、2万㎡超に　31年度本体着工 最終更新 | 2026/07/06 09:22 【速報】 東京都足立区、都市再生機構（ＵＲ）、東武鉄道の３者が進めている「竹ノ塚駅東口地区第一種市街地…",
+    "url": "https://www.kensetsunews.com/sokuho/1255997",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-06T04:02:25.637492+00:00",
+    "summary": "東京・足立区の竹ノ塚駅東口再開発、2万㎡超に　31年度本体着工 最終更新 | 2026/07/06 09:22 【速報】 東京都足立区、都市再生機構（ＵＲ）、東武鉄道の３者が進めている「竹ノ塚駅東口地区第一種市街地…",
+    "content": "",
+    "content_hash": "32c716c4885153bf",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "8165fed4e4085a196fb19352db9245f9": {
+    "id": "8165fed4e4085a196fb19352db9245f9",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "延べ15.8万㎡の東京・南小岩七丁目再開発、来年度に組合設立へ 最終更新 | 2026/07/06 09:22 【速報】 東京都江戸川区のＪＲ総武線小岩駅南側に計画がある「南小岩七丁目駅前地区第一種市街地再開発事業…",
+    "url": "https://www.kensetsunews.com/sokuho/1255993",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-06T04:02:30.147229+00:00",
+    "summary": "延べ15.8万㎡の東京・南小岩七丁目再開発、来年度に組合設立へ 最終更新 | 2026/07/06 09:22 【速報】 東京都江戸川区のＪＲ総武線小岩駅南側に計画がある「南小岩七丁目駅前地区第一種市街地再開発事業…",
+    "content": "",
+    "content_hash": "c238e513da6eaff6",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "848b20fa52d9418672840ff6f95985e2": {
+    "id": "848b20fa52d9418672840ff6f95985e2",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "足立区とUR、東武鉄道/複合施設は延べ2万㎡/竹ノ塚駅東口再…",
+    "url": "https://www.kensetsunews.com/archives/1256136",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-06T04:05:30.036736+00:00",
+    "summary": "足立区とUR、東武鉄道/複合施設は延べ2万㎡/竹ノ塚駅東口再…",
+    "content": "",
+    "content_hash": "96a607eb1ed803fa",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
