@@ -35308,5 +35308,96 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "f675e670b95c90271ca66148dc64bef2": {
+    "id": "f675e670b95c90271ca66148dc64bef2",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・中野区のサンプラザ再開発新方針、ホールを縮小　工区分割・段階整備可能に 最終更新 | 2026/07/13 09:10 カテゴリーなし 東京都中野区は、中野サンプラザ建て替えの新たな方針を明らかにした。新施設での住宅整備は１１０…",
+    "url": "https://www.kensetsunews.com/sokuho/1259129",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-13T03:29:28.179735+00:00",
+    "summary": "東京・中野区のサンプラザ再開発新方針、ホールを縮小　工区分割・段階整備可能に 最終更新 | 2026/07/13 09:10 カテゴリーなし 東京都中野区は、中野サンプラザ建て替えの新たな方針を明らかにした。新施設での住宅整備は１１０…",
+    "content": "",
+    "content_hash": "63d5cb0e77869cd6",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f4d3d53f984e1fb7b3bb6915b230c34b": {
+    "id": "f4d3d53f984e1fb7b3bb6915b230c34b",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉・松戸市の新庁舎整備基本計画、入札を公告 最終更新 | 2026/07/10 16:37 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1259142",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-13T03:29:32.581453+00:00",
+    "summary": "千葉・松戸市の新庁舎整備基本計画、入札を公告 最終更新 | 2026/07/10 16:37 【速報】 …",
+    "content": "",
+    "content_hash": "7f6f80ea0787e2ac",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f22b727cc048ce637c7212c707550ff1": {
+    "id": "f22b727cc048ce637c7212c707550ff1",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "参加申請7月22日まで/大島元町合築宿舎解体設計/東京航空局",
+    "url": "https://www.kensetsunews.com/archives/1259227",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-13T03:32:41.471734+00:00",
+    "summary": "参加申請7月22日まで/大島元町合築宿舎解体設計/東京航空局",
+    "content": "",
+    "content_hash": "084a08cb7dd9cd79",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ea43554e30fb44e3c2c38dbe6ae4f949": {
+    "id": "ea43554e30fb44e3c2c38dbe6ae4f949",
+    "source_id": "kensetsunews_kansai",
+    "source_name": "建設通信新聞 関西",
+    "title": "UR西日本/47億余で村本建設/千里竹見台団地北区域後2工区",
+    "url": "https://www.kensetsunews.com/archives/1259273",
+    "area": "大阪市",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関西",
+      "大阪",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-13T03:35:33.784022+00:00",
+    "summary": "UR西日本/47億余で村本建設/千里竹見台団地北区域後2工区",
+    "content": "",
+    "content_hash": "670efa78b33d0428",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
