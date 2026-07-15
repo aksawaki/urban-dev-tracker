@@ -35513,5 +35513,134 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "b42ed26e83c2f1d9039e9fe8d7492534": {
+    "id": "b42ed26e83c2f1d9039e9fe8d7492534",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "さいたま市に5.6万㎡の倉庫建設計画、28年の着工目指す 最終更新 | 2026/07/14 16:46 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1260282",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:49:59.066671+00:00",
+    "summary": "さいたま市に5.6万㎡の倉庫建設計画、28年の着工目指す 最終更新 | 2026/07/14 16:46 【速報】 …",
+    "content": "",
+    "content_hash": "50a86a5761133a62",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "fd41113cbb398272d877b3d48ad1dd95": {
+    "id": "fd41113cbb398272d877b3d48ad1dd95",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "日テレの東京・二番町再開発、竹中工務店で設計進む 最終更新 | 2026/07/15 09:34 【速報】 日本テレビが東京都千代田区で計画する「二番町再開発計画」の設計を、竹中工務店が担当している。…",
+    "url": "https://www.kensetsunews.com/sokuho/1260275",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:50:00.212654+00:00",
+    "summary": "日テレの東京・二番町再開発、竹中工務店で設計進む 最終更新 | 2026/07/15 09:34 【速報】 日本テレビが東京都千代田区で計画する「二番町再開発計画」の設計を、竹中工務店が担当している。…",
+    "content": "",
+    "content_hash": "84e119195d23998e",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f41f07caf7e25abe513f35988db5dde7": {
+    "id": "f41f07caf7e25abe513f35988db5dde7",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "相模原市のリニア駅周辺地区・地区計画原案、駅まち一体で推進 最終更新 | 2026/07/14 16:21 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1260280",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:50:04.902322+00:00",
+    "summary": "相模原市のリニア駅周辺地区・地区計画原案、駅まち一体で推進 最終更新 | 2026/07/14 16:21 【速報】 …",
+    "content": "",
+    "content_hash": "fa80f99d67c20f00",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ecf5a64d063f1e4ac6a87fa0711d646f": {
+    "id": "ecf5a64d063f1e4ac6a87fa0711d646f",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "横浜市の菊名小建替建築工事、61.7億円で戸田建設JV落札 最終更新 | 2026/07/14 16:33 【速報】 横浜市は、ＷＴＯ対象の「菊名小学校建替工事（建築工事）」を総合評価一般競争入札（簡易型）し…",
+    "url": "https://www.kensetsunews.com/sokuho/1260279",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:50:06.053185+00:00",
+    "summary": "横浜市の菊名小建替建築工事、61.7億円で戸田建設JV落札 最終更新 | 2026/07/14 16:33 【速報】 横浜市は、ＷＴＯ対象の「菊名小学校建替工事（建築工事）」を総合評価一般競争入札（簡易型）し…",
+    "content": "",
+    "content_hash": "8c5aa19c27e76e73",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "89e307882329842bc751de9713d59359": {
+    "id": "89e307882329842bc751de9713d59359",
+    "source_id": "tokyo_metro_press",
+    "source_name": "東京都 報道発表一覧",
+    "title": "第33回耐震化推進都民会議を開催します",
+    "url": "https://www.metro.tokyo.lg.jp/information/press/2026/07/2026071401",
+    "area": "東京都",
+    "tags": [
+      "東京都",
+      "報道発表",
+      "再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:50:53.942296+00:00",
+    "summary": "東京都では、建物の耐震化の推進に向けて、様々な分野の民間関係団体等や区市町村と連携し、一体となって耐震化の機運醸成及び啓発活動に取り組むために平成20年8月に耐震化推進都民会議を立ち上げ、耐震化に係る活動を行っています。 この度、第33回耐震化推進都民会議を下記のとおり開催します。 令和8年7月21日（火曜日）　14時00分から15時30分まで 都庁第二本庁舎1階　二庁ホール ※一般の方の傍聴はありません 別紙1（PDF：145KB） のとおり ※会議資料は後日、 東京都耐震ポータルサイト に掲載予定 別紙2（PDF：158KB） のとおり 本件は、「 2050東京戦略 」を推進する取組です。",
+    "content": "東京都では、建物の耐震化の推進に向けて、様々な分野の民間関係団体等や区市町村と連携し、一体となって耐震化の機運醸成及び啓発活動に取り組むために平成20年8月に耐震化推進都民会議を立ち上げ、耐震化に係る活動を行っています。 この度、第33回耐震化推進都民会議を下記のとおり開催します。 令和8年7月21日（火曜日）　14時00分から15時30分まで 都庁第二本庁舎1階　二庁ホール ※一般の方の傍聴はありません 別紙1（PDF：145KB） のとおり ※会議資料は後日、 東京都耐震ポータルサイト に掲載予定 別紙2（PDF：158KB） のとおり 本件は、「 2050東京戦略 」を推進する取組です。 戦略21　都市の強靭化「倒れない・助かるまちづくりの推進」",
+    "content_hash": "dd57e2728bbaa2b5",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "835877e21b443ea3eeb6c21be41f8213": {
+    "id": "835877e21b443ea3eeb6c21be41f8213",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "3月の都決目指す/中野四丁目西地区再開発/準備組合",
+    "url": "https://www.kensetsunews.com/archives/1260341",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-15T02:53:16.257426+00:00",
+    "summary": "3月の都決目指す/中野四丁目西地区再開発/準備組合",
+    "content": "",
+    "content_hash": "5a94720bdab0b80b",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
