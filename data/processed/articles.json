@@ -36132,5 +36132,92 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "b184d3e33ddea27daf984e6c84ed8b23": {
+    "id": "b184d3e33ddea27daf984e6c84ed8b23",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京都の議会付議案件、小平合同庁舎改築など　22.2億円で大豊建設らが落札 最終更新 | 2026/07/17 16:46 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1262088",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-21T03:17:11.657939+00:00",
+    "summary": "東京都の議会付議案件、小平合同庁舎改築など　22.2億円で大豊建設らが落札 最終更新 | 2026/07/17 16:46 【速報】 …",
+    "content": "",
+    "content_hash": "752321a68fc2a684",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "2cf2903eeb0d820bbe2d306a2554e0a1": {
+    "id": "2cf2903eeb0d820bbe2d306a2554e0a1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京都の都営団地建替基本設計、プロポ2件を公告 最終更新 | 2026/07/17 16:41 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1262086",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-21T03:17:12.738907+00:00",
+    "summary": "東京都の都営団地建替基本設計、プロポ2件を公告 最終更新 | 2026/07/17 16:41 【速報】 …",
+    "content": "",
+    "content_hash": "c12bb9216370793f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "5887548480170609117cebe9e02ad027": {
+    "id": "5887548480170609117cebe9e02ad027",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・小金井市の新庁舎建設対話調査、概算工事費　市の見積と大きく乖離 最終更新 | 2026/07/17 16:31 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1262076",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-21T03:17:13.821000+00:00",
+    "summary": "東京・小金井市の新庁舎建設対話調査、概算工事費　市の見積と大きく乖離 最終更新 | 2026/07/17 16:31 【速報】 …",
+    "content": "",
+    "content_hash": "0e0b56d7d26a3638",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "c7a2775ea80a8382c9eafda0c1dab1d4": {
+    "id": "c7a2775ea80a8382c9eafda0c1dab1d4",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "東京都財務局/22億の大豊建設ら/小平合庁改築など3件",
+    "url": "https://www.kensetsunews.com/archives/1262436",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-21T03:20:24.057639+00:00",
+    "summary": "東京都財務局/22億の大豊建設ら/小平合庁改築など3件",
+    "content": "",
+    "content_hash": "f23fdd979d0ef96d",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
