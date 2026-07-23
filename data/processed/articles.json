@@ -36351,5 +36351,71 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "90812a5bec364698ccf56bba021b3abf": {
+    "id": "90812a5bec364698ccf56bba021b3abf",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "大阪・箕面市に3万㎡のデータセンター、10月着工目指す 最終更新 | 2026/07/23 09:24 【速報】 関西電力サイラスワンＯＳＫ２合同会社（大阪市北区）は、大阪府箕面市でデータセンターの建設を計…",
+    "url": "https://www.kensetsunews.com/sokuho/1263076",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-23T03:21:59.768403+00:00",
+    "summary": "大阪・箕面市に3万㎡のデータセンター、10月着工目指す 最終更新 | 2026/07/23 09:24 【速報】 関西電力サイラスワンＯＳＫ２合同会社（大阪市北区）は、大阪府箕面市でデータセンターの建設を計…",
+    "content": "",
+    "content_hash": "d61e491ce6eeac64",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "313e88b9fdf23a1a8461801419751761": {
+    "id": "313e88b9fdf23a1a8461801419751761",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・葛飾区に5200㎡のマンション、10月着工 最終更新 | 2026/07/22 15:56 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1262691",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-23T03:22:05.564957+00:00",
+    "summary": "東京・葛飾区に5200㎡のマンション、10月着工 最終更新 | 2026/07/22 15:56 【速報】 …",
+    "content": "",
+    "content_hash": "b9954d52ef65d824",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e13669156d3686a66dca470f21a207a8": {
+    "id": "e13669156d3686a66dca470f21a207a8",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "歩行者デッキ改良を追加/飯田橋駅周辺基盤整備計画/東京都都市…",
+    "url": "https://www.kensetsunews.com/archives/1263398",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-23T03:24:35.189476+00:00",
+    "summary": "歩行者デッキ改良を追加/飯田橋駅周辺基盤整備計画/東京都都市…",
+    "content": "",
+    "content_hash": "fc459f30a87932dd",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
