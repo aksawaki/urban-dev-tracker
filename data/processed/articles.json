@@ -36594,5 +36594,75 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "71ec901c6aea5d746f457f076caba011": {
+    "id": "71ec901c6aea5d746f457f076caba011",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・武蔵野市の総合体育館大規模改修工事、15.9億円で飛島建設 最終更新 | 2026/07/24 16:46 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1264488",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-25T03:13:56.894690+00:00",
+    "summary": "東京・武蔵野市の総合体育館大規模改修工事、15.9億円で飛島建設 最終更新 | 2026/07/24 16:46 【速報】 …",
+    "content": "",
+    "content_hash": "0215543b50e31e5d",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "8faa7ffeaf6080ddc57fe9280aec5920": {
+    "id": "8faa7ffeaf6080ddc57fe9280aec5920",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・新宿区の下宮比町再開発20.8万㎡、来年3月の都決目指す 最終更新 | 2026/07/24 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1264485",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-25T03:13:58.038321+00:00",
+    "summary": "東京・新宿区の下宮比町再開発20.8万㎡、来年3月の都決目指す 最終更新 | 2026/07/24 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "7fc38c836d492e64",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d49b618a196506c37f1dc3e8325cf3b1": {
+    "id": "d49b618a196506c37f1dc3e8325cf3b1",
+    "source_id": "sumitomo_rd_news",
+    "source_name": "住友不動産 ニュースリリース",
+    "title": "2026.07.24 オフィスビル サステナビリティ 再開発 住友不動産東京三田ガーデンタワー・住友不動産東京三田サウスタワー 地域生物多様性増進法に基づく「自然共生サイト」に認定 ～生物多様性の価値を創出し、「都市と自然の共生」を目指す取",
+    "url": "https://www.sumitomo-rd.co.jp/uploads/20260724_release_30by30_kyousei2026_mita-1.pdf",
+    "area": "全国",
+    "tags": [
+      "住友不動産",
+      "再開発",
+      "新宿",
+      "浜松町"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-07-25T03:15:48.485432+00:00",
+    "summary": "2026.07.24 オフィスビル サステナビリティ 再開発 住友不動産東京三田ガーデンタワー・住友不動産東京三田サウスタワー 地域生物多様性増進法に基づく「自然共生サイト」に認定 ～生物多様性の価値を創出し、「都市と自然の共生」を目指す取",
+    "content": "",
+    "content_hash": "8e91007fed529668",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
