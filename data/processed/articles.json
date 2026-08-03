@@ -37571,5 +37571,116 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "02e54d6ede2c64868ca0228175659eb0": {
+    "id": "02e54d6ede2c64868ca0228175659eb0",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "TOTO、神奈川・茅ケ崎市に1万㎡の研究開発施設　12月着工 最終更新 | 2026/08/03 09:32 【速報】 TOTOは、TOTO茅ヶ崎工場（神奈川県茅ケ崎市）の敷地内にセラミック事業の新…",
+    "url": "https://www.kensetsunews.com/sokuho/1267844",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-03T03:27:54.151018+00:00",
+    "summary": "TOTO、神奈川・茅ケ崎市に1万㎡の研究開発施設　12月着工 最終更新 | 2026/08/03 09:32 【速報】 TOTOは、TOTO茅ヶ崎工場（神奈川県茅ケ崎市）の敷地内にセラミック事業の新…",
+    "content": "",
+    "content_hash": "f00ef0035136c4d4",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e691f3ae397c5f9dd6fec2599c912d8f": {
+    "id": "e691f3ae397c5f9dd6fec2599c912d8f",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉・松戸市の新庁舎整備、9月に基本計画案 最終更新 | 2026/07/31 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1267450",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-03T03:27:58.848923+00:00",
+    "summary": "千葉・松戸市の新庁舎整備、9月に基本計画案 最終更新 | 2026/07/31 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "a96450fd6d9fd047",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "b49189074b663f57257cf757ac2dbcdd": {
+    "id": "b49189074b663f57257cf757ac2dbcdd",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉県の総合スポーツセンター体育館建築工事、89.3億円で大成建設JV落札 最終更新 | 2026/07/31 16:41 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1267449",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-03T03:28:01.136965+00:00",
+    "summary": "千葉県の総合スポーツセンター体育館建築工事、89.3億円で大成建設JV落札 最終更新 | 2026/07/31 16:41 【速報】 …",
+    "content": "",
+    "content_hash": "784c213a49e935fd",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f0a024564747752bc37de133046f6335": {
+    "id": "f0a024564747752bc37de133046f6335",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉・柏市の北柏駅南口広場基本計画策定、復建エンジを特定 最終更新 | 2026/07/31 16:28 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1267447",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-03T03:28:03.455944+00:00",
+    "summary": "千葉・柏市の北柏駅南口広場基本計画策定、復建エンジを特定 最終更新 | 2026/07/31 16:28 【速報】 …",
+    "content": "",
+    "content_hash": "e0d416114c94fb0a",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "36466ce56233ccab13e6ac80903b0408": {
+    "id": "36466ce56233ccab13e6ac80903b0408",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "内神田一丁目が竣工/大手町ゲートビルなど公開/千代田区と三菱…",
+    "url": "https://www.kensetsunews.com/archives/1267588",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-03T03:31:02.328056+00:00",
+    "summary": "内神田一丁目が竣工/大手町ゲートビルなど公開/千代田区と三菱…",
+    "content": "",
+    "content_hash": "f1e967f4536d6704",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
