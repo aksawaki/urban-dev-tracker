@@ -38346,5 +38346,77 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "b72ebbcc06b5e8d187155be939132589": {
+    "id": "b72ebbcc06b5e8d187155be939132589",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "特定業務代行者を追加募集/上板橋駅南口駅前東地区市街地再開発…",
+    "url": "https://www.kensetsunews.com/archives/1271021",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-10T02:11:55.321552+00:00",
+    "summary": "特定業務代行者を追加募集/上板橋駅南口駅前東地区市街地再開発…",
+    "content": "",
+    "content_hash": "1335db10efb3778f",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "5d0d198bfe192453e1a0b3497c3a0e47": {
+    "id": "5d0d198bfe192453e1a0b3497c3a0e47",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "東京都/1.4万㎡、4月に着工/警視庁上野警察署庁舎",
+    "url": "https://www.kensetsunews.com/archives/1271029",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-10T02:11:58.941697+00:00",
+    "summary": "東京都/1.4万㎡、4月に着工/警視庁上野警察署庁舎",
+    "content": "",
+    "content_hash": "0d05662a1ee7a5bd",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "c11e9da674e47d98ddbfb0893c9a8196": {
+    "id": "c11e9da674e47d98ddbfb0893c9a8196",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "豊島区の本社解体/日本加除出版、施工はパナソニックホームズ",
+    "url": "https://www.kensetsunews.com/archives/1271031",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-10T02:12:01.425737+00:00",
+    "summary": "豊島区の本社解体/日本加除出版、施工はパナソニックホームズ",
+    "content": "",
+    "content_hash": "6bf343089fd4df7c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
