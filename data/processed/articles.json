@@ -38997,5 +38997,26 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "be0be054ccae80623a81f9967194f5f9": {
+    "id": "be0be054ccae80623a81f9967194f5f9",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・大田区に7200㎡のマンション、来年4月着工 最終更新 | 2026/08/20 16:26 【速報】 ◇大…",
+    "url": "https://www.kensetsunews.com/sokuho/1274014",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-21T01:38:35.936916+00:00",
+    "summary": "東京・大田区に7200㎡のマンション、来年4月着工 最終更新 | 2026/08/20 16:26 【速報】 ◇大…",
+    "content": "",
+    "content_hash": "3b1e426d9c9317a2",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
