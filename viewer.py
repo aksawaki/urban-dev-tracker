@@ -1566,7 +1566,26 @@ def generate_rich_html(articles: list[dict], password_hash: str = "", password: 
             or ""
         )
 
-    sorted_articles = sorted(articles, key=_sort_date, reverse=True)
+    # ── エリア単位でグループ化したうえで日付降順に並べる ──
+    # 同じ (都道府県, エリア) の記事を隣接配置し、グループ自体は
+    # 各グループの最新記事の日付の新しい順に並べる。
+    # 期間/地方/県フィルタを掛けても、表示中のカードは常にエリアごとに固まる。
+    from collections import defaultdict as _defaultdict
+    _groups: dict[tuple, list] = _defaultdict(list)
+    for _a in articles:
+        _area = _effective_area(_a)
+        _pref = _classify_region_pref(_area)[1]
+        _groups[(_pref, _area)].append(_a)
+    for _k in _groups:
+        _groups[_k].sort(key=_sort_date, reverse=True)
+    _group_keys_sorted = sorted(
+        _groups.keys(),
+        key=lambda k: _sort_date(_groups[k][0]),
+        reverse=True,
+    )
+    sorted_articles = []
+    for _k in _group_keys_sorted:
+        sorted_articles.extend(_groups[_k])
 
     if not sorted_articles:
         body = '<p class="empty">表示できる記事がありません。先に <code>python3 main.py crawl</code> を実行してください。</p>'
