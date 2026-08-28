@@ -39661,5 +39661,77 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "d7d40cc7ac9ff9580101e7285773a613": {
+    "id": "d7d40cc7ac9ff9580101e7285773a613",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・目黒区の中目黒駅前北地区再開発、変更地区計画が都決　30年度着工目指す 最終更新 | 2026/08/28 16:41 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1277469",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-28T10:45:02.560199+00:00",
+    "summary": "東京・目黒区の中目黒駅前北地区再開発、変更地区計画が都決　30年度着工目指す 最終更新 | 2026/08/28 16:41 【速報】 …",
+    "content": "",
+    "content_hash": "70b22d1a2192a24a",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "7eef18c0184411dc11372ec4c382016c": {
+    "id": "7eef18c0184411dc11372ec4c382016c",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "大田区のみらい学園/27年12月初旬に着工/延8300㎡、設…",
+    "url": "https://www.kensetsunews.com/archives/1276969",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-28T10:48:27.812673+00:00",
+    "summary": "大田区のみらい学園/27年12月初旬に着工/延8300㎡、設…",
+    "content": "",
+    "content_hash": "773a5cc3f7c1125b",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e421f44a529204f13b76e6ed03d685f5": {
+    "id": "e421f44a529204f13b76e6ed03d685f5",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "参加申請9月16日まで/板橋区の常盤台住宅複合施設構想・計画",
+    "url": "https://www.kensetsunews.com/archives/1276979",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-08-28T10:48:28.992113+00:00",
+    "summary": "参加申請9月16日まで/板橋区の常盤台住宅複合施設構想・計画",
+    "content": "",
+    "content_hash": "f2d1a72a26be5bb2",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
