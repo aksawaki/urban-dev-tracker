@@ -40614,5 +40614,122 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "36d6672bb9c855e6f94e3293463aa639": {
+    "id": "36d6672bb9c855e6f94e3293463aa639",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "明治安田、不動産投資倍増へ　2兆円目指す 最終更新 | 2026/09/07 10:25 カテゴリーなし 明治安田生命保険は、東京都新宿区に建設した明治安田生命新宿ビルの竣工（しゅんこう）式で、現在…",
+    "url": "https://www.kensetsunews.com/sokuho/1281773",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-07T03:53:19.464808+00:00",
+    "summary": "明治安田、不動産投資倍増へ　2兆円目指す 最終更新 | 2026/09/07 10:25 カテゴリーなし 明治安田生命保険は、東京都新宿区に建設した明治安田生命新宿ビルの竣工（しゅんこう）式で、現在…",
+    "content": "",
+    "content_hash": "b8883b1f750dc9be",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "2322ede9f3a9209cbcefcb1bc4ff51f4": {
+    "id": "2322ede9f3a9209cbcefcb1bc4ff51f4",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・西新宿六丁目西・新宿中央公園北西地区6.3万㎡再開発、27年度都決　31年度着工 最終更新 | 2026/09/07 09:12 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1281364",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-07T03:53:29.059744+00:00",
+    "summary": "東京・西新宿六丁目西・新宿中央公園北西地区6.3万㎡再開発、27年度都決　31年度着工 最終更新 | 2026/09/07 09:12 【速報】 …",
+    "content": "",
+    "content_hash": "df714282bfdbb501",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d50c56b46589d73047b679456a9de5b0": {
+    "id": "d50c56b46589d73047b679456a9de5b0",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "土地の歴史を継承/東京都建設局、練馬城址公園南側整備/古城の…",
+    "url": "https://www.kensetsunews.com/archives/1281426",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-07T03:56:43.859356+00:00",
+    "summary": "土地の歴史を継承/東京都建設局、練馬城址公園南側整備/古城の…",
+    "content": "",
+    "content_hash": "536d6182b3742dde",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "862afaced2614b4d47b972ea3dd01b0f": {
+    "id": "862afaced2614b4d47b972ea3dd01b0f",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "荒川区/30年程度かけ建替え/学校施設建替計画/1校目は31…",
+    "url": "https://www.kensetsunews.com/archives/1281428",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-07T03:56:45.066136+00:00",
+    "summary": "荒川区/30年程度かけ建替え/学校施設建替計画/1校目は31…",
+    "content": "",
+    "content_hash": "49be9b3307ec74c6",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "72549e4b8200f92000fca7bd02a83a86": {
+    "id": "72549e4b8200f92000fca7bd02a83a86",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "RYアーキテクツに/東京都建設局の北多摩北部事務所改修基本計…",
+    "url": "https://www.kensetsunews.com/archives/1281430",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-07T03:56:47.531318+00:00",
+    "summary": "RYアーキテクツに/東京都建設局の北多摩北部事務所改修基本計…",
+    "content": "",
+    "content_hash": "8ffc3a90992acf1f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
