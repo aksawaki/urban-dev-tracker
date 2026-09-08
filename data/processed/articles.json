@@ -40731,5 +40731,182 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "75b997d7f205e18e44af625be03160fe": {
+    "id": "75b997d7f205e18e44af625be03160fe",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "野村不動産が東京・新宿区に事務所・ホテル、設計は西松　来年4月着工 最終更新 | 2026/09/08 10:44 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1281816",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:56:13.242406+00:00",
+    "summary": "野村不動産が東京・新宿区に事務所・ホテル、設計は西松　来年4月着工 最終更新 | 2026/09/08 10:44 【速報】 …",
+    "content": "",
+    "content_hash": "c407ad7d94dbee73",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f9db22cef22faab801b8b107a8151653": {
+    "id": "f9db22cef22faab801b8b107a8151653",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "住友商事が千葉・松戸市に9.6万㎡物流施設、28年4月着工 最終更新 | 2026/09/08 10:44 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1281815",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:56:15.533887+00:00",
+    "summary": "住友商事が千葉・松戸市に9.6万㎡物流施設、28年4月着工 最終更新 | 2026/09/08 10:44 【速報】 …",
+    "content": "",
+    "content_hash": "b296958119e8bab9",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "3884c7eb79ae5abd74a277576bb6d785": {
+    "id": "3884c7eb79ae5abd74a277576bb6d785",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・荒川区の小中学校プール施設、建替に合わせ集約 最終更新 | 2026/09/07 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1281821",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:56:16.682138+00:00",
+    "summary": "東京・荒川区の小中学校プール施設、建替に合わせ集約 最終更新 | 2026/09/07 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "bbcbc83ba3edcbab",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "4733c3fc470e7d4ea4c1184fca7284a6": {
+    "id": "4733c3fc470e7d4ea4c1184fca7284a6",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "三菱地所が東京・板橋区に3万㎡物流倉庫、設計は大末　来年4月着工 最終更新 | 2026/09/07 16:37 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1281819",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:56:19.000135+00:00",
+    "summary": "三菱地所が東京・板橋区に3万㎡物流倉庫、設計は大末　来年4月着工 最終更新 | 2026/09/07 16:37 【速報】 …",
+    "content": "",
+    "content_hash": "e54e2ed20bf3ae70",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "76cd3f88580275e2821b5a734c3cda92": {
+    "id": "76cd3f88580275e2821b5a734c3cda92",
+    "source_id": "tokyo_metro_press",
+    "source_name": "東京都 報道発表一覧",
+    "title": "水素エネルギーに関する国際会議「HENCA Tokyo 2026」の開催について",
+    "url": "https://www.metro.tokyo.lg.jp/information/press/2026/09/2026090704",
+    "area": "東京都",
+    "tags": [
+      "東京都",
+      "報道発表",
+      "再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:57:05.948572+00:00",
+    "summary": "東京都は、エネルギーの安定供給の確保や脱炭素化に向け、FC（燃料電池）モビリティの普及促進など、都内における水素エネルギーの需要拡大と社会実装に取り組んでいます。 このたび、水素市場の創出に向けた国内外の連携・交流を促進するとともに、グローバル市場の最新動向や国内外の先進的な取組・プロジェクトを広く共有・発信し、水素の普及拡大と社会実装の更なる加速につなげるため、水素エネルギーに関する国際会議「HENCA Tokyo 2026」を下記のとおり開催します。 今年度は2日間にわたり開催し、国内外の水素のキーパーソンが一堂に会し、水素大動脈の動きも踏まえ、最新の知見を共有します。また、新たに、先進的",
+    "content": "東京都は、エネルギーの安定供給の確保や脱炭素化に向け、FC（燃料電池）モビリティの普及促進など、都内における水素エネルギーの需要拡大と社会実装に取り組んでいます。 このたび、水素市場の創出に向けた国内外の連携・交流を促進するとともに、グローバル市場の最新動向や国内外の先進的な取組・プロジェクトを広く共有・発信し、水素の普及拡大と社会実装の更なる加速につなげるため、水素エネルギーに関する国際会議「HENCA Tokyo 2026」を下記のとおり開催します。 今年度は2日間にわたり開催し、国内外の水素のキーパーソンが一堂に会し、水素大動脈の動きも踏まえ、最新の知見を共有します。また、新たに、先進的な取組を行うスタートアップ等による展示会も同時に開催します。 HENCA Tokyo 2026 令和8年10月14日（水曜日）13時00分から18時00分 令和8年10月15日（木曜日）10時00分から18時30分 Tokyo Innovation Base（東京都千代田区丸の内3-8-3） ※オンラインによるライブ配信（日英同時通訳あり）実施予定 ※現地参加・オンライン視聴ともに事前登録が必要です。（受付開始予定：9月下旬） 国・産業界・自治体のキーパーソンを迎え、水素社会の実装に向けたセッションを実施 世界水素サミットでも登壇したパネリストなどを迎え、欧州、北米でのグローバル市場の最新動向を共有 水素関連業界で活躍する多くのパネリストによる多様な視点でのセッションを実施 セッション1　水素大動脈構想から始まる水素の社会実装 セッション2　都市の水素実装に向けた先進自治体と官民連携 セッション3　モビリティ分野における官民連携　ほか セッション1　大西洋水素回廊構築の取組 セッション2　世界で活躍する企業によるグローバル市場創出に向けた取組 セッション3　グローバル市場創出に向けた地",
+    "content_hash": "ecf3d6026086c98d",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "971562b7aae4c6f455d256e89d35959c": {
+    "id": "971562b7aae4c6f455d256e89d35959c",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "住不/着工を11ヵ月延期/杉並の2.6万㎡共住新築",
+    "url": "https://www.kensetsunews.com/archives/1281903",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:59:19.731689+00:00",
+    "summary": "住不/着工を11ヵ月延期/杉並の2.6万㎡共住新築",
+    "content": "",
+    "content_hash": "32ebc605811aadd9",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "49cb41e698434c6a4c664aae0d5e7e91": {
+    "id": "49cb41e698434c6a4c664aae0d5e7e91",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "荒川区/建替に合わせ集約/小中学校のプール施設",
+    "url": "https://www.kensetsunews.com/archives/1281912",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:59:22.046193+00:00",
+    "summary": "荒川区/建替に合わせ集約/小中学校のプール施設",
+    "content": "",
+    "content_hash": "09b28f102e583cb5",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "1645f524c3015475b81b75a9a55ce936": {
+    "id": "1645f524c3015475b81b75a9a55ce936",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "三菱地所/板橋に3万㎡物流倉庫/設計は大末、4月上旬着工",
+    "url": "https://www.kensetsunews.com/archives/1281914",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-08T03:59:23.195405+00:00",
+    "summary": "三菱地所/板橋に3万㎡物流倉庫/設計は大末、4月上旬着工",
+    "content": "",
+    "content_hash": "2bbcbb1f476edb4a",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
