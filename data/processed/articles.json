@@ -40998,5 +40998,71 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "6a6e5d0a5540bcb8b8a163d6e5873007": {
+    "id": "6a6e5d0a5540bcb8b8a163d6e5873007",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "埼玉・越谷市立病院整備、年度内に方向性　建替えは600億円超 最終更新 | 2026/09/11 11:13 カテゴリーなし 埼玉県越谷市は、越谷市立病院の老朽化対策・建て替えの検討状況を明らかにした。市は、全面建て替…",
+    "url": "https://www.kensetsunews.com/sokuho/1283850",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-11T03:57:38.000263+00:00",
+    "summary": "埼玉・越谷市立病院整備、年度内に方向性　建替えは600億円超 最終更新 | 2026/09/11 11:13 カテゴリーなし 埼玉県越谷市は、越谷市立病院の老朽化対策・建て替えの検討状況を明らかにした。市は、全面建て替…",
+    "content": "",
+    "content_hash": "b8ec147f79af5bfc",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d701c0a8e12d806611842b7007ee2153": {
+    "id": "d701c0a8e12d806611842b7007ee2153",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "新庁舎整備、28年度に基本構想策定目指す 最終更新 | 2026/09/10 15:47 【速報】 ◇千葉・佐倉市の新庁舎整備事業、27年度に基本構想委員会を設置 千葉県佐倉市…",
+    "url": "https://www.kensetsunews.com/sokuho/1283838",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-11T03:57:47.120569+00:00",
+    "summary": "新庁舎整備、28年度に基本構想策定目指す 最終更新 | 2026/09/10 15:47 【速報】 ◇千葉・佐倉市の新庁舎整備事業、27年度に基本構想委員会を設置 千葉県佐倉市…",
+    "content": "",
+    "content_hash": "739444f4440b3b63",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "6963c583c84be84281ba5473b6f2c2b1": {
+    "id": "6963c583c84be84281ba5473b6f2c2b1",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "千代田区/9月24日まで申請受付/旧軽井沢 少年自然の家解体",
+    "url": "https://www.kensetsunews.com/archives/1283924",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-11T04:00:45.068030+00:00",
+    "summary": "千代田区/9月24日まで申請受付/旧軽井沢 少年自然の家解体",
+    "content": "",
+    "content_hash": "ad9acb8e593009ff",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
