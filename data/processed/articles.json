@@ -41133,5 +41133,143 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "d9137b06b62e12668dedef5219195fdb": {
+    "id": "d9137b06b62e12668dedef5219195fdb",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・大田区に賃貸マンション、来年1月着工 最終更新 | 2026/09/14 12:17 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1284837",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-14T04:16:44.625958+00:00",
+    "summary": "東京・大田区に賃貸マンション、来年1月着工 最終更新 | 2026/09/14 12:17 【速報】 …",
+    "content": "",
+    "content_hash": "b76eb4fbe04e3ecb",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "8072628f053cac433a4476d3795b62dd": {
+    "id": "8072628f053cac433a4476d3795b62dd",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "5.6万㎡のNTTコム大手町本館、フジタで解体 最終更新 | 2026/09/14 09:36 カテゴリーなし ＮＴＴドコモビジネスは、東京都千代田区の「ＮＴＴコム大手町本館建物地上部解体工…",
+    "url": "https://www.kensetsunews.com/sokuho/1284473",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-14T04:16:54.203331+00:00",
+    "summary": "5.6万㎡のNTTコム大手町本館、フジタで解体 最終更新 | 2026/09/14 09:36 カテゴリーなし ＮＴＴドコモビジネスは、東京都千代田区の「ＮＴＴコム大手町本館建物地上部解体工…",
+    "content": "",
+    "content_hash": "d1532e033d0b9a7f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e861888ad3b3ab075551e23ee60d5ea1": {
+    "id": "e861888ad3b3ab075551e23ee60d5ea1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東急不赤坂ビル建替計画、鹿島で既存解体へ 最終更新 | 2026/09/14 09:36 カテゴリーなし 東急不動産は、東京都千代田区で計画する「（仮称）東急不動産赤坂ビル解体・建替計画　既存建物解…",
+    "url": "https://www.kensetsunews.com/sokuho/1284472",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-14T04:16:55.390494+00:00",
+    "summary": "東急不赤坂ビル建替計画、鹿島で既存解体へ 最終更新 | 2026/09/14 09:36 カテゴリーなし 東急不動産は、東京都千代田区で計画する「（仮称）東急不動産赤坂ビル解体・建替計画　既存建物解…",
+    "content": "",
+    "content_hash": "712cc7b75f397cd3",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "8ef8fcee07985d4988b9550ddccf25f6": {
+    "id": "8ef8fcee07985d4988b9550ddccf25f6",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "北区/恒栄電設らに決定/桐ケ丘区民センター新築電気など3件",
+    "url": "https://www.kensetsunews.com/archives/1284488",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-14T04:20:13.612257+00:00",
+    "summary": "北区/恒栄電設らに決定/桐ケ丘区民センター新築電気など3件",
+    "content": "",
+    "content_hash": "a661da39db28056f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "aaa80d345a46c5db2a015b8f3874560b": {
+    "id": "aaa80d345a46c5db2a015b8f3874560b",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "三輝設計に決まる/東京都水道局の港南庁舎解体実施設計",
+    "url": "https://www.kensetsunews.com/archives/1284489",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-14T04:20:14.807788+00:00",
+    "summary": "三輝設計に決まる/東京都水道局の港南庁舎解体実施設計",
+    "content": "",
+    "content_hash": "b478cfb042eeaa31",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "07aa0d6ca6bb9e0098665876437f4f53": {
+    "id": "07aa0d6ca6bb9e0098665876437f4f53",
+    "source_id": "saitama_city_omiya",
+    "source_name": "さいたま市 まちづくり・都市整備",
+    "title": "さいたま市公有財産の利活用に関するサウンディング型市場調査の実施について",
+    "url": "https://www.city.saitama.lg.jp/005/003/016/p133512.html",
+    "area": "大宮",
+    "tags": [
+      "さいたま市",
+      "大宮",
+      "再開発",
+      "駅前",
+      "大宮グランドセントラル",
+      "都市計画"
+    ],
+    "published_at": "2026年9月14日",
+    "fetched_at": "2026-09-14T04:20:53.776337+00:00",
+    "summary": "当サイトではJavaScriptを使用しています。 ブラウザの設定でJavaScriptの使用を無効にしている場合、一部の機能が正確に動作しない恐れがあります。 当サイトをご覧の際はJavaScriptの使用を有効にしてください。 メインメニューへ移動 メインメニューをスキップして本文へ移動 フッターへ移動します トップページ > 事業者向けの情報 > まちづくり・交通・建設 > 未利用地 > さいたま市公有財産の利活用に関するサウンディング型市場調査の実施について ページの本文です。 一つ前に見ていたページに戻る 更新日付：2026年9月14日 / ページ番号：C133512 さいたま市公有",
+    "content": "当サイトではJavaScriptを使用しています。 ブラウザの設定でJavaScriptの使用を無効にしている場合、一部の機能が正確に動作しない恐れがあります。 当サイトをご覧の際はJavaScriptの使用を有効にしてください。 メインメニューへ移動 メインメニューをスキップして本文へ移動 フッターへ移動します トップページ > 事業者向けの情報 > まちづくり・交通・建設 > 未利用地 > さいたま市公有財産の利活用に関するサウンディング型市場調査の実施について ページの本文です。 一つ前に見ていたページに戻る 更新日付：2026年9月14日 / ページ番号：C133512 さいたま市公有財産の利活用に関するサウンディング型市場調査の実施について このページを印刷する さいたま市では、市が所有する公有財産について、公共性・公益性を踏まえながら、未利用財産の有効活用を推進しています。 本調査は、市内の公有財産（6物件）を対象とし、民間事業者の皆様との対話を通じて、公有財産の利活用のアイデアや事業化の際の参画意向、活用可能なノウハウを確認し、利活用の方針に関する検討を進展させることを目",
+    "content_hash": "ac19eeadde3a6419",
+    "priority": "medium",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
