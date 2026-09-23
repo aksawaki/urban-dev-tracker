@@ -41983,5 +41983,50 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "1d152f7e8eba53d4cae4945895ac86a9": {
+    "id": "1d152f7e8eba53d4cae4945895ac86a9",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "リコー、神奈川・厚木事業所に3.9万㎡の新棟計画　11月着工 最終更新 | 2026/09/18 17:20 【速報】 リコーは、厚木事業所（神奈川県厚木市）敷地内に3.9万㎡の新棟を建設する。インクジェット事業…",
+    "url": "https://www.kensetsunews.com/sokuho/1287438",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-23T04:09:44.815098+00:00",
+    "summary": "リコー、神奈川・厚木事業所に3.9万㎡の新棟計画　11月着工 最終更新 | 2026/09/18 17:20 【速報】 リコーは、厚木事業所（神奈川県厚木市）敷地内に3.9万㎡の新棟を建設する。インクジェット事業…",
+    "content": "",
+    "content_hash": "362bcd5ed720a7ef",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "069052e436db06da75dd24d9d93ec456": {
+    "id": "069052e436db06da75dd24d9d93ec456",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "横浜市、PFIでサッカースタジアム　整備費460億円 最終更新 | 2026/09/18 16:08 カテゴリーなし 横浜市は、三ツ沢公園再整備基本計画案をまとめた。PFIでJリーグ規格のサッカースタジアムなど…",
+    "url": "https://www.kensetsunews.com/sokuho/1286619",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-23T04:09:58.412034+00:00",
+    "summary": "横浜市、PFIでサッカースタジアム　整備費460億円 最終更新 | 2026/09/18 16:08 カテゴリーなし 横浜市は、三ツ沢公園再整備基本計画案をまとめた。PFIでJリーグ規格のサッカースタジアムなど…",
+    "content": "",
+    "content_hash": "4c6a6d11bf6dafee",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
