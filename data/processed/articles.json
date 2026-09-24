@@ -42028,5 +42028,137 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "4efba70bb36bf8aaf7a2eb8a9c63908c": {
+    "id": "4efba70bb36bf8aaf7a2eb8a9c63908c",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・葛飾区の立石駅南口東再開発、工事費倍増の456億円に 最終更新 | 2026/09/24 09:18 【速報】 組合施行により東京都葛飾区で計画が進む、立石駅南口東地区市街地再開発事業の現時点で想定する事…",
+    "url": "https://www.kensetsunews.com/sokuho/1287442",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:04:58.259383+00:00",
+    "summary": "東京・葛飾区の立石駅南口東再開発、工事費倍増の456億円に 最終更新 | 2026/09/24 09:18 【速報】 組合施行により東京都葛飾区で計画が進む、立石駅南口東地区市街地再開発事業の現時点で想定する事…",
+    "content": "",
+    "content_hash": "4de97cb188e94a72",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "091b923465c5379e4fc348e31996a69a": {
+    "id": "091b923465c5379e4fc348e31996a69a",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "リコー、神奈川・厚木事業所に3.9万㎡の新棟計画　11月着工 最終更新 | 2026/09/24 09:18 【速報】 リコーは、厚木事業所（神奈川県厚木市）敷地内に3.9万㎡の新棟を建設する。インクジェット事業…",
+    "url": "https://www.kensetsunews.com/sokuho/1287438",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:04:59.393956+00:00",
+    "summary": "リコー、神奈川・厚木事業所に3.9万㎡の新棟計画　11月着工 最終更新 | 2026/09/24 09:18 【速報】 リコーは、厚木事業所（神奈川県厚木市）敷地内に3.9万㎡の新棟を建設する。インクジェット事業…",
+    "content": "",
+    "content_hash": "f4e575c441eb352e",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "56798fd4a02c60dfdec765f6ebafaeb9": {
+    "id": "56798fd4a02c60dfdec765f6ebafaeb9",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "横浜市、PFIでサッカースタジアム　整備費460億円 最終更新 | 2026/09/18 16:08 カテゴリーなし 横浜市は、三ツ沢公園再整備基本計画案をまとめた。PFIでJリーグ規格のサッカースタジアムなど…",
+    "url": "https://www.kensetsunews.com/sokuho/1286619",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:05:12.150714+00:00",
+    "summary": "横浜市、PFIでサッカースタジアム　整備費460億円 最終更新 | 2026/09/18 16:08 カテゴリーなし 横浜市は、三ツ沢公園再整備基本計画案をまとめた。PFIでJリーグ規格のサッカースタジアムなど…",
+    "content": "",
+    "content_hash": "4c6a6d11bf6dafee",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "1cfeac8e9e595656ed5e914120ceeb14": {
+    "id": "1cfeac8e9e595656ed5e914120ceeb14",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "埼玉・越谷市のアリーナ整備、既存公共施設の再編も視野 最終更新 | 2026/09/17 09:32 カテゴリーなし 埼玉県越谷市の福田晃市長は、プロバスケットボールクラブ「越谷アルファーズ」のホームアリーナ整…",
+    "url": "https://www.kensetsunews.com/sokuho/1286093",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:05:15.565542+00:00",
+    "summary": "埼玉・越谷市のアリーナ整備、既存公共施設の再編も視野 最終更新 | 2026/09/17 09:32 カテゴリーなし 埼玉県越谷市の福田晃市長は、プロバスケットボールクラブ「越谷アルファーズ」のホームアリーナ整…",
+    "content": "",
+    "content_hash": "79cca478045b4db9",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "a581c4fdc78167c4d672f23a9c47381e": {
+    "id": "a581c4fdc78167c4d672f23a9c47381e",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "東京都下水道局/83億の大本組と随契/三之橋雨水調整池建設5",
+    "url": "https://www.kensetsunews.com/archives/1287473",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:08:07.190467+00:00",
+    "summary": "東京都下水道局/83億の大本組と随契/三之橋雨水調整池建設5",
+    "content": "",
+    "content_hash": "0e1a381a7bf8275e",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ae8cea9bf146d5470acde05f1dd96fed": {
+    "id": "ae8cea9bf146d5470acde05f1dd96fed",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "北区/平安設計らに決定/赤羽北二丁目アパート新築設計など2件",
+    "url": "https://www.kensetsunews.com/archives/1287474",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-24T04:08:08.384392+00:00",
+    "summary": "北区/平安設計らに決定/赤羽北二丁目アパート新築設計など2件",
+    "content": "",
+    "content_hash": "44f8e2bdcb66a065",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
