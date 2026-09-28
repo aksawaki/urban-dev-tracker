@@ -42467,5 +42467,119 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "517c753cad44c103227ca918500a776e": {
+    "id": "517c753cad44c103227ca918500a776e",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・墨田区に寄宿舎、来年2月着工 最終更新 | 2026/09/28 11:47 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1289136",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-28T04:42:04.081724+00:00",
+    "summary": "東京・墨田区に寄宿舎、来年2月着工 最終更新 | 2026/09/28 11:47 【速報】 …",
+    "content": "",
+    "content_hash": "9d136d74e2453b03",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "adb0b4401917f6398ad463a444e0a587": {
+    "id": "adb0b4401917f6398ad463a444e0a587",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "三井不レジ、東京・江東区に1.5万㎡のマンション　来夏着工 最終更新 | 2026/09/25 16:54 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1288671",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-28T04:42:14.058473+00:00",
+    "summary": "三井不レジ、東京・江東区に1.5万㎡のマンション　来夏着工 最終更新 | 2026/09/25 16:54 【速報】 …",
+    "content": "",
+    "content_hash": "77ce41216989b56d",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "9ff704dcdf33d8af2c66ea88a16cbd5b": {
+    "id": "9ff704dcdf33d8af2c66ea88a16cbd5b",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・小金井市の新庁舎、来年度にも設計施工プロポ 最終更新 | 2026/09/25 16:50 【速報】 東京都小金井市は、従来の方針を見直す「新庁舎・（仮称）新福祉会館複合施設建設事業」で、現時点…",
+    "url": "https://www.kensetsunews.com/sokuho/1288664",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-28T04:42:17.529410+00:00",
+    "summary": "東京・小金井市の新庁舎、来年度にも設計施工プロポ 最終更新 | 2026/09/25 16:50 【速報】 東京都小金井市は、従来の方針を見直す「新庁舎・（仮称）新福祉会館複合施設建設事業」で、現時点…",
+    "content": "",
+    "content_hash": "9c44d77504f32782",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "db5d73e71d45e67a6810efbcc7595d83": {
+    "id": "db5d73e71d45e67a6810efbcc7595d83",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "セット設計事務所に/東京都住宅政策本部の団地建替基本計画",
+    "url": "https://www.kensetsunews.com/archives/1288687",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-28T04:45:17.789819+00:00",
+    "summary": "セット設計事務所に/東京都住宅政策本部の団地建替基本計画",
+    "content": "",
+    "content_hash": "53cb2ca1448edd5e",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ed72117963e478d9dc04c90fcd8137dc": {
+    "id": "ed72117963e478d9dc04c90fcd8137dc",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "スイテ新宿御苑前新築工事に着手/阪急阪神不動産/施工は木内建…",
+    "url": "https://www.kensetsunews.com/archives/1288696",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-28T04:45:23.645852+00:00",
+    "summary": "スイテ新宿御苑前新築工事に着手/阪急阪神不動産/施工は木内建…",
+    "content": "",
+    "content_hash": "834655310dbe9fe0",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
