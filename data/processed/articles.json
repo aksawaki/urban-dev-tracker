@@ -42691,5 +42691,50 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "f8d60d614b5dffc879d6694313da5f8b": {
+    "id": "f8d60d614b5dffc879d6694313da5f8b",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "横浜市のアリーナ・プールPFI、予定価239億円に 最終更新 | 2026/09/30 09:23 【速報】 横浜市は、ＷＴＯ対象となる「横浜国際プール再整備事業」の総合評価一般競争入札を公告した。ＰＦ…",
+    "url": "https://www.kensetsunews.com/sokuho/1290156",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-30T04:56:10.750174+00:00",
+    "summary": "横浜市のアリーナ・プールPFI、予定価239億円に 最終更新 | 2026/09/30 09:23 【速報】 横浜市は、ＷＴＯ対象となる「横浜国際プール再整備事業」の総合評価一般競争入札を公告した。ＰＦ…",
+    "content": "",
+    "content_hash": "252601e5694005c5",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "80360b7c49b88855156adb38203c9a30": {
+    "id": "80360b7c49b88855156adb38203c9a30",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "横浜市PFI/11月4日から受付/野庭住宅J街区建替",
+    "url": "https://www.kensetsunews.com/archives/1290220",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-09-30T04:59:28.328694+00:00",
+    "summary": "横浜市PFI/11月4日から受付/野庭住宅J街区建替",
+    "content": "",
+    "content_hash": "1134f1416a80d72e",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
