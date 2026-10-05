@@ -43262,5 +43262,47 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "44d8e5fa5aa35a976ff927572b0b96d5": {
+    "id": "44d8e5fa5aa35a976ff927572b0b96d5",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・渋谷区にマンション、来年6月着工 最終更新 | 2026/10/05 10:22 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1292318",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-05T04:57:21.543530+00:00",
+    "summary": "東京・渋谷区にマンション、来年6月着工 最終更新 | 2026/10/05 10:22 【速報】 …",
+    "content": "",
+    "content_hash": "92092ec13cfb2468",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "4ab565f16e5c696ca396acc0c2117338": {
+    "id": "4ab565f16e5c696ca396acc0c2117338",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京港埠頭の中央防波堤外側コンテナ埠頭Y3バース建築施設工事、73.1億円で五洋建設 最終更新 | 2026/10/02 16:57 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1292305",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-05T04:57:24.920712+00:00",
+    "summary": "東京港埠頭の中央防波堤外側コンテナ埠頭Y3バース建築施設工事、73.1億円で五洋建設 最終更新 | 2026/10/02 16:57 【速報】 …",
+    "content": "",
+    "content_hash": "313bb0ac00957b1c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
