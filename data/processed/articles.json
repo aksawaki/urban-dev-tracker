@@ -44175,5 +44175,137 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "a3a4d3306e7825e8a692c938e017a68c": {
+    "id": "a3a4d3306e7825e8a692c938e017a68c",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "中央日土地が埼玉・八潮市にマンション、設計は長谷工 最終更新 | 2026/10/09 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1295303",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:16:54.183009+00:00",
+    "summary": "中央日土地が埼玉・八潮市にマンション、設計は長谷工 最終更新 | 2026/10/09 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "416445643bbbb783",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "b4f132679b3cf02340e843838e363519": {
+    "id": "b4f132679b3cf02340e843838e363519",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・京急の連立事業、完了36年度に延伸　工費2135億円に増 最終更新 | 2026/10/13 09:22 カテゴリーなし 東京都建設局が事業主体となり、東京都港区～品川区の京浜急行電鉄湘南線と第１号分岐線（泉岳寺駅…",
+    "url": "https://www.kensetsunews.com/sokuho/1295306",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:16:55.372499+00:00",
+    "summary": "東京・京急の連立事業、完了36年度に延伸　工費2135億円に増 最終更新 | 2026/10/13 09:22 カテゴリーなし 東京都建設局が事業主体となり、東京都港区～品川区の京浜急行電鉄湘南線と第１号分岐線（泉岳寺駅…",
+    "content": "",
+    "content_hash": "313f057efe16ee4e",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "842947ed9d4a91b7126339bb9250ce81": {
+    "id": "842947ed9d4a91b7126339bb9250ce81",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "住友不の東京・汐留ウイング増築、大成建設で着工 最終更新 | 2026/10/13 09:22 カテゴリーなし 住友不動産が東京都港区で計画している「汐留ウイング」の増築計画が、大成建設の施工で着工した。…",
+    "url": "https://www.kensetsunews.com/sokuho/1295304",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:16:56.580499+00:00",
+    "summary": "住友不の東京・汐留ウイング増築、大成建設で着工 最終更新 | 2026/10/13 09:22 カテゴリーなし 住友不動産が東京都港区で計画している「汐留ウイング」の増築計画が、大成建設の施工で着工した。…",
+    "content": "",
+    "content_hash": "da5579c6455deb4e",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "fab8c7499f468114e9f2b10c3e71e5f3": {
+    "id": "fab8c7499f468114e9f2b10c3e71e5f3",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・東村山市の萩山小複合施設DBM、債務負担80億含む契約案　市議会で可決 最終更新 | 2026/10/09 16:56 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1295299",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:16:58.939180+00:00",
+    "summary": "東京・東村山市の萩山小複合施設DBM、債務負担80億含む契約案　市議会で可決 最終更新 | 2026/10/09 16:56 【速報】 …",
+    "content": "",
+    "content_hash": "9be5979bf487efbc",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "3d514a01ff49a81923839cae3141f269": {
+    "id": "3d514a01ff49a81923839cae3141f269",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "誠和土木に決まる/葛飾区の常盤中解体",
+    "url": "https://www.kensetsunews.com/archives/1295378",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:20:05.817064+00:00",
+    "summary": "誠和土木に決まる/葛飾区の常盤中解体",
+    "content": "",
+    "content_hash": "0fffa8cc1cd79141",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "636daa041e74b9216cd861f963ec9900": {
+    "id": "636daa041e74b9216cd861f963ec9900",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "東京都財務局/大豊建設らに決定/内川護岸耐震補強など4件",
+    "url": "https://www.kensetsunews.com/archives/1295379",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-13T06:20:07.021131+00:00",
+    "summary": "東京都財務局/大豊建設らに決定/内川護岸耐震補強など4件",
+    "content": "",
+    "content_hash": "bbe717bc99fd2a2c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
