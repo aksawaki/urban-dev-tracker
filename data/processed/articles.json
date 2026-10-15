@@ -44460,5 +44460,158 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "ed5e5a421d3866743eddecb7d2c6affd": {
+    "id": "ed5e5a421d3866743eddecb7d2c6affd",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・板橋区の常盤台複合施設基本構想・計画策定支援　渡辺治建築都市設計を特定 最終更新 | 2026/10/14 16:47 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1296445",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:00:35.468678+00:00",
+    "summary": "東京・板橋区の常盤台複合施設基本構想・計画策定支援　渡辺治建築都市設計を特定 最終更新 | 2026/10/14 16:47 【速報】 …",
+    "content": "",
+    "content_hash": "5ffeb94932c2095a",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e68ec5a10ee2c7955031b0124f7235c1": {
+    "id": "e68ec5a10ee2c7955031b0124f7235c1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "NTT都市開発が東京・渋谷区にマンション、松井建設の施工で30年2月完成目指す 最終更新 | 2026/10/14 16:47 【速報】 <…",
+    "url": "https://www.kensetsunews.com/sokuho/1296317",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:00:36.649321+00:00",
+    "summary": "NTT都市開発が東京・渋谷区にマンション、松井建設の施工で30年2月完成目指す 最終更新 | 2026/10/14 16:47 【速報】 <…",
+    "content": "",
+    "content_hash": "449ba1ca5058b137",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "00849ccc0ee72117ad019f69490a8b5f": {
+    "id": "00849ccc0ee72117ad019f69490a8b5f",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉・松戸市の文化複合施設基本構想案、最大2.5万㎡想定 最終更新 | 2026/10/14 16:47 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1296313",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:00:39.003509+00:00",
+    "summary": "千葉・松戸市の文化複合施設基本構想案、最大2.5万㎡想定 最終更新 | 2026/10/14 16:47 【速報】 …",
+    "content": "",
+    "content_hash": "1143a2e769b3ad6c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "a4f2faea50f57d8660e5851fa675bac1": {
+    "id": "a4f2faea50f57d8660e5851fa675bac1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・小平市の複合施設整備工事、予定価6.3億増の99億円　総合評価入札を再公告 最終更新 | 2026/10/14 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1296319",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:00:40.185352+00:00",
+    "summary": "東京・小平市の複合施設整備工事、予定価6.3億増の99億円　総合評価入札を再公告 最終更新 | 2026/10/14 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "7fdf5f994dee439a",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "808da3c7e9df7ae3e76f56176026827d": {
+    "id": "808da3c7e9df7ae3e76f56176026827d",
+    "source_id": "tokyo_metro_press",
+    "source_name": "東京都 報道発表一覧",
+    "title": "東京都産グリーン水素を活用して出来た原料を使用した化粧品を開発",
+    "url": "https://www.metro.tokyo.lg.jp/information/press/2026/10/2026101404",
+    "area": "東京都",
+    "tags": [
+      "東京都",
+      "報道発表",
+      "再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:01:35.040977+00:00",
+    "summary": "東京都は、「水素を使う」アクションを官民連携で加速させることを目的とした「TOKYO H2 プロジェクト」を推進しています。 このたび、民間事業者5社と連携し、製造過程でCO2を排出しないグリーン水素を活用して出来た原料 【注1】 を使用した化粧品を開発しました。 都民のみなさまにグリーン水素への理解と親しみを深めていただくとともに、サステナブルな製品利用の機運醸成を図る啓発キャンペーンに本製品を活用していきます。 【注1】水素はエネルギーとして利用されるだけでなく、食品や化粧品などの製造工程でも原料として広く利用されています。 今回開発した化粧品では、保湿成分である水添ポリイソブテンの製造工",
+    "content": "東京都は、「水素を使う」アクションを官民連携で加速させることを目的とした「TOKYO H2 プロジェクト」を推進しています。 このたび、民間事業者5社と連携し、製造過程でCO2を排出しないグリーン水素を活用して出来た原料 【注1】 を使用した化粧品を開発しました。 都民のみなさまにグリーン水素への理解と親しみを深めていただくとともに、サステナブルな製品利用の機運醸成を図る啓発キャンペーンに本製品を活用していきます。 【注1】水素はエネルギーとして利用されるだけでなく、食品や化粧品などの製造工程でも原料として広く利用されています。 今回開発した化粧品では、保湿成分である水添ポリイソブテンの製造工程に東京都産グリーン水素を使用しています。 （株）資生堂（しせいどう）、資生堂（しせいどう）クリエイティブ（株） 【注2】 、（株）トキワ、日興（にっこう）リカ（株）、二和（にわ）印刷（株） 【注2】令和8年6月1日付で（株）資生堂に吸収合併。 都内で開催されるイベントや、東京都京浜島グリーン水素製造所（東京都大田区京浜島三丁目5番1号）、水素情報館 東京スイソミル（東京都江東区潮見一丁目3番2号）等において、11月4日（水曜日）からお渡しします 【注3】 。 詳細については、 専用ホームページ をご覧ください。 【注3】一日にお渡しできる本数には限りがあります。 ※ 参考資料（製品紹介リーフレットより抜粋）（PDF：1,151KB） 本件は、「 2050東京戦略 」を推進する取組です。 戦略20　ゼロエミッション「水素エネルギーの社会実装化」",
+    "content_hash": "a592382b1d51b301",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "4c83db08bfe98b3f0f31bb68c268abee": {
+    "id": "4c83db08bfe98b3f0f31bb68c268abee",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "希望申請10月19日まで/東京都建設局の神田川整備基本設計",
+    "url": "https://www.kensetsunews.com/archives/1296515",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:03:58.606047+00:00",
+    "summary": "希望申請10月19日まで/東京都建設局の神田川整備基本設計",
+    "content": "",
+    "content_hash": "fd5b9cbef9b508b7",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "c55fbf452973b8932bec9399e0b7551c": {
+    "id": "c55fbf452973b8932bec9399e0b7551c",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "板橋区/渡辺治事務所を特定/常盤台複合施設基本構想・計画支援",
+    "url": "https://www.kensetsunews.com/archives/1296521",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-15T04:04:02.260207+00:00",
+    "summary": "板橋区/渡辺治事務所を特定/常盤台複合施設基本構想・計画支援",
+    "content": "",
+    "content_hash": "f0ad943103c3f932",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
