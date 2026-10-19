@@ -44809,5 +44809,53 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "45b63c3421b4dcd9388ab33e278772e4": {
+    "id": "45b63c3421b4dcd9388ab33e278772e4",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "国内最大の水素液化プラント、建設着手　川崎重工 最終更新 | 2026/10/19 12:58 【速報】 川崎重工は19日、川崎LH2ターミナル（川崎市川崎区扇島）で、国内最大規模の水素液化プラント…",
+    "url": "https://www.kensetsunews.com/sokuho/1298070",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-19T04:02:53.738767+00:00",
+    "summary": "国内最大の水素液化プラント、建設着手　川崎重工 最終更新 | 2026/10/19 12:58 【速報】 川崎重工は19日、川崎LH2ターミナル（川崎市川崎区扇島）で、国内最大規模の水素液化プラント…",
+    "content": "",
+    "content_hash": "8a14902f572acdd1",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "f2726487cec15f924b4d80b9349f22c2": {
+    "id": "f2726487cec15f924b4d80b9349f22c2",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "アリーナは5千人規模/府中市の基地跡地留保地/新総合体育館",
+    "url": "https://www.kensetsunews.com/archives/1297694",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-19T04:06:03.106822+00:00",
+    "summary": "アリーナは5千人規模/府中市の基地跡地留保地/新総合体育館",
+    "content": "",
+    "content_hash": "d1e1873be5101a77",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
