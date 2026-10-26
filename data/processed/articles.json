@@ -45394,5 +45394,116 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "ac39bea774aa7c087359ee25c0f38107": {
+    "id": "ac39bea774aa7c087359ee25c0f38107",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・渋谷区に店舗・事務所・共同住宅、来年6月着工 最終更新 | 2026/10/26 12:47 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1300467",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-26T04:06:22.526891+00:00",
+    "summary": "東京・渋谷区に店舗・事務所・共同住宅、来年6月着工 最終更新 | 2026/10/26 12:47 【速報】 …",
+    "content": "",
+    "content_hash": "b3c60e6817158a24",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "a3f40ed72be53cc9abfc7cfcbd241430": {
+    "id": "a3f40ed72be53cc9abfc7cfcbd241430",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京都建設局の来年度公共工事品質確保方針策定検討、社会システムに決まる 最終更新 | 2026/10/23 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1300103",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-26T04:06:34.999930+00:00",
+    "summary": "東京都建設局の来年度公共工事品質確保方針策定検討、社会システムに決まる 最終更新 | 2026/10/23 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "6a320205c80347ca",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "19307bbb59639ccb4f33303553513ae1": {
+    "id": "19307bbb59639ccb4f33303553513ae1",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "フジタ、東京・文京区でオフィスビルなど3棟解体 最終更新 | 2026/10/23 16:48 【速報】 フジタ東日本開発事業部は、「東京都文京区本駒込６―１５―９他解体工事」に東輝建設の施工で１…",
+    "url": "https://www.kensetsunews.com/sokuho/1300102",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-26T04:06:36.132039+00:00",
+    "summary": "フジタ、東京・文京区でオフィスビルなど3棟解体 最終更新 | 2026/10/23 16:48 【速報】 フジタ東日本開発事業部は、「東京都文京区本駒込６―１５―９他解体工事」に東輝建設の施工で１…",
+    "content": "",
+    "content_hash": "f8ff0c31e952f07e",
+    "priority": "medium",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "cb8baf3e3a7956e1fd0c93967c983c2e": {
+    "id": "cb8baf3e3a7956e1fd0c93967c983c2e",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・墨田区の八広小改築工事、建築は54.9億円の東武谷内田建設JV 最終更新 | 2026/10/23 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1300098",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-26T04:06:37.240029+00:00",
+    "summary": "東京・墨田区の八広小改築工事、建築は54.9億円の東武谷内田建設JV 最終更新 | 2026/10/23 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "ef5951e98bf8e91f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "5e0969f99d14e2c4cebf268629aa4c9a": {
+    "id": "5e0969f99d14e2c4cebf268629aa4c9a",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "社会システムに決定/東京都建設局の工事品質確保促進方策検討",
+    "url": "https://www.kensetsunews.com/archives/1300147",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-26T04:09:24.749791+00:00",
+    "summary": "社会システムに決定/東京都建設局の工事品質確保促進方策検討",
+    "content": "",
+    "content_hash": "c2bca06d2b16fccc",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
