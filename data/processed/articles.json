@@ -45787,5 +45787,50 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "5727a275af226b57aedd26a204d33cd5": {
+    "id": "5727a275af226b57aedd26a204d33cd5",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東急不動産、千葉・松戸市で1万㎡超の冷凍冷蔵倉庫を着工 最終更新 | 2026/10/29 13:15 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1302527",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-29T05:08:47.153068+00:00",
+    "summary": "東急不動産、千葉・松戸市で1万㎡超の冷凍冷蔵倉庫を着工 最終更新 | 2026/10/29 13:15 【速報】 …",
+    "content": "",
+    "content_hash": "d3cea96bfc815b58",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e62f25241de02a3b2a3a419e0b760d18": {
+    "id": "e62f25241de02a3b2a3a419e0b760d18",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "神奈川・海老名市の文化交流拠点、設計施工で木内建設JVを特定 最終更新 | 2026/10/28 16:53 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1301932",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-10-29T05:08:59.981711+00:00",
+    "summary": "神奈川・海老名市の文化交流拠点、設計施工で木内建設JVを特定 最終更新 | 2026/10/28 16:53 【速報】 …",
+    "content": "",
+    "content_hash": "5414c487a3b2400a",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
