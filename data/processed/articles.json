@@ -46144,5 +46144,47 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "b1fa32b13d5b10d8a0c0588ef83645c9": {
+    "id": "b1fa32b13d5b10d8a0c0588ef83645c9",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "住友不が東京・目黒区にマンション、淺沼組の設計施工で来年7月着工 最終更新 | 2026/10/30 16:47 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1303222",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-02T05:20:43.369448+00:00",
+    "summary": "住友不が東京・目黒区にマンション、淺沼組の設計施工で来年7月着工 最終更新 | 2026/10/30 16:47 【速報】 …",
+    "content": "",
+    "content_hash": "9d99ea628614dd4c",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "787675fb93e966e0a74f0211f73fff25": {
+    "id": "787675fb93e966e0a74f0211f73fff25",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・北区の十条小校舎新築・体育館リノベーション工事、48.4億円で宮澤建設JV落札 最終更新 | 2026/10/30 16:42 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1303220",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-02T05:20:45.656571+00:00",
+    "summary": "東京・北区の十条小校舎新築・体育館リノベーション工事、48.4億円で宮澤建設JV落札 最終更新 | 2026/10/30 16:42 【速報】 …",
+    "content": "",
+    "content_hash": "cbb8b49507b6a5d8",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
