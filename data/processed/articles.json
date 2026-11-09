@@ -46830,5 +46830,143 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "8b7dce9456edd35ddc71815bb408ab1f": {
+    "id": "8b7dce9456edd35ddc71815bb408ab1f",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・目黒区の鷹番小複合施設改築、58.6億円の飛島建設に決定 最終更新 | 2026/11/06 17:00 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1305874",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:35:53.079055+00:00",
+    "summary": "東京・目黒区の鷹番小複合施設改築、58.6億円の飛島建設に決定 最終更新 | 2026/11/06 17:00 【速報】 …",
+    "content": "",
+    "content_hash": "83826180faeb705c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "b830147abd98757e559023113e6924ab": {
+    "id": "b830147abd98757e559023113e6924ab",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・港区の障害保健福祉センター等複合施設大規模改修　概算総工費175億円 最終更新 | 2026/11/06 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1305865",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:35:56.531772+00:00",
+    "summary": "東京・港区の障害保健福祉センター等複合施設大規模改修　概算総工費175億円 最終更新 | 2026/11/06 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "8ba47a7cc24896b4",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e662d071f8a1e49f07876cedc890b8cf": {
+    "id": "e662d071f8a1e49f07876cedc890b8cf",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "目黒区/飛島建設に決まる/鷹番小複合施設改築一期",
+    "url": "https://www.kensetsunews.com/archives/1305976",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:38:23.926232+00:00",
+    "summary": "目黒区/飛島建設に決まる/鷹番小複合施設改築一期",
+    "content": "",
+    "content_hash": "3fa2a1187ee343c9",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "0130d5526068c52a739d6b1f89b71b72": {
+    "id": "0130d5526068c52a739d6b1f89b71b72",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "パシコンと随契/東京都建設局の河川ストック効果算定環境整備",
+    "url": "https://www.kensetsunews.com/archives/1305982",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:38:28.398879+00:00",
+    "summary": "パシコンと随契/東京都建設局の河川ストック効果算定環境整備",
+    "content": "",
+    "content_hash": "41c5b8d784f9601f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d967deb217058bef4ebdc232b930c902": {
+    "id": "d967deb217058bef4ebdc232b930c902",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "11月10日まで希望申請/東京都建設局の都計区域整備方針改定…",
+    "url": "https://www.kensetsunews.com/archives/1305984",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:38:30.587544+00:00",
+    "summary": "11月10日まで希望申請/東京都建設局の都計区域整備方針改定…",
+    "content": "",
+    "content_hash": "4906d170f65a56a1",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "72dd72a5c9c93c144decddfb11c4ea88": {
+    "id": "72dd72a5c9c93c144decddfb11c4ea88",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "建設技研に決まる/東京都環境局のLCCO2ガイドライン案検討",
+    "url": "https://www.kensetsunews.com/archives/1305985",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-09T05:38:31.689432+00:00",
+    "summary": "建設技研に決まる/東京都環境局のLCCO2ガイドライン案検討",
+    "content": "",
+    "content_hash": "3a3330ff8a5c7c6c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
