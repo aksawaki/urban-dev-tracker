@@ -47037,5 +47037,159 @@
     "priority": "high",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "dbfe2109ce651ad709f1718a600377b4": {
+    "id": "dbfe2109ce651ad709f1718a600377b4",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "東京・江東区にマンション、来年3月着工 最終更新 | 2026/11/11 10:22 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1307034",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:33:05.721877+00:00",
+    "summary": "東京・江東区にマンション、来年3月着工 最終更新 | 2026/11/11 10:22 【速報】 …",
+    "content": "",
+    "content_hash": "508f9d23610edf4c",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ab72a13633834d24f538b0b887725796": {
+    "id": "ab72a13633834d24f538b0b887725796",
+    "source_id": "kensetsunews_p2",
+    "source_name": "建設通信新聞 新着ニュース p2",
+    "title": "千葉・浦安市の子ども・子育て支援複合施設建築、新日本建設が25.4億円で落札 最終更新 | 2026/11/11 12:43 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1307311",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:33:10.021621+00:00",
+    "summary": "千葉・浦安市の子ども・子育て支援複合施設建築、新日本建設が25.4億円で落札 最終更新 | 2026/11/11 12:43 【速報】 …",
+    "content": "",
+    "content_hash": "5eec604dcf32235c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "73c593807c653654da9096037b6267a6": {
+    "id": "73c593807c653654da9096037b6267a6",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・町田市の子ども・子育てサポート複合施設、建設費高騰で計画見直し 最終更新 | 2026/11/11 12:44 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1307308",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:33:14.539439+00:00",
+    "summary": "東京・町田市の子ども・子育てサポート複合施設、建設費高騰で計画見直し 最終更新 | 2026/11/11 12:44 【速報】 …",
+    "content": "",
+    "content_hash": "752a3542198549d5",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "476323f336f063411e86e375f80ec4ec": {
+    "id": "476323f336f063411e86e375f80ec4ec",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "千葉・浦安市の陸上競技場再整備基本計画、5者のくじ引きでウエスコに決定 最終更新 | 2026/11/10 16:32 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1307303",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:33:15.622888+00:00",
+    "summary": "千葉・浦安市の陸上競技場再整備基本計画、5者のくじ引きでウエスコに決定 最終更新 | 2026/11/10 16:32 【速報】 …",
+    "content": "",
+    "content_hash": "a4c4fea7b67e4a1d",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "7e77a15aa72f29c37739bed0d27ba39a": {
+    "id": "7e77a15aa72f29c37739bed0d27ba39a",
+    "source_id": "toshiseibi_top",
+    "source_name": "東京都都市整備局 トップ",
+    "title": "第255回東京都都市計画審議会を開催します",
+    "url": "https://www.toshiseibi.metro.tokyo.lg.jp/information/press/r8/11/2026110902",
+    "area": "東京都",
+    "tags": [
+      "東京都",
+      "都市整備",
+      "再開発",
+      "都市計画"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:33:34.569681+00:00",
+    "summary": "第255回東京都都市計画審議会を開催します 記事ID：039-001-20261110-020260 非表示",
+    "content": "第255回東京都都市計画審議会を開催します 記事ID：039-001-20261110-020260 非表示",
+    "content_hash": "675a813c5d727e5f",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "20d0d967b2ec8ae01c3692f809fdcd75": {
+    "id": "20d0d967b2ec8ae01c3692f809fdcd75",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "町田市/建設費高騰で後倒し/子育てサポート複合施設",
+    "url": "https://www.kensetsunews.com/archives/1307379",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:35:32.964431+00:00",
+    "summary": "町田市/建設費高騰で後倒し/子育てサポート複合施設",
+    "content": "",
+    "content_hash": "398eb196bfe5414b",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ec2092acf7402ff1f157522f53272862": {
+    "id": "ec2092acf7402ff1f157522f53272862",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "希望申請11月13日まで/大田区の大森西二丁目複合施設II期…",
+    "url": "https://www.kensetsunews.com/archives/1307381",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-11T05:35:34.084866+00:00",
+    "summary": "希望申請11月13日まで/大田区の大森西二丁目複合施設II期…",
+    "content": "",
+    "content_hash": "d0deea784f4b2bdf",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
