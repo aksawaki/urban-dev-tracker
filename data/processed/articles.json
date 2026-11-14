@@ -47366,5 +47366,53 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "aea1f24ce8244ae290e9d63c251db5da": {
+    "id": "aea1f24ce8244ae290e9d63c251db5da",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "東京・神保町で最大300%の容積率割増、千代田区の地区計画素案 最終更新 | 2026/11/14 08:52 カテゴリーなし 東京都千代田区は、神田神保町地区地区計画素案に、新築・建て替えに対する指定容積率割り増し上限…",
+    "url": "https://www.kensetsunews.com/sokuho/1309187",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-14T05:44:53.268322+00:00",
+    "summary": "東京・神保町で最大300%の容積率割増、千代田区の地区計画素案 最終更新 | 2026/11/14 08:52 カテゴリーなし 東京都千代田区は、神田神保町地区地区計画素案に、新築・建て替えに対する指定容積率割り増し上限…",
+    "content": "",
+    "content_hash": "ba05c313e4e69836",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "d154831f492d1d3b06480719a7b34f86": {
+    "id": "d154831f492d1d3b06480719a7b34f86",
+    "source_id": "kensetsunews_sokuho",
+    "source_name": "建設通信新聞 新着ニュース",
+    "title": "丸の内・郵船ビル建替 6.9万㎡で戸田建設が施工予定 最終更新 | 2026/11/14 08:42 カテゴリーなし 日本郵船は、東京・丸の内にある本店ビル「郵船ビルディング」を建て替える。「丸の内郵船ビル建替…",
+    "url": "https://www.kensetsunews.com/sokuho/1309180",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-14T05:44:55.490030+00:00",
+    "summary": "丸の内・郵船ビル建替 6.9万㎡で戸田建設が施工予定 最終更新 | 2026/11/14 08:42 カテゴリーなし 日本郵船は、東京・丸の内にある本店ビル「郵船ビルディング」を建て替える。「丸の内郵船ビル建替…",
+    "content": "",
+    "content_hash": "30909e5ecd525ff7",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
