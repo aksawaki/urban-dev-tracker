@@ -47414,5 +47414,98 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "9156c50b8fb19e3c5e12f2a0045dbcf9": {
+    "id": "9156c50b8fb19e3c5e12f2a0045dbcf9",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "丸の内・郵船ビル建替 6.9万㎡ 戸田建設が施工予定 最終更新 | 2026/11/16 08:22 カテゴリーなし 日本郵船は、東京・丸の内にある本店ビル「郵船ビルディング」を建て替える。「丸の内郵船ビル建替…",
+    "url": "https://www.kensetsunews.com/sokuho/1309180",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-16T05:44:41.588093+00:00",
+    "summary": "丸の内・郵船ビル建替 6.9万㎡ 戸田建設が施工予定 最終更新 | 2026/11/16 08:22 カテゴリーなし 日本郵船は、東京・丸の内にある本店ビル「郵船ビルディング」を建て替える。「丸の内郵船ビル建替…",
+    "content": "",
+    "content_hash": "17233e4dca481336",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "43fbaf671b0ff1b3767bb896b2d221a9": {
+    "id": "43fbaf671b0ff1b3767bb896b2d221a9",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "PLTらと大田区 旧羽田旭小活用/第1期施設が竣工/地域の交…",
+    "url": "https://www.kensetsunews.com/archives/1309239",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-16T05:47:57.984005+00:00",
+    "summary": "PLTらと大田区 旧羽田旭小活用/第1期施設が竣工/地域の交…",
+    "content": "",
+    "content_hash": "04076100a1a55dc5",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ffb0c7d3cc0d5e47984dad98a9094a17": {
+    "id": "ffb0c7d3cc0d5e47984dad98a9094a17",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "千代田区/容積率割増し最大300%/神田神保町地区計画素案",
+    "url": "https://www.kensetsunews.com/archives/1309241",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-16T05:47:59.134637+00:00",
+    "summary": "千代田区/容積率割増し最大300%/神田神保町地区計画素案",
+    "content": "",
+    "content_hash": "287c0482b030aa0b",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "be1d5167e9a417558706d36455182ccc": {
+    "id": "be1d5167e9a417558706d36455182ccc",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "開発虎ノ門に決定/東京都建設局の神田川整備基本設計",
+    "url": "https://www.kensetsunews.com/archives/1309250",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-16T05:48:06.203886+00:00",
+    "summary": "開発虎ノ門に決定/東京都建設局の神田川整備基本設計",
+    "content": "",
+    "content_hash": "b32cc6ba6e045c69",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
