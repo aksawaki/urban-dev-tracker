@@ -47844,5 +47844,96 @@
     "priority": "medium",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "ec1476b4a2f73b4ce9ecd523b4e0ab1f": {
+    "id": "ec1476b4a2f73b4ce9ecd523b4e0ab1f",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "千葉・新松戸駅東区画整理造成、42.5億円で東急建設JVに 最終更新 | 2026/11/19 12:32 カテゴリーなし 千葉県松戸市は、「松戸都市計画事業新松戸駅東側地区土地区画整理事業造成その他調整池築造等工事…",
+    "url": "https://www.kensetsunews.com/sokuho/1311239",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-19T06:48:09.660282+00:00",
+    "summary": "千葉・新松戸駅東区画整理造成、42.5億円で東急建設JVに 最終更新 | 2026/11/19 12:32 カテゴリーなし 千葉県松戸市は、「松戸都市計画事業新松戸駅東側地区土地区画整理事業造成その他調整池築造等工事…",
+    "content": "",
+    "content_hash": "d72499722ea4b550",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "ad86a1d5d152f4e512a35a19d76d8935": {
+    "id": "ad86a1d5d152f4e512a35a19d76d8935",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・台東区の北上野二丁目福祉施設新築工事、入札を再々公告 最終更新 | 2026/11/18 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1311233",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-19T06:48:10.764322+00:00",
+    "summary": "東京・台東区の北上野二丁目福祉施設新築工事、入札を再々公告 最終更新 | 2026/11/18 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "fb95d320808c20a4",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "e7cf53eb416d346327bdc5ea67583156": {
+    "id": "e7cf53eb416d346327bdc5ea67583156",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "千代田区東神田でビル地下2件解体/関電不",
+    "url": "https://www.kensetsunews.com/archives/1311328",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-19T06:50:43.900832+00:00",
+    "summary": "千代田区東神田でビル地下2件解体/関電不",
+    "content": "",
+    "content_hash": "6bdb85f2b021be1d",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "668e42256029e9ceff935ffc082833e9": {
+    "id": "668e42256029e9ceff935ffc082833e9",
+    "source_id": "kensetsunews_csk",
+    "source_name": "建設通信新聞 中国四国九州",
+    "title": "東京建物らが熊本市にホテル/施工は光進建設",
+    "url": "https://www.kensetsunews.com/archives/1311487",
+    "area": "福岡市",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "九州",
+      "福岡",
+      "広島",
+      "着工",
+      "竣工"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-19T06:54:09.444781+00:00",
+    "summary": "東京建物らが熊本市にホテル/施工は光進建設",
+    "content": "",
+    "content_hash": "37e75c5c8730382c",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
