@@ -47935,5 +47935,74 @@
     "priority": "normal",
     "enrich_content": "",
     "enrich_source": ""
+  },
+  "2853f5ce267a94cb1839514526356688": {
+    "id": "2853f5ce267a94cb1839514526356688",
+    "source_id": "kensetsunews_p3",
+    "source_name": "建設通信新聞 新着ニュース p3",
+    "title": "東京・世田谷区の児童館・保育園複合施設、工費増額し来年2月入札公告 最終更新 | 2026/11/19 16:52 【速報】 …",
+    "url": "https://www.kensetsunews.com/sokuho/1311934",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "市街地再開発"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-20T06:36:28.183376+00:00",
+    "summary": "東京・世田谷区の児童館・保育園複合施設、工費増額し来年2月入札公告 最終更新 | 2026/11/19 16:52 【速報】 …",
+    "content": "",
+    "content_hash": "cdb2f3e149632fa9",
+    "priority": "normal",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "4dc1dd6496e4c5a4a37a9904816623e9": {
+    "id": "4dc1dd6496e4c5a4a37a9904816623e9",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "ニトリHD/5.6万㎡で来年度着工/三鷹・調布にモール建設",
+    "url": "https://www.kensetsunews.com/archives/1312089",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-20T06:39:03.676099+00:00",
+    "summary": "ニトリHD/5.6万㎡で来年度着工/三鷹・調布にモール建設",
+    "content": "",
+    "content_hash": "7d0c66a3a6f32d3a",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
+  },
+  "5ed61a68dd533964ad8f1384c7ed4958": {
+    "id": "5ed61a68dd533964ad8f1384c7ed4958",
+    "source_id": "kensetsunews_kanto",
+    "source_name": "建設通信新聞 関東甲信越",
+    "title": "葛飾区/竣工時期は30年度/よつぎ小・四ツ木中/27年度に再…",
+    "url": "https://www.kensetsunews.com/archives/1312092",
+    "area": "全国",
+    "tags": [
+      "建設通信",
+      "再開発",
+      "関東",
+      "着工",
+      "竣工",
+      "組合設立"
+    ],
+    "published_at": null,
+    "fetched_at": "2026-11-20T06:39:07.085938+00:00",
+    "summary": "葛飾区/竣工時期は30年度/よつぎ小・四ツ木中/27年度に再…",
+    "content": "",
+    "content_hash": "569a9e7063705ab1",
+    "priority": "high",
+    "enrich_content": "",
+    "enrich_source": ""
   }
 }
